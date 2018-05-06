@@ -1,0 +1,729 @@
+{$CLEO .cs}
+thread 'SexMachine'
+
+{======================================================================
+======================================================================}
+const
+    GeneralState = 0@
+    ShowSexualMenu = 1@
+    ShowSexualStats = 2@
+    OnSexActivity = 3@
+    PornActress = 4@
+    PornActor = 5@
+    PlyX = 6@
+    PlyY = 7@
+    PlyZ = 8@
+    PlayerInterior = 9@
+    SexCameraState = 10@
+    SexState = 11@
+    SexStat_Climax = 12@   // (Float) Min: 1.0 - Max 100.0
+    SexStat_Speed = 13@    // (Int) Min: 1 - Max 100
+    SexStat_Pleasure = 14@ // (Int) From 1 to unlimited
+    ClimaxState = 15@
+    PleasureState = 16@
+    Dummy1 = 17@
+    Dummy2 = 18@
+    Clmx_LstEvntTime = 19@
+    Clmx_CurrEvntTime = 20@
+    Plsr_LstEvntTime = 21@
+    Plsr_CurrEvntTime = 22@
+    Plsr_Gain = 23@
+    
+    {===================================
+    ====================================}
+    FLAG_INCREASE = 1
+    FLAG_DECREASE = 0
+    
+    FLAG_NORMAL_INT = 0
+    FLAG_NORMAL_FLOAT = 1
+    FLAG_PERCENTAGE_INT = 2
+    FLAG_PERCENTAGE_FLOAT = 3
+    
+    SEX_SLOW = 0
+    SEX_FAST = 1
+    ANAL_SLOW = 2
+    ANAL_FAST = 3
+    HJ_SLOW = 4
+    HJ_FAST = 5
+    
+    SPD_THRESHOLD1 = 13 // Threshold to stop
+    SPD_THRESHOLD2 = 52 // ?
+    SPD_THRESHOLD3 = 88 // Threshold to pass from slow to fast
+
+    {===================================
+    ====================================}
+    PAD_CHANGE_CAMERA_VIEW = 13
+    PAD_ANSWER_PHONE = 4
+    PAD_PREV_WEP_ZOOM_IN = 5
+    PAD_NEXT_WEP_ZOOM_OUT = 7
+    PAD_ANSWER_PHONE = 4
+    KEY_F6 = 117
+    KEY_F3 = 114
+    
+    {===================================
+    ====================================}
+    KEY_TOGGLE_SEX_MACHINE = KEY_F6
+end
+
+{======================================================================
+======================================================================}
+:Main
+while true
+wait 0
+    if GeneralState == 0
+    then
+        if 0AB0:   key_pressed KEY_TOGGLE_SEX_MACHINE
+        then GeneralState=1
+            gosub @ToggleSexMachine
+        end
+    end
+    if GeneralState == 1
+    then
+        if 8AB0:   not key_pressed KEY_TOGGLE_SEX_MACHINE
+        then GeneralState=0
+        end
+    end
+    if OnSexActivity==true
+    then gosub @SexMachine
+    end
+    if ShowSexualMenu==true
+    then gosub @ShowSexualMenu
+    end
+    if ShowSexualStats==true
+    then 0AB1: call_scm_func @ShowSexualStats 3 SexStat_Climax SexStat_Speed SexStat_Pleasure
+    end
+end
+
+0A93: end_custom_thread
+
+{======================================================================
+Sexual positions, actors and cameras
+====================================
+Fucking in table (slow) sex_fem1_slow / sex_male1_slow
+----------------
+Female: xyz 2372.198 -1132.888 1049.775 angle -90.0
+Male: xyz 2372.195 -1132.905 1049.825 angle -90.0
+
+Fucking in table (fast) sex_fem1_fast / sex_male1_fast
+----------------
+Female: xyz  angle
+Male: xyz  angle
+
+Anal in table (slow) anal_fem1_slow / anal_male1_slow
+-------------
+Female: xyz  angle
+Male: xyz  angle
+
+Anal in table (fast) anal_fem1_fast / anal_male1_fast
+-------------
+Female: xyz  angle
+Male: xyz  angle
+
+Handjob in sofa (slow) hj_fem1_slow / hj_male1_slow
+---------------
+Female: xyz  angle
+Male: xyz  angle
+
+Handjob in sofa (fast) hj_fem1_fast / hj_male1_fast
+---------------
+Female: xyz  angle
+Male: xyz  angle
+
+Cunnilingus in sofa   cunnilingus_f1 / cunnilingus_m1
+-------------------
+Female: xyz  angle
+Male: xyz  angle
+
+Blowjob sit down on bed   bj_femX / bj_maleX
+-----------------------
+Female: xyz  angle
+Male: xyz  angle
+
+======================================================================}
+
+
+{======================================================================
+======================================================================}
+:GenerateActors
+const
+    GenAct_f_X = 0@
+    GenAct_f_Y = 1@
+    GenAct_f_Z = 2@
+    GenAct_f_A = 3@
+    GenAct_m_X = 4@
+    GenAct_m_Y = 5@
+    GenAct_m_Z = 6@
+    GenAct_m_A = 7@
+    GenAct_Actor = 8@
+    GenAct_Actress = 9@
+end
+023C: load_special_actor 'bdoll' as 1
+023C: load_special_actor 'tumi' as 2
+038B: load_requested_models
+repeat
+wait 0
+until 023D:   special_actor 1 loaded and 023D:   special_actor 2 loaded
+
+// Actress
+009A: GenAct_Actress = create_actor_pedtype 5 model #SPECIAL01 at GenAct_f_X GenAct_f_Y GenAct_f_Z
+0173: set_actor GenAct_Actress Z_angle_to GenAct_f_A
+0619: enable_actor GenAct_Actress collision_detection 0
+
+// Actor
+009A: GenAct_Actor = create_actor_pedtype 4 model #SPECIAL02 at GenAct_m_X GenAct_m_Y GenAct_m_Z
+0173: set_actor GenAct_Actor Z_angle_to GenAct_m_A
+0619: enable_actor GenAct_Actor collision_detection 0
+
+0296: unload_special_actor 1
+0296: unload_special_actor 2
+0AB2: ret 2 GenAct_Actress GenAct_Actor
+
+{======================================================================
+======================================================================}
+:LoadSexualPose
+const
+    An_Actress = 0@
+    An_Actor = 1@
+    An_SexPoseInt = 2@
+    AnimIfpFem = 10@v
+    AnimIfpMale = 20@v
+    
+    GENERIC_ANIM = "sex_pose"
+end
+
+If An_SexPoseInt == SEX_SLOW
+then AnimIfpFem = "sex_fem1_slow"
+    AnimIfpMale = "sex_male1_slow"
+end
+If An_SexPoseInt == SEX_FAST
+then AnimIfpFem = "sex_fem1_fast"
+    AnimIfpMale = "sex_male1_fast"
+end
+If An_SexPoseInt == ANAL_SLOW
+then AnimIfpFem = "anal_fem1_slow"
+    AnimIfpMale = "anal_male1_slow"
+end
+If An_SexPoseInt == ANAL_FAST
+then AnimIfpFem = "anal_fem1_fast"
+    AnimIfpMale = "anal_male1_fast"
+end
+If An_SexPoseInt == HJ_SLOW
+then AnimIfpFem = "hj_fem1_slow"
+    AnimIfpMale = "hj_male1_slow"
+end
+If An_SexPoseInt == HJ_FAST
+then AnimIfpFem = "hj_fem1_fast"
+    AnimIfpMale = "hj_male1_fast"
+end
+
+04ED: load_animation AnimIfpFem
+04ED: load_animation AnimIfpMale
+038B: load_requested_models
+repeat
+wait 0
+until 04EE:   animation AnimIfpFem loaded and 04EE:   animation AnimIfpMale loaded
+
+0605: actor An_Actress perform_animation GENERIC_ANIM IFP AnimIfpFem framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+0605: actor An_Actor perform_animation GENERIC_ANIM IFP AnimIfpMale framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+
+04EF: release_animation AnimIfpFem
+04EF: release_animation AnimIfpMale
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:ShowSexualMenu
+// Menu left
+038E: draw_box_position 75.0 317.0 size 150.0 263.0 RGBA 0 0 0 100
+038E: draw_box_position 78.0 314.0 size 156.0 269.0 RGBA 0 0 0 100
+038E: draw_box_position 83.0 223.0 size 167.0 49.0 RGBA 238 71 181 50
+038E: draw_box_position 80.0 223.0 size 161.0 62.0 RGBA 238 71 181 50
+038E: draw_box_position 83.0 229.0 size 167.0 20.0 RGBA 238 71 181 50
+038E: draw_box_position 98.0 351.0 size 91.0 194.0 RGBA 0 0 0 110
+038E: draw_box_position 98.0 189.0 size 91.0 6.0 RGBA 0 0 0 110
+
+0349: set_text_draw_font 0
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.6 2.6
+033E: set_draw_text_position 6.0 205.0 GXT 'S_MENU1' // Places
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 270.0 GXT 'S_1_1' // Bed
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 290.0 GXT 'S_1_2' // Sofa
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 310.0 GXT 'S_1_3' // Table
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 330.0 GXT 'S_1_4' // Chair
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 350.0 GXT 'S_1_5' // Floor
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 370.0 GXT 'S_1_6' // Bath
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 10.0 390.0 GXT 'S_1_7' // Kitchen
+
+// Menu right
+038E: draw_box_position 560.0 224.0 size 160.0 448.0 RGBA 0 0 0 60
+038E: draw_box_position 556.0 224.0 size 168.0 448.0 RGBA 0 0 0 60
+038E: draw_box_position 532.0 224.0 size 83.0 448.0 RGBA 0 0 0 80
+038E: draw_box_position 556.0 430.0 size 168.0 10.0 RGBA 0 0 0 50
+038E: draw_box_position 553.0 390.0 size 174.0 70.0 RGBA 238 71 181 50
+038E: draw_box_position 548.0 390.0 size 183.0 60.0 RGBA 238 71 181 60
+038E: draw_box_position 550.0 400.0 size 180.0 26.0 RGBA 238 71 181 80
+038E: draw_box_position 531.0 139.0 size 136.0 235.0 RGBA 0 0 0 50
+
+0349: set_text_draw_font 0
+0343: set_text_draw_linewidth 640.0
+033F: set_text_draw_letter_size 0.8 2.7
+033E: set_draw_text_position 448.0 378.0 GXT 'S_MENU2' // Positions
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 40.0 GXT 'S_BJ_1' // Blowjob
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 60.0 GXT 'S_HJ_1' // Handjob
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 80.0 GXT 'S_FK_1' // Fucking
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 100.0 GXT 'S_AN_1' // Anal
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 120.0 GXT 'S_69_1' // 69
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 140.0 GXT 'S_TJ_1' // Titjob
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 160.0 GXT 'S_FJ_1' // Footjob
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 180.0 GXT 'S_PY_1' // Playing
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 200.0 GXT 'S_KS_1' // Kissing
+
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.2
+033E: set_draw_text_position 492.0 220.0 GXT 'S_TC_1' // Touching
+
+return
+
+{======================================================================
+    Orgasm-o-meter bar                        Speed-o-meter bar
+    min -> posX 170.5 sizeX 1.0               min -> posX 243.5 sizeX 1.0
+    min+1 -> posX 171.0 sizeX 2.0             min+1 -> posX 244.0 sizeX 2.0
+    min+2 -> posX 171.5 sizeX 3.0             min+2 -> posX 244.5 sizeX 3.0
+    min+3 -> posX 172.0 sizeX 4.0             min+3 -> posX 245.0 sizeX 4.0
+    100% -> posX 260.0 sizeX 180.0            100% -> posX 296.0 sizeX 106.0
+======================================================================}
+:ShowSexualStats
+const
+    Flt_Climax = 0@
+    ShSt_Speed = 1@
+    ShSt_Pleasure = 2@
+    Flt_Speed = 4@
+    Climax_PosBar = 5@
+    Climax_SizeBar = 6@
+    Speed_PosBar = 7@
+    Speed_SizeBar = 8@
+end
+//0093: Flt_Climax = integer ShSt_Climax to_float
+0093: Flt_Speed = integer ShSt_Speed to_float
+
+//Climax_SizeBar = 1.8 * Flt_Climax
+//Climax_PosBar = Climax_SizeBar/2 + 170
+0087: Climax_SizeBar = Flt_Climax // (float)
+0013: Climax_SizeBar *= 1.8
+0087: Climax_PosBar = Climax_SizeBar // (float)
+0013: Climax_PosBar *= 0.5
+000B: Climax_PosBar += 170.0
+
+//Speed_SizeBar = 1.06 * Flt_Speed
+//Speed_PosBar = Speed_SizeBar/2 + 243
+0087: Speed_SizeBar = Flt_Speed // (float)
+0013: Speed_SizeBar *= 1.06
+0087: Speed_PosBar = Speed_SizeBar // (float)
+0013: Speed_PosBar *= 0.5
+000B: Speed_PosBar += 243.0
+
+//Black styled climax bar
+{038E: draw_box_position 260.0 414.0 size 186.0 23.0 RGBA 0 0 0 100
+038E: draw_box_position 260.0 414.0 size 180.0 16.0 RGBA 0 0 0 100
+038E: draw_box_position 261.0 419.0 size 186.0 13.0 RGBA 0 0 0 80
+038E: draw_box_position Climax_PosBar 414.0 size Climax_SizeBar 16.0 RGBA 0 0 0 250}
+
+//Pink styled climax bar
+038E: draw_box_position 260.0 414.0 size 186.0 23.0 RGBA 238 71 181 100
+038E: draw_box_position 260.0 414.0 size 180.0 16.0 RGBA 0 0 0 100
+038E: draw_box_position 260.0 419.0 size 186.0 13.0 RGBA 0 0 0 150
+038E: draw_box_position Climax_PosBar 414.0 size Climax_SizeBar 16.0 RGBA 238 71 181 60 // the orgasm-o-meter bar
+038E: draw_box_position Climax_PosBar 411.0 size Climax_SizeBar 3.0 RGBA 255 255 255 50 // the orgasm-o-meter bar 2
+
+// Speedometer
+038E: draw_box_position 257.0 436.0 size 1.0 15.0 RGBA 153 153 153 180 // Medium Gray
+038E: draw_box_position 298.0 436.0 size 1.0 15.0 RGBA 153 153 153 180
+038E: draw_box_position 337.0 436.0 size 1.0 15.0 RGBA 153 153 153 180
+038E: draw_box_position 296.0 436.0 size 114.0 12.0 RGBA 238 71 181 80 // Pink
+038E: draw_box_position 296.0 436.0 size 110.0 8.0 RGBA 0 0 0 140 // Black
+038E: draw_box_position Speed_PosBar 436.0 size Speed_SizeBar 4.0 RGBA 255 0 0 250 // Red // the speed-o-meter bar
+
+// Shadow on text "pleasure"
+038E: draw_box_position 203.0 436.0 size 72.0 12.0 RGBA 0 0 0 120
+    
+0349: set_text_draw_font 2
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.0
+033E: set_draw_text_position 179.0 409.0 GXT 'S_HUD1' // Climax
+
+0349: set_text_draw_font 1
+0343: set_text_draw_linewidth 600.0
+033F: set_text_draw_letter_size 0.2 1.0
+045A: draw_text_1number 171.0 430.0 GXT 'S_HUD2' number ShSt_Pleasure  // Pleasure: ~1~%
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:ToggleSexualCamera
+if 0@ == 0
+then 015F: set_camera_position 2373.360839 -1134.396972 1051.675415 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2372.830078 -1133.676879 1051.228271 switchstyle 2
+end
+if 0@ == 1
+then 015F: set_camera_position 2370.840087 -1132.937622 1051.675415 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.658447 -1132.903564 1051.101684 switchstyle 2
+end
+if 0@ == 2
+then 015F: set_camera_position 2371.700439 -1134.403198 1051.175537 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.944091 -1133.470336 1050.910156 switchstyle 2
+end
+if 0@ == 3
+then 015F: set_camera_position 2372.286865 -1133.062622 1052.975097 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2372.226806 -1132.963989 1051.981811 switchstyle 2
+end
+if 0@ == 4
+then 015F: set_camera_position 2372.265136 -1133.077148 1052.075317 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2372.155029 -1132.927856 1051.092651 switchstyle 2
+end
+if 0@ == 5
+then 015F: set_camera_position 2371.559814 -1132.563598 1052.075317 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.843505 -1132.798461 1051.145629 switchstyle 2
+end
+if 0@ == 6
+then 015F: set_camera_position 2372.394042 -1132.386840 1051.575439 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2372.034912 -1132.926391 1050.813964 switchstyle 2
+end
+if 0@ == 7
+then 015F: set_camera_position 2371.326904 -1130.574951 1052.475219 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.521240 -1131.331176 1051.850463 switchstyle 2
+end
+if 0@ == 8
+then 015F: set_camera_position 2370.883544 -1132.128417 1050.875610 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.674316 -1132.715576 1051.048095 switchstyle 2
+end
+if 0@ == 9
+then 015F: set_camera_position 2372.027587 -1132.840576 1051.573439 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.727294 -1132.847900 1050.621382 switchstyle 2
+end
+if 0@ == 10
+then 015F: set_camera_position 2371.823242 -1132.939453 1052.175292 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.935791 -1132.936645 1051.181640 switchstyle 2
+end
+if 0@ == 11
+then 015F: set_camera_position 2371.022216 -1133.324340 1050.775634 rotation 0.0 0.0 0.0
+    0160: set_camera_point_at 2371.881347 -1132.916259 1051.084472 switchstyle 2
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:IncOrDecVariable
+if 0039:   2@ == FLAG_INCREASE
+then
+    if 003B:   0@ == 1@  // (int)
+    then 0@ = 0
+    else 0@++
+    end
+else // 2@ == FLAG_DECREASE
+    if 0@ == 0
+    then 0085: 0@ = 1@ // (int)
+    else 0@--
+    end
+end
+0AB2: ret 1 0@
+
+{======================================================================
+======================================================================}
+:ToggleSexMachine
+if OnSexActivity == false
+then
+    {fade 0 time 800
+    wait 800 ms}
+    01B4: set_player $PLAYER_CHAR can_move 0
+    0581: enable_radar 0
+    0826: enable_hud 0
+    03F0: enable_text_draw 1
+    {00A0: store_actor $PLAYER_ACTOR position_to PlyX PlyY PlyZ
+    077E: get_active_interior_to PlayerInterior
+    04BB: select_interior 8
+    0860: link_actor $PLAYER_ACTOR to_interior 8
+    00A1: put_actor $PLAYER_ACTOR at 2372.198 -1132.888 1039.775
+    04E4: unknown_refresh_game_renderer_at 2372.198 -1132.888
+    03CB: set_rendering_origin_at 2372.198 -1132.888 1049.775
+    //04F9: set_interior 8 color_to 0
+    0AB1: call_scm_func @GenerateActors 8 Xf 2372.198 Yf -1132.888 Zf 1049.775 angle -90.0 Xm 2372.195 Ym -1132.905 Zm 1049.825 angle -90.0 PornActress PornActor
+    0AB1: call_scm_func @LoadSexualPose 3 PornActress PornActor SEX_SLOW
+    0AB1: call_scm_func @ToggleSexualCamera 1 SexCameraState
+    0AB1: call_scm_func @IncOrDecVariable 3 SexCameraState 11 FLAG_INCREASE SexCameraState}
+    OnSexActivity = true
+    SexState=0
+    ShowSexualStats=true
+    SexStat_Climax = 0.0
+    SexStat_Speed = 40
+    SexStat_Pleasure = 1
+    ClimaxState = 0
+    PleasureState = 0
+    {wait 500
+    fade 1 time 800}
+    {wait 500
+    03E5: show_text_box 'I_CTRL1'  // Puedes cambiar la vista con ~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~. Ingresa al menu pulsando ~b~~k~~PED_ANSWER_PHONE~~w~ para ver las diferentes opciones.
+    wait 7000
+    03E5: show_text_box 'I_GNRL1'}  // Puedes aumentar el ritmo de los movimientos con ~b~~k~~PED_CYCLE_WEAPON_LEFT~~w~ / ~b~~k~~PED_CYCLE_WEAPON_RIGHT~~w~. Tambien puedes parar totalmente disminuyendo el ritmo a su minimo valor.
+else
+    {fade 0 time 800
+    wait 800 ms}
+    0581: enable_radar 1
+    0826: enable_hud 1
+    03F0: enable_text_draw 0
+    {04BB: select_interior PlayerInterior
+    0860: link_actor $PLAYER_ACTOR to_interior PlayerInterior
+    00A1: put_actor $PLAYER_ACTOR at PlyX PlyY PlyZ
+    0373: set_camera_directly_behind_player
+    02EB: restore_camera_with_jumpcut
+    009B: destroy_actor PornActress
+    009B: destroy_actor PornActor}
+    01B4: set_player $PLAYER_CHAR can_move 1
+    SexCameraState=0
+    OnSexActivity=false
+    ShowSexualMenu=false
+    ShowSexualStats=false
+    {wait 500
+    fade 1 time 800}
+end
+return
+
+{======================================================================
+======================================================================}
+:SexMachine
+if SexState == 0
+then
+    if 00E1:   player 0 pressed_key PAD_CHANGE_CAMERA_VIEW // V
+    then SexState=1
+        0AB1: call_scm_func @ToggleSexualCamera 1 SexCameraState
+        0AB1: call_scm_func @IncOrDecVariable 3 SexCameraState 11 FLAG_INCREASE SexCameraState
+    end
+    if 00E1:   player 0 pressed_key PAD_ANSWER_PHONE // TAB
+    then SexState=2
+        gosub @ToggleSexualMenu
+    end
+end
+if SexState == 1
+then
+    if 80E1:   not player 0 pressed_key PAD_CHANGE_CAMERA_VIEW
+    then SexState=0
+    end
+end
+if SexState == 2
+then
+    if 80E1:   not player 0 pressed_key PAD_ANSWER_PHONE
+    then SexState=0
+    end
+end
+
+// Increase / Decrease Speed
+if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
+then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
+end
+if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
+then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
+end
+
+// Increase Pleasure
+gosub @PleasureMachine
+
+// Increase Climax
+gosub @ClimaxMachine
+return
+
+{======================================================================
+======================================================================}
+:PleasureMachine
+if PleasureState == 0
+then 0209: Plsr_Gain = random_int_in_ranges 1 4
+end
+if not SexStat_Speed > 13
+then return
+end
+0AB1: call_scm_func @IncreaseTimedVar 7 SexStat_Pleasure Plsr_Gain PleasureState 800 FLAG_NORMAL_INT Plsr_LstEvntTime Plsr_CurrEvntTime SexStat_Pleasure PleasureState Plsr_LstEvntTime Plsr_CurrEvntTime
+if PleasureState == 2
+then PleasureState=0
+end
+return
+
+{======================================================================
+======================================================================}
+:ClimaxMachine
+// Speed: min: 13 - max: 100
+// steps: 0.3 - min: 1 - max: 250
+// steps: 0.4 - min: 1 - max: 500
+// Ecuacion de la recta: Time (ms) = -5,7356321839080459770114942528736*Speed + 574,56321839080459770114942528736
+if SexStat_Speed > 13
+then
+    0093: Dummy1 = integer SexStat_Speed to_float
+    Dummy1 *= -5.735
+    Dummy1 += 574.563
+    0092: Dummy1 = float Dummy1 to_integer
+    Dummy2 = 0.4
+else
+    Dummy1 = 500
+    Dummy2 = -0.4
+end
+0AB1: call_scm_func @IncreaseTimedVar 7 SexStat_Climax Dummy2 ClimaxState Dummy1 FLAG_PERCENTAGE_FLOAT Clmx_LstEvntTime Clmx_CurrEvntTime SexStat_Climax ClimaxState Clmx_LstEvntTime Clmx_CurrEvntTime
+if ClimaxState == 2
+then ClimaxState=0
+end
+return
+
+{======================================================================
+======================================================================}
+:ToggleSexualMenu
+if ShowSexualMenu == false
+then ShowSexualMenu=true
+else ShowSexualMenu=false
+end
+return
+
+{======================================================================
+======================================================================}
+:IncOrDecPercentageIntStat
+const
+    PtSt_Stat = 0@
+    PtSt_Amount = 1@
+    PtSt_IncOrDec = 2@
+end
+if PtSt_IncOrDec == FLAG_INCREASE
+then
+    005A: PtSt_Stat += PtSt_Amount  // (int)
+    if PtSt_Stat > 100
+    then 0AB2: ret 1 100
+    end
+else // FLAG_DECREASE
+    0062: PtSt_Stat -= PtSt_Amount  // (int)
+    if 1 > PtSt_Stat
+    then 0AB2: ret 1 1
+    end
+end
+0AB2: ret 1 PtSt_Stat
+
+{======================================================================
+======================================================================}
+:IncOrDecPercentageFloatStat
+const
+    FtSt_Stat = 0@
+    FtSt_Amount = 1@
+    FtSt_IncOrDec = 2@
+end
+if FtSt_IncOrDec == FLAG_INCREASE
+then
+    005B: FtSt_Stat += FtSt_Amount  // (float)
+    if FtSt_Stat > 100.0
+    then 0AB2: ret 1 100.0
+    end
+else // FLAG_DECREASE
+    0062: FtSt_Stat -= FtSt_Amount  // (int)
+    if 1.0 > FtSt_Stat
+    then 0AB2: ret 1 1.0
+    end
+end
+0AB2: ret 1 FtSt_Stat
+
+{======================================================================
+======================================================================}
+:IncreaseTimedVar
+const
+    IcTm_Var = 0@
+    IcTm_Amount = 1@
+    IcTm_Stat = 2@
+    IcTm_msec = 3@
+    IcTm_PercentageFlag = 4@
+    IcTm_LastTime = 5@
+    IcTm_CurrentTime = 6@
+end
+if IcTm_Stat == 0
+then
+    0085: IcTm_LastTime = 32@ // (int)
+    005A: IcTm_LastTime += IcTm_msec  // (int)
+    IcTm_Stat=1
+end
+if IcTm_Stat == 1
+then
+    0085: IcTm_CurrentTime = 32@ // (int)
+    if 002D:   IcTm_CurrentTime >= IcTm_LastTime  // (int)
+    then
+        if IcTm_PercentageFlag == FLAG_NORMAL_INT
+        then 005A: IcTm_Var += IcTm_Amount  // (int)
+        end
+        if IcTm_PercentageFlag == FLAG_NORMAL_FLOAT
+        then 005B: IcTm_Var += IcTm_Amount  // (float)
+        end
+        if IcTm_PercentageFlag == FLAG_PERCENTAGE_INT
+        then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 IcTm_Var IcTm_Amount FLAG_INCREASE IcTm_Var
+        end
+        if IcTm_PercentageFlag == FLAG_PERCENTAGE_FLOAT
+        then 0AB1: call_scm_func @IncOrDecPercentageFloatStat 3 IcTm_Var IcTm_Amount FLAG_INCREASE IcTm_Var
+        end
+        IcTm_Stat=2
+    end
+end
+0AB2: ret 4 IcTm_Var IcTm_Stat IcTm_LastTime IcTm_CurrentTime
+
