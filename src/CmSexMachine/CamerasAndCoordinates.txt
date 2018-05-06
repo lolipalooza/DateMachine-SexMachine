@@ -230,8 +230,37 @@ end
 
 {======================================================================
 ======================================================================}
+:GetPlaceFromString
+if 0@s == 'S_PL_1' // Cama
+then 0AB2: ret 1 PL_BED
+end
+if 0@s == 'S_PL_2' // Sofa
+then 0AB2: ret 1 PL_SOFA
+end
+if 0@s == 'S_PL_3' // Mesa
+then 0AB2: ret 1 PL_TABLE
+end
+if 0@s == 'S_PL_4' // Silla
+then 0AB2: ret 1 PL_CHAIR
+end
+if 0@s == 'S_PL_5' // Piso
+then 0AB2: ret 1 PL_FLOOR
+end
+if 0@s == 'S_PL_6' // Baño
+then 0AB2: ret 1 PL_BATH
+end
+if 0@s == 'S_PL_7' // Cocina
+then 0AB2: ret 1 PL_KITCHEN
+end
+if 0@s == 'S_PL_8' // Pared
+then 0AB2: ret 1 PL_WALL
+end
+if 0@s == 'S_PL_9' // De pié
+then 0AB2: ret 1 PL_FOOT
+end
+0AB2: ret 1 404
+
 :GetPoseFromString
-// inputs: 0@-1@: string
 if 0@s == 'S_BJ_1'
 then 0AB2: ret 1 SEX_BJ
 end
@@ -510,9 +539,11 @@ then
 end
 0AB2: ret 8 fem_xyz 0.0 0.0 0.0 angle 0.0 male_xyz 0.0 0.0 0.0 angle 0.0
 
+{======================================================================
+======================================================================}
 :CheckPoseAndPlaceAvailability
-// 0@: place, 1@: pose
-0AB1: call_scm_func @GetActorsCoordinates 2 1@ 0@ ret fem_xyza 10@ 11@ 12@ 13@ male_xyza 20@ 21@ 22@ 23@
+// 0@: pose, 1@: place
+0AB1: call_scm_func @GetActorsCoordinates 2 0@ 1@ ret fem_xyza 10@ 11@ 12@ 13@ male_xyza 20@ 21@ 22@ 23@
 if and
 10@ == 0.0
 11@ == 0.0

@@ -20,7 +20,7 @@
 038E: draw_box_position 550.0 400.0 size 180.0 26.0 RGBA 238 71 181 80
 038E: draw_box_position 531.0 139.0 size 136.0 235.0 RGBA 0 0 0 50
 
-0AB1: @SexualMenu_GetContent 1 FLAG_SX_MENU_LEFT
+0AB1: @SexualMenu_GetContent 3 SexPoseInt SexPlace FLAG_SX_MENU_LEFT
 
 if SexMenuState >= SX_MENU_OPT1_PLACES_FIRST_ELEM
 then    
@@ -36,7 +36,7 @@ then
     002B:   SX_MENU_OPT1_PLACES_LAST_ELEM >= SexMenuState  // (int)
     then
         Dummy1 -= SX_MENU_OPT1_PLACES_FIRST_ELEM
-        0AB1: @SexualMenu_GetContent 2 FLAG_SX_MENU_RIGHT SX_MENU_OPT1_PLACES_FIRST_ELEM
+        0AB1: @SexualMenu_GetContent 4 SexPoseInt SexPlace FLAG_SX_MENU_RIGHT SX_MENU_OPT1_PLACES_FIRST_ELEM
     end
         
     // Is current selector on opt 2 right menu items ?
@@ -45,7 +45,7 @@ then
     002B:   SX_MENU_OPT2_POSITIONS_LAST_ELEM >= SexMenuState  // (int)
     then
         Dummy1 -= SX_MENU_OPT2_POSITIONS_FIRST_ELEM
-        0AB1: @SexualMenu_GetContent 2 FLAG_SX_MENU_RIGHT SX_MENU_OPT2_POSITIONS_FIRST_ELEM
+        0AB1: @SexualMenu_GetContent 4 SexPoseInt SexPlace FLAG_SX_MENU_RIGHT SX_MENU_OPT2_POSITIONS_FIRST_ELEM
     end
         
     // Is current selector on opt 3 right menu items ?
@@ -54,7 +54,7 @@ then
     002B:   SX_MENU_OPT3_CAMERAS_LAST_ELEM >= SexMenuState  // (int)
     then
         Dummy1 -= SX_MENU_OPT3_CAMERAS_FIRST_ELEM
-        0AB1: @SexualMenu_GetContent 2 FLAG_SX_MENU_RIGHT SX_MENU_OPT3_CAMERAS_FIRST_ELEM
+        0AB1: @SexualMenu_GetContent 4 SexPoseInt SexPlace FLAG_SX_MENU_RIGHT SX_MENU_OPT3_CAMERAS_FIRST_ELEM
     end
     // Highlighting right selected item
     0093: Dummy1 = integer Dummy1 to_float
@@ -80,16 +80,19 @@ return
 ======================================================================}
 :SexualMenu_GetContent
 const
-    SmGc_LftOrRghtFlag = 0@
-    SmGc_RightMenuFlag = 1@
+    SmGc_Pose = 0@
+    SmGc_Place = 1@
+    SmGc_LftOrRghtFlag = 2@
+    SmGc_RightMenuFlag = 3@
+    {4@, 5@}
+    {6@s - 8@s - .... - 24@s: Array of 10 strings}
     SmGc_AuxStr = 26@s
     SmGc_Aux1 = 26@
     SmGc_Aux2 = 27@
     SmGc_MaxOpts = 28@
     SmGc_Index = 29@
     SmGc_PosY = 30@
-    {4@, 5@}
-    {6@s - 8@s - .... - 24@s: Array of 10 strings}
+    {31@}
 end
 
 // Read Content
@@ -114,11 +117,39 @@ for SmGc_Index = 0 to 28@ // 28@ : SmGc_MaxOpts
     if SmGc_LftOrRghtFlag == FLAG_SX_MENU_LEFT
     then 0AB1: @SetDrawText 8 2 600.0 size 0.2 1.2 pos 10.0 SmGc_PosY GXT SmGc_Aux1 SmGc_Aux2
     else
-        0AB1: @SetDrawText 8 2 600.0 size 0.2 1.2 pos 492.0 SmGc_PosY GXT SmGc_Aux1 SmGc_Aux2
+        if SmGc_RightMenuFlag == SX_MENU_OPT1_PLACES_FIRST_ELEM
+        then
+            if 0AB1: @CheckPoseAndPlaceAvailability 2 SmGc_Pose SmGc_Index
+            then 0AB1: @SetDrawText 8 2 600.0 size 0.2 1.2 pos 492.0 SmGc_PosY GXT SmGc_Aux1 SmGc_Aux2
+            else 0AB1: @SetDrawTextRGB 11 2 600.0 size 0.2 1.2 pos 492.0 SmGc_PosY GXT SmGc_Aux1 SmGc_Aux2 100 100 100
+            end
+        end
+        if SmGc_RightMenuFlag == SX_MENU_OPT2_POSITIONS_FIRST_ELEM
+        then
+            0AB1: @GetTruePositionIndex 1 SmGc_Index 31@
+            if 0AB1: @CheckPoseAndPlaceAvailability 2 31@ SmGc_Place
+            then 0AB1: @SetDrawText 8 2 600.0 size 0.2 1.2 pos 492.0 SmGc_PosY GXT SmGc_Aux1 SmGc_Aux2
+            else 0AB1: @SetDrawTextRGB 11 2 600.0 size 0.2 1.2 pos 492.0 SmGc_PosY GXT SmGc_Aux1 SmGc_Aux2 100 100 100
+            end
+        end
+        if SmGc_RightMenuFlag == SX_MENU_OPT3_CAMERAS_FIRST_ELEM
+        then
+        end
     end
     SmGc_PosY += 20.0
 end
 0AB2: ret 0
+
+:GetTruePositionIndex
+10@=SEX_CUNNI
+11@=SEX_69
+12@=SEX_BJ
+13@=SEX_HJ
+14@=SEX_FUCKING
+15@=SEX_ANAL
+16@=SEX_TJ
+17@=SEX_FJ
+0AB2: ret 1 10@(0@,8i)
 
 {======================================================================
 ======================================================================}
