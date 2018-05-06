@@ -4,17 +4,17 @@ thread 'SexMachine'
 {======================================================================
 Sexual positions, actors and cameras
 ====================================
-Fucking in table (slow/fast) sex_fem1_xxxx / sex_male1_xxxx
+Fucking in table  sex_fem1_xxxx / sex_male1_xxxx
 ----------------
 Female: xyz 2372.198 -1132.888 1049.775 angle -90.0
 Male: xyz 2372.195 -1132.905 1049.825 angle -90.0
 
-Anal in table (slow/fast) anal_fem1_xxxx / anal_male1_xxxx
+Anal in table  anal_fem1_xxxx / anal_male1_xxxx
 -------------
 Female: xyz 2372.688 -1132.955 1049.905 angle -90.0
 Male: xyz 2372.681 -1133.057 1049.975 angle -90.0
 
-Handjob in sofa (slow/fast) hj_fem1_xxxx / hj_male1_xxxx
+Handjob in sofa  hj_fem1_xxxx / hj_male1_xxxx
 ---------------
 Female: xyz 2372.3 -1121.857 1049.415 angle 0.0
 Male: xyz 2372.317 -1121.818 1049.475 angle 0.0
@@ -81,11 +81,16 @@ const
     
     SEX_SLOW = 0
     SEX_FAST = 1
-    ANAL_SLOW = 2
-    ANAL_FAST = 3
-    HJ_SLOW = 4
-    HJ_FAST = 5
-    CUNNILINGUS = 6
+    SEX_IDLE = 2
+    ANAL_SLOW = 3
+    ANAL_FAST = 4
+    ANAL_IDLE = 5
+    HJ_SLOW = 6
+    HJ_FAST = 7
+    HJ_IDLE = 8
+    CUNNILINGUS_SLOW = 9
+    CUNNILINGUS_FAST = 10
+    CUNNILINGUS_IDLE = 11
     
     SEX_FUCKING = 0
     SEX_BJ = 1
@@ -222,6 +227,10 @@ If An_SexPoseInt == SEX_FAST
 then AnimIfpFem = "sex_fem1_fast"
     AnimIfpMale = "sex_male1_fast"
 end
+If An_SexPoseInt == SEX_IDLE
+then AnimIfpFem = "sex_fem1_idle"
+    AnimIfpMale = "sex_male1_idle"
+end
 If An_SexPoseInt == ANAL_SLOW
 then AnimIfpFem = "anal_fem1_slow"
     AnimIfpMale = "anal_male1_slow"
@@ -238,7 +247,7 @@ If An_SexPoseInt == HJ_FAST
 then AnimIfpFem = "hj_fem1_fast"
     AnimIfpMale = "hj_male1_fast"
 end
-If An_SexPoseInt == CUNNILINGUS
+If An_SexPoseInt == CUNNILINGUS_SLOW
 then AnimIfpFem = "cunnilingus_f1"
     AnimIfpMale = "cunnilingus_m1"
 end
@@ -899,14 +908,14 @@ const
     ChgAn_SpeedStatus = 3@
     ChgAn_SpeedInt = 4@
     
-    SPD_STOPPED = 0
+    SPD_IDLE = 0
     SPD_SLOW = 1
     SPD_FAST = 2
 end
 
 // Determining speed of pose
 if ChgAn_SpeedStatus == 0
-then ChgAn_SpeedInt = SPD_STOPPED
+then ChgAn_SpeedInt = SPD_IDLE
 end
 if ChgAn_SpeedStatus == 1
 then ChgAn_SpeedInt = SPD_SLOW
@@ -928,6 +937,11 @@ if and
 ChgAn_Pose == SEX_FUCKING
 ChgAn_SpeedInt == SPD_FAST
 then 0AB1: call_scm_func @LoadSexualPose 3 ChgAn_Actress ChgAn_Actor SEX_FAST
+end
+if and
+ChgAn_Pose == SEX_FUCKING
+ChgAn_SpeedInt == SPD_IDLE
+then 0AB1: call_scm_func @LoadSexualPose 3 ChgAn_Actress ChgAn_Actor SEX_IDLE
 end
 {if and
 ChgAn_Pose == SEX_BJ
