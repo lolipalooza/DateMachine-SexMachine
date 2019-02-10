@@ -155,11 +155,32 @@ gosub @ToggleSexMachine
 while true
 wait 0
     gosub @SexMachine
-    if SexMenuState > 0
+    if SexMenuState == 1
     then
         gosub @SexualMenuMachine
         gosub @ShowSexualMenu
-    else
+    end
+    if SexMenuState == 2
+    then
+        gosub @SexualMenuMachine
+        0AB1: @ActorsOffsetsMenu 3 SexMenuState PornActress PornActor ret SexMenuState Dummy1 Dummy2 Dummy3
+        if Dummy2 == true
+        then
+            if Dummy1 == 0 // gender flag
+            then 0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
+            else 0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
+            end
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
+        end
+        if Dummy3 == 1
+        then
+            0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
+            0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
+        end
+    end
+    if SexMenuState == 0
+    then
         if PulseButtonState == PULSED_ENTER_VEH
         then break // End Sex Activity
         end
@@ -337,8 +358,19 @@ then
     then SexState=2
         gosub @ToggleSexualMenu
     end}
-    if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0
-    then gosub @ToggleSexualMenu
+    if or
+    SexMenuState == 0
+    SexMenuState == 1
+    then
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
+        then 0AB1: @ToggleVariable 3 toggle_var SexMenuState toggle_values 0 1 store_in SexMenuState
+        end
+    end
+    if SexMenuState == 0
+    then
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
+        then 0AB1: @ToggleVariable 3 toggle_var SexMenuState toggle_values 0 2 store_in SexMenuState
+        end
     end
     if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
     then
@@ -479,6 +511,15 @@ then SexMenuState = 1 // Show and start from initial state
 else SexMenuState = 0 // Hide sexual menu
 end
 return
+
+{======================================================================
+======================================================================}
+:ToggleVariable // 0@: Toggle Variable, 1@ 2@: Toggle Values
+if 003B:   0@ == 1@  // (int)
+then 0085: 0@ = 2@ // (int)
+else 0085: 0@ = 1@ // (int)
+end
+0AB2: ret 1 0@
 
 {======================================================================
 ======================================================================}

@@ -569,6 +569,167 @@ end
 
 {======================================================================
 ======================================================================}
+:GenderFlag
+hex
+    0 // 0: female, 1: male (female by default)
+end
+:MaleOffset
+hex
+00 00 00 00
+00 00 00 00
+00 00 00 00
+end
+:FemaleOffset
+hex
+00 00 00 00
+00 00 00 00
+00 00 00 00
+end
+:MaleOffsetStored
+hex
+00 00 00 00
+00 00 00 00
+00 00 00 00
+end
+:FemaleOffsetStored
+hex
+00 00 00 00
+00 00 00 00
+00 00 00 00
+end
+:ResetOffset
+hex
+    0 // 0: read offset, 1: ignore offset
+end
+
+{======================================================================
+======================================================================}
+:ActorsOffsetsMenu // 0@: SexMenuState, 1@: Porn Actress, 2@: Porn Actor
+const
+    OFF_INC_STEP = 0.02
+    OFF_DEC_STEP = -0.02
+end
+
+0AB1: @GetInt 1 @GenderFlag 20@
+if 20@ == 0
+then 10@s = 'CFG_O2' // Female offset
+else 10@s = 'CFG_O1' // Male offset
+end
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 502.0 12.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 540.0 18.0 box_size 86.0 12.0
+then
+    0AB1: @ToggleVariable 3 toggle_var 20@ toggle_values 0 1 store_in 20@
+    0AB1: @StoreInt 2 @GenderFlag 20@
+end
+
+
+10@s = 'CFG_O3' // x    <    >
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 512.0 29.0 GXT 10@ 11@
+10@s = 'CFG_O4' // y    <    >
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 512.0 42.0 GXT 10@ 11@
+10@s = 'CFG_O5' // z    <    >
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 512.0 55.0 GXT 10@ 11@
+
+// Position X
+if 0AB1: @CursorClickCheck 4 box_position 531.0 35.0 box_size 13.0 10.0
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 0 ret 21@
+end
+if 0AB1: @CursorClickCheck 4 box_position 546.0 35.0 box_size 13.0 10.0
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_INC_STEP pos_offset 0 ret 21@
+end
+
+// Position Y
+if 0AB1: @CursorClickCheck 4 box_position 531.0 48.0 box_size 13.0 10.0
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 4 ret 21@
+end
+if 0AB1: @CursorClickCheck 4 box_position 546.0 48.0 box_size 13.0 10.0
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_INC_STEP pos_offset 4 ret 21@
+end
+
+// Position Z
+if 0AB1: @CursorClickCheck 4 box_position 531.0 61.0 box_size 13.0 10.0
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 8 ret 21@
+end
+if 0AB1: @CursorClickCheck 4 box_position 546.0 61.0 box_size 13.0 10.0
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_INC_STEP pos_offset 8 ret 21@
+end
+
+0AB1: @GetInt 1 @ResetOffset 30@
+if 30@ == 0
+then 10@s = 'CFG_O6' // Reset
+else 10@s = 'CFG_O7' // Restore
+end
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 502.0 74.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 521.0 80.0 box_size 48.0 12.0
+then
+    0AB1: @ToggleVariable 3 toggle_var 30@ toggle_values 0 1 store_in 30@
+    0AB1: @StoreInt 2 @ResetOffset 30@
+    31@=1
+    
+    if 30@ == 0
+    then
+        0AB1: @GetData 2 @FemaleOffsetStored 0 out 22@
+        0AB1: @StoreData 3 @FemaleOffset 22@ 0
+        0AB1: @GetData 2 @FemaleOffsetStored 4 out 22@
+        0AB1: @StoreData 3 @FemaleOffset 22@ 4
+        0AB1: @GetData 2 @FemaleOffsetStored 8 out 22@
+        0AB1: @StoreData 3 @FemaleOffset 22@ 8
+        
+        0AB1: @GetData 2 @MaleOffsetStored 0 out 22@
+        0AB1: @StoreData 3 @MaleOffset 22@ 0
+        0AB1: @GetData 2 @MaleOffsetStored 4 out 22@
+        0AB1: @StoreData 3 @MaleOffset 22@ 4
+        0AB1: @GetData 2 @MaleOffsetStored 8 out 22@
+        0AB1: @StoreData 3 @MaleOffset 22@ 8
+    else
+        0AB1: @GetData 2 @FemaleOffset 0 out 22@
+        0AB1: @StoreData 3 @FemaleOffsetStored 22@ 0
+        0AB1: @GetData 2 @FemaleOffset 4 out 22@
+        0AB1: @StoreData 3 @FemaleOffsetStored 22@ 4
+        0AB1: @GetData 2 @FemaleOffset 8 out 22@
+        0AB1: @StoreData 3 @FemaleOffsetStored 22@ 8
+        
+        0AB1: @GetData 2 @MaleOffset 0 out 22@
+        0AB1: @StoreData 3 @MaleOffsetStored 22@ 0
+        0AB1: @GetData 2 @MaleOffset 4 out 22@
+        0AB1: @StoreData 3 @MaleOffsetStored 22@ 4
+        0AB1: @GetData 2 @MaleOffset 8 out 22@
+        0AB1: @StoreData 3 @MaleOffsetStored 22@ 8
+        
+        0AB1: @StoreData 3 @FemaleOffset 0.0 0
+        0AB1: @StoreData 3 @FemaleOffset 0.0 4
+        0AB1: @StoreData 3 @FemaleOffset 0.0 8
+        0AB1: @StoreData 3 @MaleOffset 0.0 0
+        0AB1: @StoreData 3 @MaleOffset 0.0 4
+        0AB1: @StoreData 3 @MaleOffset 0.0 8
+    end 
+end
+
+10@s = 'S_OPT6' // Close
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 563.0 74.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 583.0 80.0 box_size 48.0 12.0
+then 0@ = 0 // Close (Reset SexMenuState)
+end
+
+0AB2: ret 4 0@ 20@ 21@ 31@
+
+{======================================================================
+======================================================================}
+:IncDecActorOffset // 0@: gender flag, 1@: increase or decrease, 2@: position offset
+if 0@ == 0 // female by default (0)
+then
+    0AB1: @GetData 2 @FemaleOffset 2@ out 30@
+    005B: 30@ += 1@  // (float)
+    0AB1: @StoreData 3 @FemaleOffset 30@ 2@
+else
+    0AB1: @GetData 2 @MaleOffset 2@ out 30@
+    005B: 30@ += 1@  // (float)
+    0AB1: @StoreData 3 @MaleOffset 30@ 2@
+end
+0AB2: ret 1 true
+
+{======================================================================
+======================================================================}
 :ShowSettingTexts
 // 0@: sex menu state, 1@: speed, 2@: pose, 3@ place
 
@@ -629,10 +790,13 @@ for 12@ = 1 to 9@
     0AB1: @SetDrawTextRGB_1Number 12 font 1 linewidth 600.0 size 0.4 1.2 position 14@ 389.0 GXT 10@ 11@ rgb 13@ 13@ 13@ number 12@
 end
 
-if 0@ <= 0 // sex menu closed/hidden
+if 0@ == 0 // sex menu closed/hidden
 then
     //10@s = 'CFG_T2' // ~b~~k~~PED_ANSWER_PHONE~~w~: Open/close menu.
     10@s = 'CFG_T7' // Change position
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
+
+    10@s = 'CFG_T8' // Actors offsets
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
 end
 0AB2: ret 0
