@@ -6,6 +6,7 @@ S_OPT2	Cambiar posicion
 S_OPT3	Cambiar camara
 S_OPT4	Change!
 S_OPT5	Cancel
+S_OPT6	Close
 S_MENU1	Lugares
 S_MENU2	Posiciones
 S_MENU3	Camaras
@@ -84,6 +85,7 @@ CFG_T4	~b~NUM4~s~/~b~NUM6~s~: Change cam view (fixed mode).
 CFG_T5	Poses
 CFG_T6	<    >
 CFG_T7	Change position
+CFG_T8	Actors offsets
 
 CFG_C1	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (Free Camera)
 CFG_C2	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (Fixed Camera ~1~)
@@ -102,5 +104,13 @@ CFG_P6	~k~~PED_FIREWEAPON~: ~e~Change pose (~w~1~e~ 2 3 4)
 CFG_P7	~k~~PED_FIREWEAPON~: ~e~Change pose (1 ~w~2~e~ 3 4)
 CFG_P8	~k~~PED_FIREWEAPON~: ~e~Change pose (1 2 ~w~3~e~ 4)
 CFG_P9	~k~~PED_FIREWEAPON~: ~e~Change pose (1 2 3 ~w~4~e~)
+
+CFG_O1	Male offset
+CFG_O2	Female offset
+CFG_O3	x    <    >
+CFG_O4	y    <    >
+CFG_O5	z    <    >
+CFG_O6	Reset
+CFG_O7	Restore
 
 INT_1	~1~
