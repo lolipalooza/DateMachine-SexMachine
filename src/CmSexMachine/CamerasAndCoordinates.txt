@@ -69,7 +69,7 @@ then
         FPV_MINANGLE = 16
         FPV_MAXANGLE = 20
     end
-    0AB1: @GetFirstPersonCamCoordinates 2 0@ 1@ ret cam_pos 4@ 5@ 6@ cam_target 7@ 8@ 9@ rotation 14@ angle 15@ min_rotation 16@ max_rotation 17@ min_angle 18@ max_angle 19@
+    0AB1: @GetFirstPersonCamCoordinates 2 pose 0@ place 1@ ret cam_pos 4@ 5@ 6@ cam_target 7@ 8@ 9@ rotation 14@ angle 15@ min_rotation 16@ max_rotation 17@ min_angle 18@ max_angle 19@
     0AB1: @StoreData 3 @FirstPersonCameraVars 14@ FPV_ROTATION
     0AB1: @StoreData 3 @FirstPersonCameraVars 16@ FPV_MINROTATION
     0AB1: @StoreData 3 @FirstPersonCameraVars 17@ FPV_MAXROTATION
@@ -126,7 +126,49 @@ end
 
 {======================================================================
 ======================================================================}
-:GetFirstPersonCamCoordinates
+:GetFirstPersonCamCoordinates // 0@: pose, 1@: place
+094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+//0AB1: @RecoverPlayerInterior 0 9@
+
+0A9A: 2@ = openfile COORDINATES_FILE mode "rb"  // IF and SET
+
+// Get section
+repeat
+    0ADA: 3@ = scan_file 2@ format "%s" 4@v //IF and SET
+    if 4@v == "FirstPersonCam"
+    then break
+    end
+until 0AD6:   end_of_file 2@ reached // To do: handle cases when string is not present in file
+
+// Get interior name
+repeat
+    0ADA: 3@ = scan_file 2@ format "%s" 4@v //IF and SET
+    if 4@v == 10@v
+    then break
+    end
+until 0AD6:   end_of_file 2@ reached // To do: handle cases when string is not present in file
+
+// Get data
+for 4@ = 0 to 7
+    for 5@ = 0 to 8
+        0ADA: 3@ = scan_file 2@ format "%s" 10@v //IF and SET       // Dummy words
+    end
+    for 5@ = 0 to 8
+        0ADA: 3@ = scan_file 2@ format "%s" 10@v //IF and SET       // Dummy word
+        0ADA: 3@ = scan_file 2@ format "%f %f %f %f %f %f %f %f %f %f %f %f" 10@ 11@ 12@ 13@ 14@ 15@ 16@ 17@ 18@ 19@ 20@ 21@ //IF and SET
+        if 003B:   4@ == 0@  // (int)
+        then
+            if 003B:   5@ == 1@  // (int)
+            then 0AB2: ret 12 cam_pos 10@ 11@ 12@ cam_target 13@ 14@ 15@ rotation 16@ angle 17@ min_rotation 18@ max_rotation 19@ min_angle 20@ max_angle 21@
+            end
+        end
+    end
+end
+0AB2: ret 6 cam 0.0 0.0 0.0 trgt 0.0 0.0 0.0
+
+{======================================================================
+======================================================================}
+:GetFirstPersonCamCoordinates2 // 0@: pose, 1@: place
 094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 0AB1: @RecoverPlayerInterior 0 9@
 if or
