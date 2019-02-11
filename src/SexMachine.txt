@@ -1,9 +1,6 @@
 {$CLEO .s}
 thread 'SexMachine'
 
-//0AB1: @ReadSexPosesInfo 3 speed 1 pose 0 place 2 ret gxt 0@ 1@ max_anim 2@
-//0AD0: show_formatted_text_lowpriority "speed: %s, max anim: %d" time 1000 0@s 2@
-
 {gosub @CmSexStart
 if wasted_or_busted 
 then gosub @CmSexEnd
