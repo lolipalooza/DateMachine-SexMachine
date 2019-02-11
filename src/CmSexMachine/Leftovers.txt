@@ -431,7 +431,7 @@ end
 
 {======================================================================
 ======================================================================}
-:ReadSexPosesInfo2
+:ReadSexPosesInfo
 const
     Rsp_Speed = 0@
     Rsp_Pose = 1@
@@ -477,7 +477,7 @@ end
 
 {======================================================================
 ======================================================================}
-:GetFirstPersonCamCoordinates2 // 0@: pose, 1@: place
+:GetFirstPersonCamCoordinates // 0@: pose, 1@: place
 094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 0AB1: @RecoverPlayerInterior 0 9@
 if or
@@ -588,4 +588,118 @@ then
     end
 end
 0AB2: ret 6 cam 0.0 0.0 0.0 trgt 0.0 0.0 0.0
+
+{======================================================================
+======================================================================}
+:GetCenterCoordinates // 0@: pose, 1@: place
+094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+0AB1: @RecoverPlayerInterior 0 9@
+if or
+10@v == "SVLAMD"
+9@ == 0
+then
+    if 0@ == SEX_FUCKING
+    then
+        if 1@ == PL_BED
+        then 0AB2: ret 3 2358.99 -1132.7687 1050.579
+        end
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2374.2893 -1123.5206 1050.381
+        end
+        if 1@ == PL_TABLE
+        then 0AB2: ret 3 2371.7969 -1132.8502 1050.4785
+        end
+        if 1@ == PL_FLOOR
+        then 0AB2: ret 3 2373.4448 -1126.0282 1049.8816
+        end
+        if 1@ == PL_KITCHEN
+        then 0AB2: ret 3 2374.1855 -1131.6512 1050.9828
+        end
+        if 1@ == PL_WALL
+        then 0AB2: ret 3 2369.8174 -1129.0562 1050.4834
+        end
+    end
+    if 0@ == SEX_BJ
+    then
+        if 1@ == PL_BED
+        then 0AB2: ret 3 2362.2092 -1122.4932 1050.3805
+        end
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2374.5054 -1123.332 1050.0811
+        end
+        if 1@ == PL_CHAIR
+        then 0AB2: ret 3 2359.7014 -1132.7325 1050.2815
+        end
+        if 1@ == PL_FLOOR
+        then 0AB2: ret 3 2374.4753 -1123.4691 1050.5
+        end
+        if 1@ == PL_KITCHEN
+        then 0AB2: ret 3 2373.8 -1131.4 1050.4
+        end
+        if 1@ == PL_FOOT
+        then 0AB2: ret 3 2372.6848 -1125.203 1050.875
+        end
+    end
+    if 0@ == SEX_ANAL
+    then
+        if 1@ == PL_BED
+        then 0AB2: ret 3 2359.1401 -1132.9093 1050.577
+        end
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2372.5667 -1121.9469 1050.1776
+        end
+        if 1@ == PL_TABLE
+        then 0AB2: ret 3 2372.2219 -1132.9757 1050.4785
+        end
+        if 1@ == PL_FLOOR
+        then 0AB2: ret 3 2372.5811 -1125.9805 1049.8792
+        end
+        if 1@ == PL_BATH
+        then 0AB2: ret 3 2362.7004 -1122.2124 1050.4795
+        end
+        if 1@ == PL_WALL
+        then 0AB2: ret 3 2369.8132 -1128.7932 1050.4814
+        end
+    end
+    if 0@ == SEX_HJ
+    then
+        if 1@ == PL_BED
+        then 0AB2: ret 3 2361.9197 -1122.5356 1050.4824
+        end
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2372.2788 -1121.979 1050.083
+        end
+        if 1@ == PL_FOOT
+        then 0AB2: ret 3 2372.6919 -1122.257 1050.2834
+        end
+    end
+    if 0@ == SEX_CUNNI
+    then
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2374.3625 -1123.5858 1050.1796
+        end
+        if 1@ == PL_FLOOR
+        then 0AB2: ret 3 2372.3486 -1126.4558 1049.6802
+        end
+    end
+    if 0@ == SEX_69
+    then
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2370.5925 -1123.4781 1050.084
+        end
+    end
+    if 0@ == SEX_TJ
+    then
+        if 1@ == PL_CHAIR
+        then 0AB2: ret 3 2363.5767 -1122.5115 1050.577
+        end
+    end
+    if 0@ == SEX_FJ
+    then
+        if 1@ == PL_SOFA
+        then 0AB2: ret 3 2372.6287 -1121.7363 1050.3785
+        end
+    end
+end
+0AB2: ret 3 0.0 0.0 0.0
 
