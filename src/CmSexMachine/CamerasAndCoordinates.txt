@@ -36,10 +36,9 @@ end
 
 {======================================================================
 ======================================================================}
-:PutPlayerIntoScene
-// 0@: pose, 1@: place
+:PutPlayerIntoScene // 0@: pose, 1@: place
 0619: enable_actor $PLAYER_ACTOR collision_detection 0
-0AB1: @GetCenterCoordinates 2 0@ 1@ ret 3@ 4@ 5@
+0AB1: @GetCenterCoordinates 2 pose 0@ place 1@ ret 3@ 4@ 5@
 5@ -= 1.0
 00A1: put_actor $PLAYER_ACTOR at 3@ 4@ 5@
 0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
@@ -159,16 +158,69 @@ for 4@ = 0 to 7
         if 003B:   4@ == 0@  // (int)
         then
             if 003B:   5@ == 1@  // (int)
-            then 0AB2: ret 12 cam_pos 10@ 11@ 12@ cam_target 13@ 14@ 15@ rotation 16@ angle 17@ min_rotation 18@ max_rotation 19@ min_angle 20@ max_angle 21@
+            then
+                0A9B: closefile 2@
+                0AB2: ret 12 cam_pos 10@ 11@ 12@ cam_target 13@ 14@ 15@ rotation 16@ angle 17@ min_rotation 18@ max_rotation 19@ min_angle 20@ max_angle 21@
             end
         end
     end
 end
+0A9B: closefile 2@
 0AB2: ret 6 cam 0.0 0.0 0.0 trgt 0.0 0.0 0.0
 
 {======================================================================
 ======================================================================}
-:GetCenterCoordinates
+:GetCenterCoordinates // 0@: pose, 1@: place
+094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+//0AB1: @RecoverPlayerInterior 0 9@
+
+0A9A: 2@ = openfile COORDINATES_FILE mode "rb"  // IF and SET
+
+// Get section
+repeat
+    0ADA: 3@ = scan_file 2@ format "%s" 4@v //IF and SET
+    if 4@v == "CenterCoordinates"
+    then break
+    end
+until 0AD6:   end_of_file 2@ reached // To do: handle cases when string is not present in file
+
+// Get interior name
+repeat
+    0ADA: 3@ = scan_file 2@ format "%s" 4@v //IF and SET
+    if 4@v == 10@v
+    then break
+    end
+until 0AD6:   end_of_file 2@ reached // To do: handle cases when string is not present in file
+
+// Get data
+for 4@ = 0 to 3
+    0ADA: 3@ = scan_file 2@ format "%s %s" 10@v 14@v //IF and SET           // Dummy words
+    for 5@ = 0 to 8
+        0ADA: 3@ = scan_file 2@ format "%s" 10@v //IF and SET               // Dummy word
+        for 6@ = 0 to 1
+            0ADA: 3@ = scan_file 2@ format "%f %f %f" 10@ 11@ 12@ //IF and SET
+            0B14: 20@ = 0@ MOD 2
+            0085: 21@ = 0@ // (int)
+            0016: 21@ /= 2
+            if and            // pose % 2 === 6@        and         pose / 2 === 4@
+            003B:   20@ == 6@  // (int)
+            003B:   21@ == 4@  // (int)
+            then
+                if 003B:   5@ == 1@  // (int)   // place === 5@
+                then
+                    0A9B: closefile 2@
+                    0AB2: ret 3 10@ 11@ 12@
+                end
+            end
+        end
+    end
+end
+0A9B: closefile 2@
+0AB2: ret 3 0.0 0.0 0.0
+
+{======================================================================
+======================================================================}
+:GetCenterCoordinates2 // 0@: pose, 1@: place
 094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 0AB1: @RecoverPlayerInterior 0 9@
 if or
