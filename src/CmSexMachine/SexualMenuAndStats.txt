@@ -132,16 +132,11 @@ repeat
     end
 until 0AD6:   end_of_file 2@ reached // To do: handle cases when string is not present in file
 
-//0A9A: 9@ = openfile "modloader/2huGTA/cleo/DEBUG.dat" mode "wb+"  // IF and SET
-//0AD9: write_formatted_text "Looking for place %d, pose %d...%c%c" in_file 9@ 0@ 1@ 0xd 0xa
 for 4@ = 0 to 2
     0ADA: 3@ = scan_file 2@ format "%s %s %s" 10@v 14@v 18@v //IF and SET
-    //0AD9: write_formatted_text "Block %d:%c%c" in_file 9@ 4@ 0xd 0xa
     for 5@ = 0 to 4
-        //0AD9: write_formatted_text "Line %d: " in_file 9@ 5@
         for 6@ = 0 to 2
             0ADA: 3@ = scan_file 2@ format "%s %s %s %s %s" 10@s 12@s 14@s 16@s 18@s //IF and SET
-            //0AD9: write_formatted_text "[%d]%s %s %s %s %s " in_file 9@ 6@ 10@s 12@s 14@s 16@s 18@s
             0B14: 22@ = 0@ MOD 3
             0085: 23@ = 0@ // (int)
             0016: 23@ /= 3
@@ -158,20 +153,15 @@ for 4@ = 0 to 2
                     003B:   25@ == 5@  // (int)      // pose / 5    === 7@ (line)
                     then
                         05AA: 30@s = 10@(7@,5s) // @s = 'short'
-                        //0AD9: write_formatted_text "%c%cGot it: block %d, line %d, number %d, value %s" in_file 9@ 0xd 0xa 4@ 5@ 6@ 30@s
                         0A9B: closefile 2@
-                        //0A9B: closefile 9@
                         0AB2: ret 2 gxt_entry 30@ 31@
                     end
                 end
             end
         end
-        //0AD9: write_formatted_text "%c%c" in_file 9@ 0xd 0xa
     end
 end
-//0AD9: write_formatted_text "Nothing found!" in_file 9@
 0A9B: closefile 2@
-//0A9B: closefile 9@
 0AB2: ret 2 gxt_entry 10@ 11@
 
 {======================================================================
