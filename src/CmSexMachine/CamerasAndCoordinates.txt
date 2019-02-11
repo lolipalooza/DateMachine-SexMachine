@@ -220,7 +220,53 @@ end
 
 {======================================================================
 ======================================================================}
-:GetCameraCoordinates
+:GetCameraCoordinates // 0@: current camera, 1@: pose, 2@: place
+094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+//0AB1: @RecoverPlayerInterior 0 9@
+
+0A9A: 30@ = openfile COORDINATES_FILE mode "rb"  // IF and SET
+
+// Get section
+repeat
+    0ADA: 31@ = scan_file 30@ format "%s" 4@v //IF and SET
+    if 4@v == "FixedCameras"
+    then break
+    end
+until 0AD6:   end_of_file 30@ reached // To do: handle cases when string is not present in file
+
+// Get interior name
+repeat
+    0ADA: 31@ = scan_file 30@ format "%s" 4@v //IF and SET
+    if 4@v == 10@v
+    then break
+    end
+until 0AD6:   end_of_file 30@ reached // To do: handle cases when string is not present in file
+
+// Get data
+for 4@ = 0 to 7
+    0ADA: 31@ = scan_file 30@ format "%s" 10@v //IF and SET                           // Dummy word
+    for 5@ = 0 to 8
+        0ADA: 31@ = scan_file 30@ format "%s %s %s" 10@v 14@v 18@v //IF and SET       // Dummy words
+        for 6@ = 0 to 11
+            0ADA: 31@ = scan_file 30@ format "%f %f %f %f %f %f" 10@ 11@ 12@ 13@ 14@ 15@ //IF and SET
+            0ADA: 31@ = scan_file 30@ format "%s" 18@v //IF and SET                   // Dummy word
+            if and
+            003B:   4@ == 1@  // (int)    // Pose
+            003B:   5@ == 2@  // (int)    // Place
+            003B:   6@ == 0@  // (int)    // Current Camera
+            then
+                0A9B: closefile 30@
+                0AB2: ret 6 cam_pos 10@ 11@ 12@ cam_target 13@ 14@ 15@
+            end
+        end
+    end
+end
+0A9B: closefile 30@
+0AB2: ret 6 0.0 0.0 0.0 0.0 0.0 0.0
+
+{======================================================================
+======================================================================}
+:GetCameraCoordinates2
 094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 0AB1: @RecoverPlayerInterior 0 9@
 if or
