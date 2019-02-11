@@ -266,6 +266,49 @@ end
 
 {======================================================================
 ======================================================================}
+:GetActorsCoordinates // inputs: 0@: pose, 1@: place
+094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+//0AB1: @RecoverPlayerInterior 0 9@
+
+0A9A: 30@ = openfile COORDINATES_FILE mode "rb"  // IF and SET
+
+// Get section
+repeat
+    0ADA: 31@ = scan_file 30@ format "%s" 4@v //IF and SET
+    if 4@v == "ActorsCoordinates"
+    then break
+    end
+until 0AD6:   end_of_file 30@ reached // To do: handle cases when string is not present in file
+
+// Get interior name
+repeat
+    0ADA: 31@ = scan_file 30@ format "%s" 4@v //IF and SET
+    if 4@v == 10@v
+    then break
+    end
+until 0AD6:   end_of_file 30@ reached // To do: handle cases when string is not present in file
+
+// Get data
+for 4@ = 0 to 7
+    0ADA: 31@ = scan_file 30@ format "%s %s %s %s %s" 10@v 14@v 18@v 22@v 26@v //IF and SET     // Dummy words
+    for 5@ = 0 to 8
+        0ADA: 31@ = scan_file 30@ format "%s" 10@v //IF and SET                                 // Dummy word
+        0ADA: 31@ = scan_file 30@ format "%f %f %f %f %f %f %f %f" 10@ 11@ 12@ 13@ 14@ 15@ 16@ 17@ //IF and SET
+        if and
+        003B:   4@ == 0@  // (int)    // Pose
+        003B:   5@ == 1@  // (int)    // Place
+        then
+            0A9B: closefile 30@
+            0AB2: ret 8 fem_xyz 10@ 11@ 12@ angle 13@ male_xyz 14@ 15@ 16@ angle 17@
+        end
+    end
+end
+
+0A9B: closefile 30@
+0AB2: ret 8 fem_xyz 0.0 0.0 0.0 angle 0.0 male_xyz 0.0 0.0 0.0 angle 0.0
+
+{======================================================================
+======================================================================}
 :GetPlaceFromString
 if 0@s == 'S_PL_1' // Cama
 then 0AB2: ret 1 PL_BED
@@ -328,8 +371,7 @@ end
 
 {======================================================================
 ======================================================================}
-:GetActorsCoordinates
-// inputs: 0@: pose, 1@: place
+:GetActorsCoordinates2 // inputs: 0@: pose, 1@: place
 094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 0AB1: @RecoverPlayerInterior 0 9@
 if or

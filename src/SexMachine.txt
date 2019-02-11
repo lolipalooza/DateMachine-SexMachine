@@ -1,6 +1,18 @@
 {$CLEO .s}
 thread 'SexMachine'
 
+{0A9A: 0@ = openfile "modloader/2hugta/cleo/Asdf.txt" mode "wb+"  // IF and SET
+
+1@=5
+2@=1
+0AB1: call_scm_func @GetActorsCoordinates 2 pose 1@ place 2@ ret fem_xyza 10@ 11@ 12@ 13@ male_xyza 20@ 21@ 22@ 23@
+
+0AD9: write_formatted_text "reading actors coordinates (pose %d place %d)%c%c" in_file 0@ values pose 1@ place 2@ end_of_line 0xd 0xa
+0AD9: write_formatted_text "fem: %f %f %f %f, male: %f %f %f %f" in_file 0@ values fem_xyza 10@ 11@ 12@ 13@ male_xyza 20@ 21@ 22@ 23@
+0AD9: write_formatted_text "%c%cDone!" in_file 0@ values 0xd 0xa
+
+0A9B: closefile 0@}
+
 {gosub @CmSexStart
 if wasted_or_busted 
 then gosub @CmSexEnd
