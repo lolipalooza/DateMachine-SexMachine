@@ -575,8 +575,8 @@ if 20@ == 0
 then 10@s = 'CFG_O2' // Female offset
 else 10@s = 'CFG_O1' // Male offset
 end
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 502.0 12.0 GXT 10@ 11@
-if 0AB1: @CursorClickCheck 4 box_position 540.0 18.0 box_size 86.0 12.0
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 12.0 368.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 50.0 374.0 box_size 86.0 12.0
 then
     0AB1: @ToggleVariable 3 toggle_var 20@ toggle_values 0 1 store_in 20@
     0AB1: @StoreInt 2 @GenderFlag 20@
@@ -584,33 +584,33 @@ end
 
 
 10@s = 'CFG_O3' // x    <    >
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 512.0 29.0 GXT 10@ 11@
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 22.0 385.0 GXT 10@ 11@
 10@s = 'CFG_O4' // y    <    >
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 512.0 42.0 GXT 10@ 11@
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 22.0 398.0 GXT 10@ 11@
 10@s = 'CFG_O5' // z    <    >
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 512.0 55.0 GXT 10@ 11@
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 22.0 411.0 GXT 10@ 11@
 
 // Position X
-if 0AB1: @CursorClickCheck 4 box_position 531.0 35.0 box_size 13.0 10.0
+if 0AB1: @CursorClickCheck 4 box_position 41.0 391.0 box_size 13.0 10.0
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 0 ret 21@
 end
-if 0AB1: @CursorClickCheck 4 box_position 546.0 35.0 box_size 13.0 10.0
+if 0AB1: @CursorClickCheck 4 box_position 56.0 391.0 box_size 13.0 10.0
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_INC_STEP pos_offset 0 ret 21@
 end
 
 // Position Y
-if 0AB1: @CursorClickCheck 4 box_position 531.0 48.0 box_size 13.0 10.0
+if 0AB1: @CursorClickCheck 4 box_position 41.0 404.0 box_size 13.0 10.0
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 4 ret 21@
 end
-if 0AB1: @CursorClickCheck 4 box_position 546.0 48.0 box_size 13.0 10.0
+if 0AB1: @CursorClickCheck 4 box_position 56.0 404.0 box_size 13.0 10.0
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_INC_STEP pos_offset 4 ret 21@
 end
 
 // Position Z
-if 0AB1: @CursorClickCheck 4 box_position 531.0 61.0 box_size 13.0 10.0
+if 0AB1: @CursorClickCheck 4 box_position 41.0 417.0 box_size 13.0 10.0
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 8 ret 21@
 end
-if 0AB1: @CursorClickCheck 4 box_position 546.0 61.0 box_size 13.0 10.0
+if 0AB1: @CursorClickCheck 4 box_position 56.0 417.0 box_size 13.0 10.0
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_INC_STEP pos_offset 8 ret 21@
 end
 
@@ -619,8 +619,8 @@ if 30@ == 0
 then 10@s = 'CFG_O6' // Reset
 else 10@s = 'CFG_O7' // Restore
 end
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 502.0 74.0 GXT 10@ 11@
-if 0AB1: @CursorClickCheck 4 box_position 521.0 80.0 box_size 48.0 12.0
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 12.0 430.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 31.0 436.0 box_size 48.0 12.0
 then
     0AB1: @ToggleVariable 3 toggle_var 30@ toggle_values 0 1 store_in 30@
     0AB1: @StoreInt 2 @ResetOffset 30@
@@ -666,8 +666,8 @@ then
 end
 
 10@s = 'S_OPT6' // Close
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 563.0 74.0 GXT 10@ 11@
-if 0AB1: @CursorClickCheck 4 box_position 583.0 80.0 box_size 48.0 12.0
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 73.0 430.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 93.0 436.0 box_size 48.0 12.0
 then 0@ = 0 // Close (Reset SexMenuState)
 end
 
