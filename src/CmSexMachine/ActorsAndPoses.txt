@@ -223,7 +223,7 @@ end
 
 {======================================================================
 ======================================================================}
-:ReadSexPosesInfo
+:ReadSexPosesInfo2
 const
     Rsp_Speed = 0@
     Rsp_Pose = 1@
@@ -269,6 +269,42 @@ end
 
 {======================================================================
 ======================================================================}
+:ReadSexPosesInfo // 0@: speed, 1@: pose, 2@: place
+0A9A: 30@ = openfile ANIMATIONS_FILE mode "rb"  // IF and SET
+for 4@ = 0 to 3
+    0ADA: 31@ = scan_file 30@ format "%s %s" 10@v 14@v //IF and SET     // Dummy words
+    for 5@ = 0 to 8
+        0ADA: 31@ = scan_file 30@ format "%s" 10@v //IF and SET         // Dummy word
+        for 6@ = 0 to 1
+            0ADA: 31@ = scan_file 30@ format "%s %d %s %d %s %d %s %d" 10@s 20@ 12@s 21@ 14@s 22@ 16@s 23@ //IF and SET
+            0B14: 24@ = 1@ MOD 2
+            0085: 25@ = 1@ // (int)
+            0016: 25@ /= 2
+            if and            // pose % 2 === 6@  &&   pose / 2 === 4@
+            003B:   24@ == 6@  // (int)
+            003B:   25@ == 4@  // (int)
+            then
+                if 003B:   2@ == 5@  // (int)   // place === 5@
+                then
+                    for 7@ = 0 to 3
+                        if 003B:   0@ == 7@  // (int)   // speed === 7@
+                        then
+                            05AA: 26@s = 10@(7@,4s) // @s = 'short'
+                            0085: 28@ = 20@(7@,4i) // (int)
+                            0A9B: closefile 30@
+                            0AB2: ret 3 gxt_entry 26@ 27@ max_anim 28@
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+0A9B: closefile 30@
+0AB2: ret 3 gxt_entry 26@ 27@ max_anim 28@
+
+{======================================================================
+======================================================================}
 :GetAnimationNames
 const
     Gan_Str1 = 0@
@@ -277,13 +313,13 @@ const
     Gan_Animation = 2@
 end
 
-if 05AE:   Gan_StrSpeed == "idle__" // @s == 'short'
+if 05AE:   Gan_StrSpeed == "idle" // @s == 'short'
 then
     0AD3: 10@v = format "idle%d_f" Gan_Animation
     0AD3: 14@v = format "idle%d_m" Gan_Animation
     0AD3: 18@v = format "idle%d" Gan_Animation
 end
-if 05AE:   Gan_StrSpeed == "slow__" // @s == 'short'
+if 05AE:   Gan_StrSpeed == "slow" // @s == 'short'
 then
     0AD3: 10@v = format "slow%d_f" Gan_Animation
     0AD3: 14@v = format "slow%d_m" Gan_Animation
@@ -295,7 +331,7 @@ then
     0AD3: 14@v = format "normal%d_m" Gan_Animation
     0AD3: 18@v = format "normal%d" Gan_Animation
 end
-if 05AE:   Gan_StrSpeed == "fast__" // @s == 'short'
+if 05AE:   Gan_StrSpeed == "fast" // @s == 'short'
 then
     0AD3: 10@v = format "fast%d_f" Gan_Animation
     0AD3: 14@v = format "fast%d_m" Gan_Animation

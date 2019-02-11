@@ -1,6 +1,9 @@
 {$CLEO .s}
 thread 'SexMachine'
 
+//0AB1: @ReadSexPosesInfo 3 speed 1 pose 0 place 2 ret gxt 0@ 1@ max_anim 2@
+//0AD0: show_formatted_text_lowpriority "speed: %s, max anim: %d" time 1000 0@s 2@
+
 {gosub @CmSexStart
 if wasted_or_busted 
 then gosub @CmSexEnd
@@ -64,39 +67,44 @@ const
     FLAG_SX_MENU_LEFT = 0
     FLAG_SX_MENU_RIGHT = 1
     
+    // Pose
     SEX_FUCKING = 0
-    SEX_BJ = 1
-    SEX_ANAL = 2
-    SEX_HJ = 3
-    SEX_CUNNI = 4
-    SEX_69 = 5
-    SEX_TJ = 6
-    SEX_FJ = 7
+    SEX_BJ      = 1
+    SEX_ANAL    = 2
+    SEX_HJ      = 3
+    SEX_CUNNI   = 4
+    SEX_69      = 5
+    SEX_TJ      = 6
+    SEX_FJ      = 7
     
-    PL_BED = 0
-    PL_SOFA = 1
-    PL_TABLE = 2
-    PL_CHAIR = 3
-    PL_FLOOR = 4
-    PL_BATH = 5
-    PL_KITCHEN = 6
-    PL_WALL = 7
-    PL_FOOT = 8
-
-    BT_NORMAL = 0
-    BT_LOLI = 1
-    BT_BIG = 2
+    // Place
+    PL_BED      = 0
+    PL_SOFA     = 1
+    PL_TABLE    = 2
+    PL_CHAIR    = 3
+    PL_FLOOR    = 4
+    PL_BATH     = 5
+    PL_KITCHEN  = 6
+    PL_WALL     = 7
+    PL_FOOT     = 8
     
+    // Speed
     SPD_IDLE   = 0
     SPD_SLOW   = 1
     SPD_NORMAL = 2
     SPD_FAST   = 3
+
+    BT_NORMAL = 0
+    BT_LOLI = 1
+    BT_BIG = 2
     
     SPD_THRESHOLD1 = 13 // Threshold to stop
     SPD_THRESHOLD2 = 52 // Threshold to pass from slow to normal
     SPD_THRESHOLD3 = 88 // Threshold to pass from normal to fast
     
     LOG_FILE = "modloader/2hugta/cleo/SexMachine.log"
+    SEXPLACES_FILE = "cleo/SexPlaces.dat"
+    ANIMATIONS_FILE = "cleo/SexAnimations.dat"
                    
     // Sex Menu States
     SX_MENU_LEFT_FIRST_ELEM = 1
@@ -170,13 +178,13 @@ wait 0
             then 0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
             else 0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
             end
-            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
         end
         if Dummy3 == 1
         then
             0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
             0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
-            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
         end
     end
     if SexMenuState == 0
