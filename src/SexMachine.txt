@@ -1,19 +1,6 @@
 {$CLEO .s}
 thread 'SexMachine'
 
-{0A9A: 0@ = openfile "modloader/2hugta/cleo/Asdf.txt" mode "wb+"  // IF and SET
-
-1@=5
-2@=1
-10@=6
-0AB1: @GetCameraCoordinates 3 camera 10@ pose 1@ place 2@ ret cam_pos 3@ 4@ 5@ cam_target 6@ 7@ 8@
-
-0AD9: write_formatted_text "reading camera %d pose %d place %d%c%c" in_file 0@ values camera 10@ pose 1@ place 2@ end_of_line 0xd 0xa
-0AD9: write_formatted_text "camera position: %f %f %f - camera target: %f %f %f" in_file 0@ values 3@ 4@ 5@ 6@ 7@ 8@
-0AD9: write_formatted_text "%c%cDone!" in_file 0@ values 0xd 0xa
-
-0A9B: closefile 0@}
-
 {gosub @CmSexStart
 if wasted_or_busted 
 then gosub @CmSexEnd
