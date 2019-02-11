@@ -122,7 +122,7 @@ end
 {======================================================================
 ======================================================================}
 :SxMn_GetGXTPose // 0@: place, 1@: pose
-0A9A: 2@ = openfile "cleo/SexPlaces.dat" mode "rb"  // IF and SET
+0A9A: 2@ = openfile SEXPLACES_FILE mode "rb"  // IF and SET
 
 // Get interior name
 repeat
