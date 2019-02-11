@@ -1,6 +1,9 @@
 {$CLEO .s}
 thread 'SexMachine'
 
+//0AB1: @SxMn_GetGXTPose 2 place 8 pose 5 ret 0@ 1@
+//0AD0: show_formatted_text_lowpriority "%s" time 2000 0@s
+
 {gosub @CmSexStart
 if wasted_or_busted 
 then gosub @CmSexEnd
