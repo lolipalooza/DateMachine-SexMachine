@@ -34,8 +34,7 @@ wait 0
                 then
                     03E6: remove_text_box
                     0@ = 0
-                    //0A94: start_custom_mission "CmSexMachine"
-                    0A92: create_custom_thread "SexMachine.s" 0
+                    0A92: create_custom_thread "SexMachine.s" pose 0 place 2 // 0: sex coitus, 2: table
                 end
             else
                 if 0@ == 1

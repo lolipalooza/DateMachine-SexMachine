@@ -1,3 +1,11 @@
+{======================================================================
+Custom thread - Sex Machine:
+Entry Values:   0@: Pose
+                1@: Place
+
+Esxample of use                    
+0A92: create_custom_thread "SexMachine.s" pose 5 place 3
+======================================================================}
 {$CLEO .s}
 thread 'SexMachine'
 
@@ -156,6 +164,8 @@ end
 :CmSexStart
 $ONMISSION = 1
 OnSexActivity = false
+0085: SexPoseInt = 0@ // (int)
+0085: SexPlace = 1@ // (int)
 gosub @ToggleSexMachine
 
 while true
@@ -293,8 +303,8 @@ then
         03CB: set_rendering_origin_at 2364.344 -1136.4468 1051.0762
         //04F9: set_interior 8 color_to 0
     end
-    SexPoseInt = SEX_FUCKING
-    SexPlace = PL_TABLE
+    //SexPoseInt = SEX_FUCKING
+    //SexPlace = PL_TABLE
     BodyType = BT_NORMAL
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
