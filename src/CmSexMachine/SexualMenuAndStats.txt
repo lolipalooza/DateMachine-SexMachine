@@ -31,40 +31,6 @@ DummyString = 'S_OPT5' // Cancel
 
 0AB1: @SexualMenu_GetContent2 0
 0AB1: @SexualMenu_CheckBoxes 2 SexPlace SexPoseInt
-
-// Change Button Click
-if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0
-then
-    0AB1: @GetInt 1 @SxMn_Pose Dummy1
-    0AB1: @GetInt 1 @SxMn_Place Dummy2
-    0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret Dummy3 Dummy4
-    Dummy5=0
-    0AB1: @GetPoseFromString 2 Dummy3 Dummy4 ret Dummy1 Dummy5
-    if or
-    803B:   not Dummy1 == SexPoseInt  // (int)
-    803B:   not Dummy2 == SexPlace  // (int)
-    803B:   not Dummy5 == BodyType  // (int)
-    then
-        0085: SexPoseInt = Dummy1 // (int)
-        0085: SexPlace = Dummy2 // (int)
-        0085: BodyType = Dummy5 // (int)
-        fade 0 time 800
-        wait 800 ms
-        015F: set_camera_position 0.0 0.0 0.0 rotation 0.0 0.0 0.0
-        0160: set_camera_point_at 0.0 0.0 0.0 switchstyle 2
-        009B: destroy_actor PornActress
-        009B: destroy_actor PornActor
-        0AB1: call_scm_func @GenerateActors 2 SexPoseInt SexPlace ret PornActress PornActor
-        0AB1: call_scm_func @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
-        0AB1: call_scm_func @PutPlayerIntoScene 2 SexPoseInt SexPlace
-        0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
-        0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
-        SexStat_Speed = 40
-        wait 500
-        fade 1 time 800
-        SexMenuState = 0 // Close Sexual Menu
-    end
-end
 return
 
 {======================================================================
@@ -188,8 +154,7 @@ end
 
 {======================================================================
 ======================================================================}
-:SexualMenu_CheckBoxes
-// 0@ place, 1@: pose
+:SexualMenu_CheckBoxes // 0@ place, 1@: pose
 0AB1: @GetInt 1 @SxMn_Place 30@
 0AB1: @GetInt 1 @SxMn_Pose 31@
 for 11@ = 1 to 3
@@ -692,14 +657,17 @@ end
 {======================================================================
 ======================================================================}
 :ShowSettingTexts
-// 0@: sex menu state, 1@: speed, 2@: pose, 3@ place
+// 0@: sex menu state, 1@: speed, 2@: pose, 3@ place, 4@: flag for info text
 
-10@s = 'CFG_T3' // ~b~~k~~VEHICLE_ENTER_EXIT~: ~s~Go back.
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 12.0 GXT 10@ 11@
-10@s = 'CFG_T1' // ~b~Mouse wheel~w~: Increase/decrease speed.
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 26.0 GXT 10@ 11@
-10@s = 'CFG_T4' // ~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~s~: Change Camera mode. ~b~~k~~GO_LEFT~~s~/~b~~k~~GO_RIGHT~~s~: Change cam view (only in fixed mode).
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 40.0 GXT 10@ 11@
+if 4@ == 0
+then
+    10@s = 'CFG_T3' // ~b~~k~~VEHICLE_ENTER_EXIT~: ~s~Go back.
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 12.0 GXT 10@ 11@
+    10@s = 'CFG_T1' // ~b~Mouse wheel~w~: Increase/decrease speed.
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 26.0 GXT 10@ 11@
+    10@s = 'CFG_T4' // ~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~s~: Change Camera mode. ~b~~k~~GO_LEFT~~s~/~b~~k~~GO_RIGHT~~s~: Change cam view (only in fixed mode).
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 40.0 GXT 10@ 11@
+end
 
 {// Debug
 0AB1: @GetData 1 @FirstPersonCameraVars 29@

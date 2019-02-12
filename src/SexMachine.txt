@@ -19,6 +19,7 @@ end
 gosub @CmSexCleanUp
 end_thread}
 
+//gosub @CmSexStart
 gosub @CmSexStart
 gosub @CmSexCleanUp
 0A93: end_custom_thread
@@ -162,6 +163,8 @@ end
 {$I CmSexMachine/GenerateSexFiles.txt}
 {$I CmSexMachine/SexualMenuAndStats.txt}
 
+{$I CmSexMachine/AlternativeSexMachine.txt}
+
 {======================================================================
 ======================================================================}
 :CmSexStart
@@ -174,7 +177,6 @@ $ONMISSION = 1
 0AB1: @StoreActorsInfo 4 gxt_fem 3@ 4@ gtx_male 5@ 6@
 
 OnSexActivity = false
-
 gosub @ToggleSexMachine
 
 while true
@@ -182,12 +184,28 @@ wait 0
     gosub @SexMachine
     if SexMenuState == 1
     then
-        gosub @SexualMenuMachine
         gosub @ShowSexualMenu
+        if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0 // Change Button Click
+        then
+            0AB1: @GetInt 1 @SxMn_Pose Dummy1
+            0AB1: @GetInt 1 @SxMn_Place Dummy2
+            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret Dummy3 Dummy4
+            0AB1: @GetPoseFromString 2 Dummy3 Dummy4 ret Dummy1 Dummy5
+            if or
+            803B:   not Dummy1 == SexPoseInt  // (int)
+            803B:   not Dummy2 == SexPlace  // (int)
+            803B:   not Dummy5 == BodyType  // (int)
+            then
+                0085: SexPoseInt = Dummy1 // (int)
+                0085: SexPlace = Dummy2 // (int)
+                0085: BodyType = Dummy5 // (int)
+                gosub @ChangePoseAndPlace
+                SexMenuState = 0 // Close Sexual Menu
+            end
+        end
     end
     if SexMenuState == 2
     then
-        gosub @SexualMenuMachine
         0AB1: @ActorsOffsetsMenu 3 SexMenuState PornActress PornActor ret SexMenuState Dummy1 Dummy2 Dummy3
         if Dummy2 == true
         then
@@ -218,6 +236,7 @@ wait 0
         0AB1: @ShowSexualStats 3 SexStat_Climax SexStat_Speed SexStat_Pleasure
         0AB1: @ShowSettingTexts 4 SexMenuState SpeedState SexPoseInt SexPlace
     end
+    gosub @SexualMenuMachine
 end
 
 :CmSexEnd
@@ -323,6 +342,7 @@ then
     0AB1: call_scm_func @PutPlayerIntoScene 2 SexPoseInt SexPlace
     0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
     0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+    SexMenuState=0
     OnSexActivity = true
     SexState = 0
     ShowSexualStats = true
@@ -660,6 +680,25 @@ then
         0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_NORMAL
     end
 end
+return
+
+{======================================================================
+======================================================================}
+:ChangePoseAndPlace
+fade 0 time 800
+wait 800 ms
+015F: set_camera_position 0.0 0.0 0.0 rotation 0.0 0.0 0.0
+0160: set_camera_point_at 0.0 0.0 0.0 switchstyle 2
+009B: destroy_actor PornActress
+009B: destroy_actor PornActor
+0AB1: call_scm_func @GenerateActors 2 SexPoseInt SexPlace ret PornActress PornActor
+0AB1: call_scm_func @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
+0AB1: call_scm_func @PutPlayerIntoScene 2 SexPoseInt SexPlace
+0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
+0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+SexStat_Speed = 40
+wait 500
+fade 1 time 800
 return
 
 {======================================================================

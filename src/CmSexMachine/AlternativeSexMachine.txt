@@ -1,0 +1,175 @@
+{======================================================================
+======================================================================}
+:CmSexStart2
+$ONMISSION = 1
+
+// Entry parameters
+0085: SexPoseInt = 0@ // (int)
+0085: SexPlace = 1@ // (int)
+0085: SexStat_Speed = 2@ // (int)
+0AB1: @StoreActorsInfo 4 gxt_fem 3@ 4@ gtx_male 5@ 6@
+
+    0581: enable_radar 0
+    0826: enable_hud 0
+    03F0: enable_text_draw 1
+    03E0: draw_text_behind_textures 1
+0AB1: @InitCursorControl 0
+ShowSexualStats = true
+SexMenuState = 0
+SexStat_Speed = 0
+
+0ACE: show_formatted_text_box "Go to your desired place and then select pose with TAB"
+
+while true
+wait 0
+    gosub @SexMachine2
+    if SexMenuState == 0
+    then
+        if PulseButtonState == PULSED_ENTER_VEH
+        then break // End Sex Activity
+        end
+        if 00E1:   player 0 pressed_key PAD_ANSWER_PHONE // TAB
+        then
+            SexMenuState = 1
+            01B4: set_player $PLAYER_CHAR can_move 0
+        end
+    end
+    if SexMenuState == 1
+    then
+        gosub @ShowSexualMenu
+        0AB1: @CursorControl 0
+        if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0 // Change Button Click
+        then
+            01B4: set_player $PLAYER_CHAR can_move 1
+            SexMenuState = 0 // Close Sexual Menu
+        end
+        if PulseButtonState == PULSED_ENTER_VEH
+        then 01B4: set_player $PLAYER_CHAR can_move 1
+        end
+    end
+    {if SexMenuState == 2
+    then
+        gosub @SexualMenuMachine
+        0AB1: @ActorsOffsetsMenu 3 SexMenuState PornActress PornActor ret SexMenuState Dummy1 Dummy2 Dummy3
+        if Dummy2 == true
+        then
+            if Dummy1 == 0 // gender flag
+            then 0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
+            else 0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
+            end
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+        end
+        if Dummy3 == 1
+        then
+            0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
+            0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+        end
+    end}
+    if ShowSexualStats==true
+    then
+        0AB1: @ShowSexualStats 3 SexStat_Climax SexStat_Speed SexStat_Pleasure
+        0AB1: @ShowSettingTexts 5 SexMenuState SpeedState SexPoseInt SexPlace true
+    end
+    gosub @SexualMenuMachine
+end
+
+0581: enable_radar 1
+0826: enable_hud 1
+03F0: enable_text_draw 0
+03E0: draw_text_behind_textures 0
+return
+
+{======================================================================
+======================================================================}
+:SexMachine2
+if SexState == 0
+then
+    {if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0
+    then SexState=1
+        0AB1: @GetInt 1 @CameraMode Dummy1
+        0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 0 max_value 2 flag FLAG_INCREASE store_into Dummy1
+        0AB1: @StoreInt 2 @CameraMode Dummy1
+        0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+    end
+    if or
+    SexMenuState == 0
+    SexMenuState == 1
+    then
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
+        then 0AB1: @ToggleVariable 3 toggle_var SexMenuState toggle_values 0 1 store_in SexMenuState
+        end
+    end
+    if SexMenuState == 0
+    then
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
+        then 0AB1: @ToggleVariable 3 toggle_var SexMenuState toggle_values 0 2 store_in SexMenuState
+        end
+    end
+    if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
+    then
+        0AB1: @GetInt 1 @CurrentAnimation Dummy1
+        0AB1: call_scm_func @ReadSexPosesInfo 3 SpeedState SexPoseInt SexPlace out Dummy3 Dummy4 Dummy2
+        0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value Dummy2 flag FLAG_INCREASE store_into Dummy1
+        0AB1: @StoreInt 2 @CurrentAnimation Dummy1
+        0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+    end}
+
+    {0AB1: @GetInt 1 @CameraMode Dummy1
+    if Dummy1 == 1 // Fixed Camera
+    then
+        0494: get_joystick 0 data_to MoveAxisX MoveAxisY SpAxisX SpAxisY
+        if 0018:   SpAxisX > 100 // RIGHT
+        then SexState = 4
+            0AB1: @GetInt 1 @CurrentCamera MoveAxisY
+            0AB1: call_scm_func @IncOrDecIntVariable 4 MoveAxisY 0 11 FLAG_INCREASE MoveAxisY
+            0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
+            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+        end
+        if 001A:   -100 > SpAxisX // LEFT
+        then SexState = 5
+            0AB1: @GetInt 1 @CurrentCamera MoveAxisY
+            0AB1: @IncOrDecIntVariable 4 var_to_increase MoveAxisY min_value 0 max_value 11 flag FLAG_DECREASE store_into MoveAxisY
+            0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
+            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 247.0 395.0 box_size 13.0 12.0
+        then
+            0AB1: @GetInt 1 @CurrentCamera MoveAxisY
+            0AB1: @IncOrDecIntVariable 4 var_to_increase MoveAxisY min_value 0 max_value 11 flag FLAG_DECREASE store_into MoveAxisY
+            0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
+            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 263.0 395.0 box_size 13.0 12.0
+        then
+            0AB1: @GetInt 1 @CurrentCamera MoveAxisY
+            0AB1: call_scm_func @IncOrDecIntVariable 4 MoveAxisY 0 11 FLAG_INCREASE MoveAxisY
+            0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
+            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+        end
+    end}
+end
+
+// Increase / Decrease Speed
+if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
+then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
+end
+if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
+then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
+end
+
+// Increase Pleasure
+gosub @PleasureMachine
+
+// Increase Climax
+gosub @ClimaxMachine
+
+// Change from stopped to slow or fast
+//gosub @SpeedMachine
+
+// Buttons UP - DOWN - ACCEPT - CANCEL acknowledge
+gosub @PulseButtonMachine
+
+// First Person Camera control
+0AB1: @FirstPersonCameraControl 0
+return
