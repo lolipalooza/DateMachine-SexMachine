@@ -370,10 +370,6 @@ then
         0AB1: @StoreInt 2 @CameraMode Dummy1
         0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
     end
-    {if 00E1:   player 0 pressed_key PAD_ANSWER_PHONE // TAB
-    then SexState=2
-        gosub @ToggleSexualMenu
-    end}
     if or
     SexMenuState == 0
     SexMenuState == 1
@@ -516,15 +512,6 @@ end
 0AB1: call_scm_func @IncreaseTimedVar 7 SexStat_Climax Dummy2 ClimaxState Dummy1 FLAG_PERCENTAGE_FLOAT Clmx_LstEvntTime Clmx_CurrEvntTime SexStat_Climax ClimaxState Clmx_LstEvntTime Clmx_CurrEvntTime
 if ClimaxState == 2
 then ClimaxState=0
-end
-return
-
-{======================================================================
-======================================================================}
-:ToggleSexualMenu
-if SexMenuState == 0
-then SexMenuState = 1 // Show and start from initial state
-else SexMenuState = 0 // Hide sexual menu
 end
 return
 
