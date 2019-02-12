@@ -1,3 +1,3 @@
-!release/modloader/ignored/
-release/modloader/ignored/*
+!release/modloader/. ignored/
+release/modloader/. ignored/*
 release/modloader/ignored/bdoll.bat
