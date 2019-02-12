@@ -2,9 +2,12 @@
 Custom thread - Sex Machine:
 Entry Values:   0@: Pose
                 1@: Place
+                2@: Speed
+                3@s: Actress
+                5@s: Actor
 
 Esxample of use                    
-0A92: create_custom_thread "SexMachine.s" pose 5 place 3
+0A92: create_custom_thread "SexMachine.s" pose 5 place 3 speed 40 fem_gxt 10@ 11@ male_gxt 20@ 21@
 ======================================================================}
 {$CLEO .s}
 thread 'SexMachine'
@@ -163,9 +166,15 @@ end
 ======================================================================}
 :CmSexStart
 $ONMISSION = 1
-OnSexActivity = false
+
+// Entry parameters
 0085: SexPoseInt = 0@ // (int)
 0085: SexPlace = 1@ // (int)
+0085: SexStat_Speed = 2@ // (int)
+0AB1: @StoreActorsInfo 4 gxt_fem 3@ 4@ gtx_male 5@ 6@
+
+OnSexActivity = false
+
 gosub @ToggleSexMachine
 
 while true
@@ -318,7 +327,7 @@ then
     SexState = 0
     ShowSexualStats = true
     SexStat_Climax = 0.0
-    SexStat_Speed = 40
+    //SexStat_Speed = 40
     SexStat_Pleasure = 1
     ClimaxState = 0
     PleasureState = 0

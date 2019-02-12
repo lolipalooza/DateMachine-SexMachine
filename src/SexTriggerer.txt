@@ -34,7 +34,9 @@ wait 0
                 then
                     03E6: remove_text_box
                     0@ = 0
-                    0A92: create_custom_thread "SexMachine.s" pose 0 place 2 // 0: sex coitus, 2: table
+                    10@s = 'female'
+                    20@s = 'male'
+                    0A92: create_custom_thread "SexMachine.s" pose 0 place 2 speed 40 fem_gxt 10@ 11@ male_gxt 20@ 21@
                 end
             else
                 if 0@ == 1

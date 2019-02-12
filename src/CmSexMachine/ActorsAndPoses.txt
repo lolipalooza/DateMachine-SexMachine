@@ -1,5 +1,33 @@
 {======================================================================
 ======================================================================}
+:ActressGXT
+hex
+    00 00 00 00
+    00 00 00 00
+end
+
+:ActorGXT
+hex
+    00 00 00 00
+    00 00 00 00
+end
+
+:GetActorsInfo
+0AB1: @GetData 2 @ActressGXT 0 0@
+0AB1: @GetData 2 @ActressGXT 4 1@
+0AB1: @GetData 2 @ActorGXT 0 2@
+0AB1: @GetData 2 @ActorGXT 4 3@
+0AB2: ret 4 gxt_fem 0@ 1@ gtx_male 2@ 3@
+
+:StoreActorsInfo // 0@s: female gxt, 2@s: male gxt
+0AB1: @StoreData 3 @ActressGXT 0@ 0
+0AB1: @StoreData 3 @ActressGXT 1@ 4
+0AB1: @StoreData 3 @ActorGXT 2@ 0
+0AB1: @StoreData 3 @ActorGXT 3@ 4
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :AddOffsetTo3DCoord // 0@ 1@ 2@: coordinates, 3@: gender flag
 if 3@ == 0 // female by default (0)
 then
@@ -25,8 +53,9 @@ end
 0AB1: @AddOffsetTo3DCoord 4 3dcoord 10@ 11@ 12@ gender 0 store_in 10@ 11@ 12@
 0AB1: @AddOffsetTo3DCoord 4 3dcoord 20@ 21@ 22@ gender 1 store_in 20@ 21@ 22@
 
-023C: load_special_actor 'bdoll' as 1
-023C: load_special_actor 'tumi' as 2
+0AB1: @GetActorsInfo 0 gxt_fem 18@ 19@ gtx_male 28@ 29@
+023C: load_special_actor 18@s as 1
+023C: load_special_actor 28@s as 2
 038B: load_requested_models
 repeat
 wait 0
