@@ -100,9 +100,9 @@ const
     SPD_THRESHOLD3 = 88 // Threshold to pass from normal to fast
     
     LOG_FILE = "modloader/2hugta/cleo/SexMachine.log"
-    SEXPLACES_FILE = "cleo/SexPlaces.dat"
-    ANIMATIONS_FILE = "cleo/SexAnimations.dat"
-    COORDINATES_FILE = "cleo/SexCoordinates.dat"
+    SEXPLACES_FILE = "data/SexPlaces.dat"
+    ANIMATIONS_FILE = "data/SexAnimations.dat"
+    COORDINATES_FILE = "data/SexCoordinates.dat"
                    
     // Sex Menu States
     SX_MENU_LEFT_FIRST_ELEM = 1
