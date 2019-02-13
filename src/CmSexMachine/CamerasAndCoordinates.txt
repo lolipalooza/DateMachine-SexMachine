@@ -145,6 +145,27 @@ end
 
 {======================================================================
 ======================================================================}
+:SetNumbers
+0AB2: ret 10 0@ 1@ 2@ 3@ 4@ 5@ 6@ 7@ 8@ 9@
+
+{
+How to use this?
+
+If you want to only set one number:
+0AB1: @SetNumbers 1 300 ret 16@ DummyVar DummyVar DummyVar DummyVar DummyVar DummyVar DummyVar DummyVar DummyVar // There must be 10 output vars total!
+
+If you want to set 3 numbers (like a coordinate...):
+0AB1: @SetNumbers 3 0.0 0.0 -1.0 ret 1@ 2@ 3@ 4@ 4@ 4@ 4@ 4@ 4@ 4@ // 4@ repeated 7 times to make a total of 10 output vars, where 4@ is the dummy var
+
+A coordinate plus angle:
+0AB1: @SetNumbers 4 34.9 2467.9 17.5 90.0 ret 1@ 2@ 3@ 4@ Dm Dm Dm Dm Dm Dm
+
+Use as much numbers as you please... But remember: max 10 numbers!
+}
+
+
+{======================================================================
+======================================================================}
 :GetFirstPersonCamCoordinates // 0@: pose, 1@: place
 094B: 10@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 //0AB1: @RecoverPlayerInterior 0 9@

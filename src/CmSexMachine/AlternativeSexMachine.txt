@@ -216,10 +216,12 @@ SexStat_Speed = 40
 0AB1: @StoreData 3 @PlayerPosY Dummy2 0
 0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
 0AB1: @StoreData 3 @PlayerAngle Dummy4 0
+Dummy3 += -1.0
             
 0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
-0AB1: @CreateActor 4 gender_flag 0 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActress position Dummy1 Dummy2 Dummy3 angle Dummy4
-0AB1: @CreateActor 4 gender_flag 1 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActor position Dummy1 Dummy2 Dummy3 angle Dummy4
+//0AB1: @CreateActor 4 gender_flag 0 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActress
+//0AB1: @CreateActor 4 gender_flag 1 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActor
+0AB1: @GenerateActors_Alt 0 ret PornActress PornActor
 0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
 0619: enable_actor $PLAYER_ACTOR collision_detection 0
 00A1: put_actor $PLAYER_ACTOR at Dummy1 Dummy2 Dummy3
@@ -246,3 +248,4 @@ return
 SexMenuState=0
 SexStat_Speed = 0
 return
+
