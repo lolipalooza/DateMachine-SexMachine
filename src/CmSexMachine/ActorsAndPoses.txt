@@ -28,30 +28,32 @@ end
 
 {======================================================================
 ======================================================================}
-:AddOffsetTo3DCoord // 0@ 1@ 2@: coordinates, 3@: gender flag
-if 3@ == 0 // female by default (0)
+:AddOffsetTo3DCoord // 0@ 1@ 2@ 3@: coordinates, 4@: gender flag
+if 4@ == 0 // female by default (0)
 then
     0AB1: @GetData 2 @FemaleOffset 0 out 10@
     0AB1: @GetData 2 @FemaleOffset 4 out 11@
     0AB1: @GetData 2 @FemaleOffset 8 out 12@
+    0AB1: @GetData 2 @FemaleOffset 12 out 13@
 else
     0AB1: @GetData 2 @MaleOffset 0 out 10@
     0AB1: @GetData 2 @MaleOffset 4 out 11@
     0AB1: @GetData 2 @MaleOffset 8 out 12@
+    0AB1: @GetData 2 @MaleOffset 12 out 13@
 end
 005B: 0@ += 10@  // (float)
 005B: 1@ += 11@  // (float)
 005B: 2@ += 12@  // (float)
-0AB2: ret 3 0@ 1@ 2@
+005B: 3@ += 13@  // (float)
+0AB2: ret 4 0@ 1@ 2@ 3@
 
 {======================================================================
 ======================================================================}
-:GenerateActors
-// 0@: pose, 1@: place
+:GenerateActors // 0@: pose, 1@: place
 0AB1: @GetActorsCoordinates 2 0@ 1@ ret fem_xyza 10@ 11@ 12@ 13@ male_xyza 20@ 21@ 22@ 23@
 
-0AB1: @AddOffsetTo3DCoord 4 3dcoord 10@ 11@ 12@ gender 0 store_in 10@ 11@ 12@
-0AB1: @AddOffsetTo3DCoord 4 3dcoord 20@ 21@ 22@ gender 1 store_in 20@ 21@ 22@
+0AB1: @AddOffsetTo3DCoord 5 3dcoord 10@ 11@ 12@ 13@ gender 0 store_in 10@ 11@ 12@ 13@
+0AB1: @AddOffsetTo3DCoord 5 3dcoord 20@ 21@ 22@ 23@ gender 1 store_in 20@ 21@ 22@ 23@
 
 0AB1: @GetActorsInfo 0 gxt_fem 18@ 19@ gtx_male 28@ 29@
 023C: load_special_actor 18@s as 1
@@ -81,11 +83,11 @@ until 023D:   special_actor 1 loaded and 023D:   special_actor 2 loaded
 0AB1: @GetActorsCoordinates 2 2@ 3@ ret fem_xyza 10@ 11@ 12@ 13@ male_xyza 20@ 21@ 22@ 23@
 if 1@ == 0 // female by default (0)
 then
-    0AB1: @AddOffsetTo3DCoord 4 3dcoord 10@ 11@ 12@ gender 0 store_in 10@ 11@ 12@
+    0AB1: @AddOffsetTo3DCoord 5 3dcoord 10@ 11@ 12@ 13@ gender 0 store_in 10@ 11@ 12@ 13@
     00A1: put_actor 0@ at 10@ 11@ 12@
     0173: set_actor 0@ Z_angle_to 13@
 else
-    0AB1: @AddOffsetTo3DCoord 4 3dcoord 20@ 21@ 22@ gender 1 store_in 20@ 21@ 22@
+    0AB1: @AddOffsetTo3DCoord 5 3dcoord 20@ 21@ 22@ 23@ gender 1 store_in 20@ 21@ 22@ 23@
     00A1: put_actor 0@ at 20@ 21@ 22@
     0173: set_actor 0@ Z_angle_to 23@
 end
@@ -99,19 +101,18 @@ end
 0AB1: @GetData 2 @PlayerPosZ 0 12@
 13@ = 0.0
 12@-=1.0
-00A0: store_actor $PLAYER_ACTOR position_to 20@ 21@ 22@
-0172: 23@ = actor $PLAYER_ACTOR Z_angle
+//00A0: store_actor $PLAYER_ACTOR position_to 20@ 21@ 22@
+//0172: 23@ = actor $PLAYER_ACTOR Z_angle
 
-0AB1: @AddOffsetTo3DCoord 4 3dcoord 10@ 11@ 12@ gender 1@ store_in 10@ 11@ 12@
+0AB1: @AddOffsetTo3DCoord 5 3dcoord 10@ 11@ 12@ 13@ gender 1@ store_in 10@ 11@ 12@ 13@
 00A1: put_actor 0@ at 10@ 11@ 12@
-//0173: set_actor 0@ Z_angle_to 13@   // ignore angle for now
+0173: set_actor 0@ Z_angle_to 13@
 
 if 1@ == 0 // female
 then
     00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
     0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
 end
-
 0AB2: ret 0
 
 {======================================================================

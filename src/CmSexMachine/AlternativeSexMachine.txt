@@ -18,6 +18,8 @@ $ONMISSION = 1
     BodyType = BT_NORMAL
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
+0AB1: @StoreData 3 @PositionStepIncreaser 0.02 0
+0AB1: @StoreData 3 @AngleStepIncreaser 90.0 0
 
 0AB1: @InitCursorControl 0
 ShowSexualStats = true

@@ -459,15 +459,13 @@ hex
     00 00 00 00 // Max angle       offset: 20
 end
 
-:GetData
-// 0@: label, 1@: offset for address
+:GetData // 0@: label, 1@: offset for address
 0AC6: 10@ = label 0@ offset
 005A: 10@ += 1@  // (int)
 0A8D: 11@ = read_memory 10@ size 4 virtual_protect 0
 0AB2: ret 1 11@
 
-:StoreData
-// 0@: label, 1@: value, 2@: offset for address
+:StoreData // 0@: label, 1@: value, 2@: offset for address
 0AC6: 10@ = label 0@ offset
 005A: 10@ += 2@  // (int)
 0A8C: write_memory 10@ size 4 value 1@ virtual_protect 0
