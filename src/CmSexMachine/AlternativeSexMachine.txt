@@ -13,15 +13,26 @@ $ONMISSION = 1
     0826: enable_hud 0
     03F0: enable_text_draw 1
     03E0: draw_text_behind_textures 1
+    08E7: disable_entrance_markers 1
+
+    BodyType = BT_NORMAL
+    0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
+    0AB1: @StoreInt 2 @SxMn_Place SexPlace
+
 0AB1: @InitCursorControl 0
 ShowSexualStats = true
+SexState = 0
 SexMenuState = 0
 SexStat_Speed = 0
+07CC: set_player $PLAYER_CHAR button_15 0
 
 0ACE: show_formatted_text_box "Go to your desired place and then select pose with TAB"
 
 while true
 wait 0
+    if SexMenuState > 0             // 0 is the only state when player can move
+    then 0AB1: @CursorControl 0     // so is best to activate cursor when player can't!
+    end
     gosub @SexMachine2
     if SexMenuState == 0
     then
@@ -37,47 +48,76 @@ wait 0
     if SexMenuState == 1
     then
         gosub @ShowSexualMenu
-        0AB1: @CursorControl 0
         if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0 // Change Button Click
         then
-            01B4: set_player $PLAYER_CHAR can_move 1
-            SexMenuState = 0 // Close Sexual Menu
+            0AB1: @GetInt 1 @SxMn_Pose Dummy1
+            0AB1: @GetInt 1 @SxMn_Place Dummy2
+            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret Dummy3 Dummy4
+            0AB1: @GetPoseFromString 2 Dummy3 Dummy4 ret Dummy1 Dummy5
+            0085: SexPoseInt = Dummy1 // (int)
+            0085: SexPlace = Dummy2 // (int)
+            0085: BodyType = Dummy5 // (int)
+            gosub @ChangePoseAndPlace_Alt
+            SexMenuState = 2
         end
         if PulseButtonState == PULSED_ENTER_VEH
         then 01B4: set_player $PLAYER_CHAR can_move 1
         end
     end
-    {if SexMenuState == 2
+    if SexMenuState == 2
     then
-        gosub @SexualMenuMachine
+        if PulseButtonState == PULSED_ENTER_VEH
+        then gosub @RemovePosesAndActors
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
+        then gosub @RemovePosesAndActors
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
+        then SexMenuState = 3
+        end
+    end
+    if SexMenuState == 3
+    then
+        if PulseButtonState == PULSED_ENTER_VEH
+        then
+            SexMenuState = 2
+            PulseButtonState++
+        end
         0AB1: @ActorsOffsetsMenu 3 SexMenuState PornActress PornActor ret SexMenuState Dummy1 Dummy2 Dummy3
+        if SexMenuState == 0
+        then SexMenuState = 2
+        end
         if Dummy2 == true
         then
             if Dummy1 == 0 // gender flag
-            then 0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
-            else 0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
+            then 0AB1: @RelocateActor_Alt 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
+            else 0AB1: @RelocateActor_Alt 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
             end
             0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
         end
         if Dummy3 == 1
         then
-            0AB1: @RelocateActor 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
-            0AB1: @RelocateActor 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
+            0AB1: @RelocateActor_Alt 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
+            0AB1: @RelocateActor_Alt 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
             0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
         end
-    end}
+    end
     if ShowSexualStats==true
     then
         0AB1: @ShowSexualStats 3 SexStat_Climax SexStat_Speed SexStat_Pleasure
         0AB1: @ShowSettingTexts 5 SexMenuState SpeedState SexPoseInt SexPlace true
     end
-    gosub @SexualMenuMachine
+    if not SexMenuState == 3
+    then gosub @SexualMenuMachine
+    end
 end
 
 0581: enable_radar 1
 0826: enable_hud 1
 03F0: enable_text_draw 0
 03E0: draw_text_behind_textures 0
+08E7: disable_entrance_markers 0
+07CC: set_player $PLAYER_CHAR button_15 1
 return
 
 {======================================================================
@@ -91,21 +131,7 @@ then
         0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 0 max_value 2 flag FLAG_INCREASE store_into Dummy1
         0AB1: @StoreInt 2 @CameraMode Dummy1
         0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
-    end
-    if or
-    SexMenuState == 0
-    SexMenuState == 1
-    then
-        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
-        then 0AB1: @ToggleVariable 3 toggle_var SexMenuState toggle_values 0 1 store_in SexMenuState
-        end
-    end
-    if SexMenuState == 0
-    then
-        if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
-        then 0AB1: @ToggleVariable 3 toggle_var SexMenuState toggle_values 0 2 store_in SexMenuState
-        end
-    end
+    end}
     if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
     then
         0AB1: @GetInt 1 @CurrentAnimation Dummy1
@@ -113,7 +139,7 @@ then
         0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value Dummy2 flag FLAG_INCREASE store_into Dummy1
         0AB1: @StoreInt 2 @CurrentAnimation Dummy1
         0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
-    end}
+    end
 
     {0AB1: @GetInt 1 @CameraMode Dummy1
     if Dummy1 == 1 // Fixed Camera
@@ -165,11 +191,56 @@ gosub @PleasureMachine
 gosub @ClimaxMachine
 
 // Change from stopped to slow or fast
-//gosub @SpeedMachine
+if and
+056D:   actor PornActress defined
+056D:   actor PornActor defined
+then gosub @SpeedMachine
+end
 
 // Buttons UP - DOWN - ACCEPT - CANCEL acknowledge
 gosub @PulseButtonMachine
 
 // First Person Camera control
 0AB1: @FirstPersonCameraControl 0
+return
+
+{======================================================================
+======================================================================}
+:ChangePoseAndPlace_Alt
+SexStat_Speed = 40
+00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
+0172: Dummy4 = actor $PLAYER_ACTOR Z_angle
+0AB1: @StoreData 3 @PlayerPosX Dummy1 0
+0AB1: @StoreData 3 @PlayerPosY Dummy2 0
+0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
+0AB1: @StoreData 3 @PlayerAngle Dummy4 0
+            
+0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
+0AB1: @CreateActor 4 gender_flag 0 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActress position Dummy1 Dummy2 Dummy3 angle Dummy4
+0AB1: @CreateActor 4 gender_flag 1 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActor position Dummy1 Dummy2 Dummy3 angle Dummy4
+0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+0619: enable_actor $PLAYER_ACTOR collision_detection 0
+00A1: put_actor $PLAYER_ACTOR at Dummy1 Dummy2 Dummy3
+0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+01B4: set_player $PLAYER_CHAR can_move 1
+return
+
+:RemovePosesAndActors
+009B: destroy_actor PornActress
+009B: destroy_actor PornActor
+0619: enable_actor $PLAYER_ACTOR collision_detection 1
+
+0AB1: @GetData 2 @PlayerPosX 0 Dummy1
+0AB1: @GetData 2 @PlayerPosY 0 Dummy2
+0AB1: @GetData 2 @PlayerPosZ 0 Dummy3
+0AB1: @GetData 2 @PlayerAngle 0 Dummy4
+00A1: put_actor $PLAYER_ACTOR at Dummy1 Dummy2 Dummy3
+0173: set_actor $PLAYER_ACTOR Z_angle_to Dummy4
+0373: set_camera_directly_behind_player
+02EB: restore_camera_with_jumpcut
+
+01B4: set_player $PLAYER_CHAR can_move 1
+0ACE: show_formatted_text_box "Go to your desired place and then select pose with TAB"
+SexMenuState=0
+SexStat_Speed = 0
 return

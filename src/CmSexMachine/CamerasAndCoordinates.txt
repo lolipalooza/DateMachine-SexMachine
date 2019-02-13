@@ -6,6 +6,26 @@ hex
     00 // Interior
 end
 
+:PlayerPosX
+hex
+00000000
+end
+
+:PlayerPosY
+hex
+00000000
+end
+
+:PlayerPosZ
+hex
+00000000
+end
+
+:PlayerAngle
+hex
+00000000
+end
+
 :StorePlayerData
 00A0: store_actor $PLAYER_ACTOR position_to 10@ 11@ 12@
 077E: get_active_interior_to 13@

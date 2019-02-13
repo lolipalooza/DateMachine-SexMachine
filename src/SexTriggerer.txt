@@ -19,6 +19,13 @@ wait 0
         0373: set_camera_directly_behind_player
     end
     
+    if 0ADC:   test_cheat "SXM"
+    then
+        10@s = 'female'
+        20@s = 'male'
+        0A92: create_custom_thread "SexMachine.s" pose 0 place 2 speed 40 fem_gxt 10@ 11@ male_gxt 20@ 21@ mode true
+    end
+    
     if $ONMISSION == 0
     then
         if 00FE:   actor $PLAYER_ACTOR sphere 0 in_sphere 2368.5999 -1134.7006 1050.875 radius 50.0 50.0 50.0

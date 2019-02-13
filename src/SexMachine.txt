@@ -5,6 +5,7 @@ Entry Values:   0@: Pose
                 2@: Speed
                 3@s: Actress
                 5@s: Actor
+                7@: mode (true: new mode, false(default): classic mode)
 
 Esxample of use                    
 0A92: create_custom_thread "SexMachine.s" pose 5 place 3 speed 40 fem_gxt 10@ 11@ male_gxt 20@ 21@
@@ -19,8 +20,10 @@ end
 gosub @CmSexCleanUp
 end_thread}
 
-//gosub @CmSexStart
-gosub @CmSexStart
+if 7@ == true
+then gosub @CmSexStart2
+else gosub @CmSexStart
+end
 gosub @CmSexCleanUp
 0A93: end_custom_thread
 

@@ -133,9 +133,7 @@ end
 
 {======================================================================
 ======================================================================}
-:SxMn_GetIntegerFromArray
-// x: 0@,   y: 1@,  2@: width
-// i = x + (y-1)*width - 1
+:SxMn_GetIntegerFromArray // 0@: x,     1@: y,      2@: width       // i = x + (y-1)*width - 1
 0085: 10@ = 1@ // (int)
 000E: 10@ -= 1
 006A: 10@ *= 2@  // (int)
@@ -143,9 +141,7 @@ end
 000E: 10@ -= 1 // i = x + (y-1)*5 - 1
 0AB2: ret 1 10@
 
-:SxMn_GetCoord
-// 0@: index,   1@: start point,    2@: offset
-// xpos = start + (x-1)*offset
+:SxMn_GetCoord  // 0@: index,   1@: start point,    2@: offset      // xpos = start + (x-1)*offset
 0093: 10@ = integer 0@ to_float
 000F: 10@ -= 1.0
 006B: 10@ *= 2@  // (float)
@@ -419,7 +415,7 @@ if 0AB1: @CursorClickCheck 4 box_position 93.0 436.0 box_size 48.0 12.0
 then 0@ = 0 // Close (Reset SexMenuState)
 end
 
-0AB2: ret 4 0@ 20@ 21@ 31@
+0AB2: ret 4 0@ 20@ 21@ 31@ // 0@: SexMenuState, 20@: gender_flag, 21@: flag-coord was edited or not, 31@: flag-there were a reset/restore or not
 
 {======================================================================
 ======================================================================}
@@ -501,13 +497,23 @@ for 12@ = 1 to 9@
     0AB1: @SetDrawTextRGB_1Number 12 font 1 linewidth 600.0 size 0.4 1.2 position 14@ 389.0 GXT 10@ 11@ rgb 13@ 13@ 13@ number 12@
 end
 
-if 0@ == 0 // sex menu closed/hidden
-then
-    //10@s = 'CFG_T2' // ~b~~k~~PED_ANSWER_PHONE~~w~: Open/close menu.
+if and
+4@ == false
+0@ == 0
+then // sex menu closed/hidden
     10@s = 'CFG_T7' // Change position
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
 
     10@s = 'CFG_T8' // Actors offsets
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
 end
+if 0@ == 2
+then // sex menu closed/hidden
+    10@s = 'CFG_T7' // Change position
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
+
+    10@s = 'CFG_T8' // Actors offsets
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
+end
+
 0AB2: ret 0
