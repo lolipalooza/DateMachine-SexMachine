@@ -2,7 +2,7 @@
 ======================================================================}
 :GenerateSexFiles // 0@: pose, 1@: place
 const
-    DEST_DIR = "modloader/2hugta/sex"
+    DEST_DIR = "modloader/date&sex/sex"
 end
 
 0B01: delete_directory DEST_DIR include_subdirs 1

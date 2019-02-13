@@ -114,7 +114,7 @@ const
     SPD_THRESHOLD2 = 52 // Threshold to pass from slow to normal
     SPD_THRESHOLD3 = 88 // Threshold to pass from normal to fast
     
-    LOG_FILE = "modloader/2hugta/cleo/SexMachine.log"
+    LOG_FILE = "modloader/date&sex/cleo/SexMachine.log"
     SEXPLACES_FILE = "data/SexPlaces.dat"
     ANIMATIONS_FILE = "data/SexAnimations.dat"
     COORDINATES_FILE = "data/SexCoordinates.dat"
