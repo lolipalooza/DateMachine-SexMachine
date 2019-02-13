@@ -110,7 +110,15 @@ CFG_O2	Female offset
 CFG_O3	x    <    >
 CFG_O4	y    <    >
 CFG_O5	z    <    >
+CFG_O8	a    <    >
 CFG_O6	Reset
 CFG_O7	Restore
 
 INT_1	~1~
+
+CFG_D1	<    >    +0.5
+CFG_D2	<    >    +0.2
+CFG_D3	<    >    +0.02
+CFG_D4	<    >    +90
+CFG_D5	<    >    +30
+CFG_D6	<    >    +45
