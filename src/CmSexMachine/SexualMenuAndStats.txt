@@ -560,14 +560,21 @@ return
 :ShowSettingTexts
 // 0@: sex menu state, 1@: speed, 2@: pose, 3@ place, 4@: flag for info text
 
+10@s = 'CFG_T3' // ~b~~k~~VEHICLE_ENTER_EXIT~: ~s~Go back.
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 12.0 GXT 10@ 11@
+
 if 4@ == 0
 then
-    10@s = 'CFG_T3' // ~b~~k~~VEHICLE_ENTER_EXIT~: ~s~Go back.
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 12.0 GXT 10@ 11@
     10@s = 'CFG_T1' // ~b~Mouse wheel~w~: Increase/decrease speed.
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 26.0 GXT 10@ 11@
     10@s = 'CFG_T4' // ~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~s~: Change Camera mode. ~b~~k~~GO_LEFT~~s~/~b~~k~~GO_RIGHT~~s~: Change cam view (only in fixed mode).
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 40.0 GXT 10@ 11@
+else
+    if 0@ == 0
+    then
+        10@s = 'CFG_T9' // ~b~~k~~PED_ANSWER_PHONE~~w~: Go to the desired place and press ~k~~PED_ANSWER_PHONE~ to select pose.
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 26.0 GXT 10@ 11@
+    end
 end
 
 {// Debug

@@ -86,6 +86,7 @@ CFG_T5	Poses
 CFG_T6	<    >
 CFG_T7	Change position
 CFG_T8	Actors offsets
+CFG_T9	~b~~k~~PED_ANSWER_PHONE~~w~: Go to the desired place and press ~k~~PED_ANSWER_PHONE~ to select pose.
 
 CFG_C1	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (Free Camera)
 CFG_C2	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (Fixed Camera ~1~)

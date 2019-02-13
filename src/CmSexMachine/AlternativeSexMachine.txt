@@ -28,8 +28,6 @@ SexMenuState = 0
 SexStat_Speed = 0
 07CC: set_player $PLAYER_CHAR button_15 0
 
-0ACE: show_formatted_text_box "Go to your desired place and then select pose with TAB"
-
 while true
 wait 0
     if SexMenuState > 0             // 0 is the only state when player can move
@@ -244,7 +242,6 @@ return
 02EB: restore_camera_with_jumpcut
 
 01B4: set_player $PLAYER_CHAR can_move 1
-0ACE: show_formatted_text_box "Go to your desired place and then select pose with TAB"
 SexMenuState=0
 SexStat_Speed = 0
 return
