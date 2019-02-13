@@ -6,4 +6,5 @@ release/modloader/. ignored/*
 !release/modloader/. ignored/models/
 release/modloader/. ignored/models/*.dff
 release/modloader/. ignored/models/*.txd
+release/modloader/. ignored/models/*.zip
 release/modloader/ignored/bdoll.bat
