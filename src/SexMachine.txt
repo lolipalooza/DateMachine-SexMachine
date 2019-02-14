@@ -160,13 +160,13 @@ end
 
 {======================================================================
 ======================================================================}
-{$I CmSexMachine/ActorsAndPoses.txt}
-{$I CmSexMachine/CamerasAndCoordinates.txt}
-{$I CmSexMachine/CursorControl.txt}
-{$I CmSexMachine/GenerateSexFiles.txt}
-{$I CmSexMachine/SexualMenuAndStats.txt}
+{$I SexMachine/ActorsAndPoses.txt}
+{$I SexMachine/CamerasAndCoordinates.txt}
+{$I SexMachine/CursorControl.txt}
+{$I SexMachine/GenerateSexFiles.txt}
+{$I SexMachine/SexualMenuAndStats.txt}
 
-{$I CmSexMachine/AlternativeSexMachine.txt}
+{$I SexMachine/AlternativeSexMachine.txt}
 
 {======================================================================
 ======================================================================}
