@@ -10,6 +10,5 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
-- Fix error in 'actors offsets' in classic mode of sex machine
 - Create a save/load system for the editable offsets
 - Cameras!

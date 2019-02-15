@@ -627,23 +627,26 @@ for 12@ = 1 to 9@
     0AB1: @SetDrawTextRGB_1Number 12 font 1 linewidth 600.0 size 0.4 1.2 position 14@ 389.0 GXT 10@ 11@ rgb 13@ 13@ 13@ number 12@
 end
 
-if and
-4@ == false
-0@ == 0
-then // sex menu closed/hidden
-    10@s = 'CFG_T7' // Change position
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
-
-    10@s = 'CFG_T8' // Actors offsets
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
-end
-if 0@ == 2
-then // sex menu closed/hidden
-    10@s = 'CFG_T7' // Change position
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
-
-    10@s = 'CFG_T8' // Actors offsets
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
+if 4@ == 0    // Classic Mode For SexMachine
+then
+    if 0@ == 0
+    then // sex menu closed/hidden
+        10@s = 'CFG_T7' // Change position
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
+    
+        10@s = 'CFG_T8' // Actors offsets
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
+    end
+else          // Custom mode for SexMachine
+    if 0@ == 2
+    then // sex menu closed/hidden
+        10@s = 'CFG_T7' // Change position
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
+    
+        10@s = 'CFG_T8' // Actors offsets
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@
+    end
 end
 
 0AB2: ret 0
+
