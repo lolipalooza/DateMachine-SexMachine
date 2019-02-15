@@ -12,11 +12,20 @@ wait 0
         0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
     end}
     
-    if 0ADC:   test_cheat "SEX"
+    {if 0ADC:   test_cheat "SEX"
     then
         00A1: put_actor $PLAYER_ACTOR at 1684.6886 -2105.0771 13.5469
         0173: set_actor $PLAYER_ACTOR Z_angle_to 0.0
         0373: set_camera_directly_behind_player
+    end}
+    for 30@ = 2 to 13
+        0AB1: @GetInterior 1 30@ ret pos_xyz 1@ 2@ 3@ angle 4@ cheat_string 10@ 11@ 12@ 13@
+        if 0ADC:   test_cheat 10@v // "INXX" where XX is 30@
+        then
+            00A1: put_actor $PLAYER_ACTOR at 1@ 2@ 3@
+            0173: set_actor $PLAYER_ACTOR Z_angle_to 4@
+            0373: set_camera_directly_behind_player
+        end
     end
     
     if 0ADC:   test_cheat "SXM"
@@ -57,3 +66,67 @@ wait 0
 end
 0A93: end_custom_thread
 
+
+{=================================================================================================
+Interiors Collection
+==================================================================================================
+												// Wardrobe Interior					// CHANGER
+-2245.384 128.666 35.3203		270.0			// Zero shop	// PROPERTY_TO_BUY[1]	// RCPLAY      IN01
+428.8419 2536.4243 16.3608		90.0			// Dessert		// PROPERTY_TO_BUY[2]	// DESHOUS     IN02
+315.844 -1774.4987 4.7578		0.0				// Beach		// PROPERTY_TO_BUY[3]	// SVLAMD      IN03
+-365.0775 1165.3569 19.7422		45.0			// Country		// PROPERTY_TO_BUY[5]	// SVCUNT      IN04
+1286.4896 2522.7598 10.8203		90.0			// House		// PROPERTY_TO_BUY[6]	// SVVGMD      IN05
+-2099.6311 900.4489 76.7109		180.0			// House		// PROPERTY_TO_BUY[11]	// SVSFBG      IN06
+1330.9253 -628.5058 109.1349	180.0			// House		// PROPERTY_TO_BUY[12]	// SVSFBG      IN07
+-2700.3953 817.7889 49.9844		0.0				// House		// PROPERTY_TO_BUY[13]	// SVSFSM      IN08
+-2457.394 -136.1217 26.0244		270.0			// House		// PROPERTY_TO_BUY[14]	// SVSFMD      IN09
+1968.7172 1622.8868 12.8642		90.0			// Hotel Suit	// PROPERTY_TO_BUY[16]	// SVVGHO2     IN10
+2235.1826 1285.2806 10.8203		270.0			// Hotel Suit	// PROPERTY_TO_BUY[17]	// SVVGHO1     IN11
+-2423.28 336.4034 36.5712		60.0			// Hotel Suit	// PROPERTY_TO_BUY[21]	// SVHOT1      IN12
+2111.3367 -1282.7655 25.4922	0.0				// House		// PROPERTY_TO_BUY[26]	// SVLASM      IN13
+===================================================================================================}    
+:GetInterior // 0@: interior id
+0AD3: 10@v = format "IN%.2d" 0@
+if 0@ == 1
+then 0AB1: @SetCoordinates 4    -2245.384 128.666 35.3203		270.0    return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 2
+then 0AB1: @SetCoordinates 4    428.8419 2536.4243 16.3608		90.0     return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 3
+then 0AB1: @SetCoordinates 4    315.844 -1774.4987 4.7578		0.0      return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 4
+then 0AB1: @SetCoordinates 4    -365.0775 1165.3569 19.7422		45.0     return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 5
+then 0AB1: @SetCoordinates 4    1286.4896 2522.7598 10.8203		90.0     return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 6
+then 0AB1: @SetCoordinates 4    -2099.6311 900.4489 76.7109		180.0    return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 7
+then 0AB1: @SetCoordinates 4    1330.9253 -628.5058 109.1349	180.0    return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 8
+then 0AB1: @SetCoordinates 4    -2700.3953 817.7889 49.9844		0.0      return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 9
+then 0AB1: @SetCoordinates 4    -2457.394 -136.1217 26.0244		270.0    return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 10
+then 0AB1: @SetCoordinates 4    1968.7172 1622.8868 12.8642		90.0     return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 11
+then 0AB1: @SetCoordinates 4    2235.1826 1285.2806 10.8203		270.0    return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 12
+then 0AB1: @SetCoordinates 4    -2423.28 336.4034 36.5712		60.0     return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 13
+then 0AB1: @SetCoordinates 4    2111.3367 -1282.7655 25.4922	0.0      return_in    1@ 2@ 3@ 4@   
+end
+0AB2: ret 8 pos_xyz 1@ 2@ 3@ angle 4@ cheat_string 10@ 11@ 12@ 13@
+
+:SetCoordinates // 0@ 1@ 2@ 3@
+0AB2: ret 4 pos_xyz 0@ 1@ 2@ angle 3@
