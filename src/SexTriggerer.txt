@@ -28,7 +28,7 @@ wait 0
         end
     end
     
-    if 0ADC:   test_cheat "SXM"
+    if 0ADC:   test_cheat "SEX"
     then
         10@s = 'female'
         20@s = 'male'
