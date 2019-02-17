@@ -123,3 +123,9 @@ CFG_D3	<    >    +0.02
 CFG_D4	<    >    +90
 CFG_D5	<    >    +30
 CFG_D6	<    >    +45
+
+CFSV_1	Save
+CFSV_2	Load
+CFSV_3	Delete
+CFSV_4	Slot ~1~
+CFSV_5	Data!

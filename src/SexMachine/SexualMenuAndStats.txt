@@ -326,6 +326,28 @@ const
     OFF_DEC_STEP = -0.02
 end
 
+10@s = 'CFSV_1' // Save
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 12.0 324.0 GXT 10@ 11@
+10@s = 'CFSV_2' // Load
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 62.0 324.0 GXT 10@ 11@
+10@s = 'CFSV_3' // Delete
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 112.0 324.0 GXT 10@ 11@
+10@s = 'S_OPT6' // Close
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 162.0 324.0 GXT 10@ 11@
+
+if 0AB1: @CursorClickCheck 4 box_position 30.0 331.0 box_size 44.0 12.0 // Save
+then
+end
+if 0AB1: @CursorClickCheck 4 box_position 80.0 331.0 box_size 44.0 12.0 // Load
+then
+end
+if 0AB1: @CursorClickCheck 4 box_position 130.0 331.0 box_size 44.0 12.0 // Delete
+then
+end
+if 0AB1: @CursorClickCheck 4 box_position 180.0 331.0 box_size 44.0 12.0 // Close
+then
+end
+
 0AB1: @GetInt 1 @GenderFlag 20@
 if 20@ == 0
 then 10@s = 'CFG_O2' // Female offset
@@ -650,3 +672,7 @@ end
 
 0AB2: ret 0
 
+{======================================================================
+======================================================================}
+:SaveLoadOffsets_SubMenu
+0AB2: ret 0
