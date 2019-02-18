@@ -82,26 +82,15 @@ wait 0
     then
         if PulseButtonState == PULSED_ENTER_VEH
         then
-            SexMenuState = 2
+            if SexMenuState == 4
+            then SexMenuState = 3
+            else SexMenuState = 2
+            end
             PulseButtonState++
         end
-        0AB1: @ActorsOffsetsMenu 3 SexMenuState PornActress PornActor ret SexMenuState Dummy1 Dummy2 Dummy3
+        0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
         if SexMenuState == 0
         then SexMenuState = 2
-        end
-        if Dummy2 == true
-        then
-            if Dummy1 == 0 // gender flag
-            then 0AB1: @RelocateActor_Alt 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
-            else 0AB1: @RelocateActor_Alt 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
-            end
-            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
-        end
-        if Dummy3 == 1
-        then
-            0AB1: @RelocateActor_Alt 4 actor PornActress gender 0 pose SexPoseInt place SexPlace
-            0AB1: @RelocateActor_Alt 4 actor PornActor gender 1 pose SexPoseInt place SexPlace
-            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
         end
     end
     if ShowSexualStats==true
@@ -127,20 +116,25 @@ return
 :SexMachine2
 if SexState == 0
 then
-    {if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0
-    then SexState=1
-        0AB1: @GetInt 1 @CameraMode Dummy1
-        0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 0 max_value 2 flag FLAG_INCREASE store_into Dummy1
-        0AB1: @StoreInt 2 @CameraMode Dummy1
-        0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
-    end}
-    if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
+    if and
+    not SexMenuState == 3
+    not SexMenuState == 4
     then
-        0AB1: @GetInt 1 @CurrentAnimation Dummy1
-        0AB1: call_scm_func @ReadSexPosesInfo 3 SpeedState SexPoseInt SexPlace out Dummy3 Dummy4 Dummy2
-        0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value Dummy2 flag FLAG_INCREASE store_into Dummy1
-        0AB1: @StoreInt 2 @CurrentAnimation Dummy1
-        0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+        {if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0
+        then SexState=1
+            0AB1: @GetInt 1 @CameraMode Dummy1
+            0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 0 max_value 2 flag FLAG_INCREASE store_into Dummy1
+            0AB1: @StoreInt 2 @CameraMode Dummy1
+            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+        end}
+        if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
+        then
+            0AB1: @GetInt 1 @CurrentAnimation Dummy1
+            0AB1: call_scm_func @ReadSexPosesInfo 3 SpeedState SexPoseInt SexPlace out Dummy3 Dummy4 Dummy2
+            0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value Dummy2 flag FLAG_INCREASE store_into Dummy1
+            0AB1: @StoreInt 2 @CurrentAnimation Dummy1
+            0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+        end
     end
 
     {0AB1: @GetInt 1 @CameraMode Dummy1
@@ -179,11 +173,16 @@ then
 end
 
 // Increase / Decrease Speed
-if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
-then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
-end
-if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
-then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
+if and
+not SexMenuState == 3
+not SexMenuState == 4
+then
+    if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
+    then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
+    end
+    if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
+    then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
+    end
 end
 
 // Increase Pleasure

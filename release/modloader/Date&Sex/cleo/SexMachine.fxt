@@ -119,6 +119,7 @@ CFG_OA	Device offset
 
 CFG_C1	Free cam offset
 CFG_C2	First person offset
+CFG_C3	Change Angle of View
 
 INT_1	~1~
 
