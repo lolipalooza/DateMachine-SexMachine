@@ -114,6 +114,11 @@ CFG_O5	z    <    >
 CFG_O8	a    <    >
 CFG_O6	Reset
 CFG_O7	Restore
+CFG_O9	Both offset
+CFG_OA	Device offset
+
+CFG_C1	Free cam offset
+CFG_C2	First person offset
 
 INT_1	~1~
 
@@ -123,9 +128,13 @@ CFG_D3	<    >    +0.02
 CFG_D4	<    >    +90
 CFG_D5	<    >    +30
 CFG_D6	<    >    +45
+CFG_D7	<
+CFG_D8	>
 
 CFSV_1	Save
 CFSV_2	Load
 CFSV_3	Delete
 CFSV_4	Slot ~1~
 CFSV_5	Data!
+CFSV_6	~a~
+CFSV_7	Back

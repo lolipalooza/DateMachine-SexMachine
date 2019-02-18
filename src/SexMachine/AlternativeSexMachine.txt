@@ -76,7 +76,9 @@ wait 0
         then SexMenuState = 3
         end
     end
-    if SexMenuState == 3
+    if or
+    SexMenuState == 3
+    SexMenuState == 4
     then
         if PulseButtonState == PULSED_ENTER_VEH
         then
