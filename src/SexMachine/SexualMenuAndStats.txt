@@ -630,8 +630,8 @@ end
 ======================================================================}
 :ActorsOffsetsMenu // 0@: SexMenuState, 1@: Porn Actress, 2@: Porn Actor, 3@: pose, 4@: place, 5@: speed state
 const
-    OFF_INC_STEP = 0.05
-    OFF_DEC_STEP = -0.05
+    OFF_INC_STEP = 0.01
+    OFF_DEC_STEP = -0.01
 end
 
 0AB1: @GetInt 1 @ActorsOffsetsMenu_OffsetToModify 20@
@@ -666,8 +666,9 @@ end
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 48.0 414.0 GXT 10@ 11@
 10@s = 'CFSV_3' // Delete
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 83.0 414.0 GXT 10@ 11@
-10@s = 'CFG_O6' // Reset
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
+if not 0@ == 4
+then
+end
 
 if 0@ == 4
 then 10@s = 'CFSV_7' // Back
@@ -684,14 +685,17 @@ end
 if 0AB1: @CursorClickCheck 4 box_position 100.0 421.0 box_size 41.0 12.0 // Delete
 then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 2 ret 0@ 30@ 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
 end
-if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
-then
-end
 if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
 then
     if 0@ == 4
     then 0@ = 3 // Back to previous
-    else 0@ = 0 // Close (Reset SexMenuState)
+    else
+        0@ = 0 // Close (Reset SexMenuState)
+        0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
+        0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
+        0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+        0373: set_camera_directly_behind_player
+        02EB: restore_camera_with_jumpcut
     end
 end
 
@@ -721,7 +725,24 @@ then
             end
         end
     end
+    0AB1: @StoreInt 2 @ActorsOffsetsMenu_Action 30@
+    0AB2: ret 1 sex_menu_state 0@
 else
+    10@s = 'CFG_O6' // Reset
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
+    if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
+    then
+        0AB1: @StoreData 3 @MaleOffset 0.0 0
+        0AB1: @StoreData 3 @MaleOffset 0.0 4
+        0AB1: @StoreData 3 @MaleOffset 0.0 8
+        0AB1: @StoreData 3 @MaleOffset 0.0 12
+        0AB1: @StoreData 3 @FemaleOffset 0.0 0
+        0AB1: @StoreData 3 @FemaleOffset 0.0 4
+        0AB1: @StoreData 3 @FemaleOffset 0.0 8
+        0AB1: @StoreData 3 @FemaleOffset 0.0 12
+        21@ = 1
+    end
+    
     if 20@ == 0
     then 10@s = 'CFG_O2' // Female offset
     end
@@ -766,16 +787,21 @@ end
 if 0AB0:   key_pressed KEY_Q // down
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step OFF_DEC_STEP pos_offset 8 ret 21@
 end
+if 0AB0:   key_pressed 37 // left
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step -10.0 pos_offset 12 ret 21@
+end
+if 0AB0:   key_pressed 39 // right
+then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 10.0 pos_offset 12 ret 21@
+end
 
 if 21@ == true
 then
-    0AB1: @RelocateActor_Alt 4 actor 1@ gender 0 pose 3@ place 4@
-    0AB1: @RelocateActor_Alt 4 actor 2@ gender 1 pose 3@ place 4@
+    0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 0
+    0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 0
     0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
 end
 
 0AB1: @StoreInt 2 @ActorsOffsetsMenu_OffsetToModify 20@
-0AB1: @StoreInt 2 @ActorsOffsetsMenu_Action 30@
 0AB2: ret 1 sex_menu_state 0@
 
 {======================================================================
@@ -814,12 +840,29 @@ end
 0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 0@
 0AB1: @GetXSteps 2 angle 0@ step OFF_INC_STEP store_in 10@ 11@
 0AB1: @GetYSteps 2 angle 0@ step OFF_INC_STEP store_in 12@ 13@
+if and
+8AB0:   not key_pressed KEY_W
+8AB0:   not key_pressed KEY_A
+8AB0:   not key_pressed KEY_S
+8AB0:   not key_pressed KEY_D
+8AB0:   not key_pressed KEY_Q
+8AB0:   not key_pressed KEY_E
+then 32@=0
+end
 0092: 1@ = float 0@ to_integer
 0B14: 1@ = 1@ MOD 180
 if 1@ == 0
 then 0AB1: @SetNumbers 6 12@ 13@ 10@ 11@ 4 0 ret 20@ 21@ 22@ 23@ 24@ 25@ dummies 9@ 9@ 9@ 9@
 else 0AB1: @SetNumbers 6 11@ 10@ 13@ 12@ 0 4 ret 20@ 21@ 22@ 23@ 24@ 25@ dummies 9@ 9@ 9@ 9@
 end
+0085: 30@ = 32@ // (int)
+0016: 30@ /= 1000
+000A: 30@ += 1
+0093: 30@ = integer 30@ to_float
+006B: 20@ *= 30@  // (float)
+006B: 21@ *= 30@  // (float)
+006B: 22@ *= 30@  // (float)
+006B: 23@ *= 30@  // (float)
 0AB2: ret 6 w_s_steps 20@ 21@ a_d_steps 22@ 23@ offsets_for_x_and_y 24@ 25@
 
 {======================================================================

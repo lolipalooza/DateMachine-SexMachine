@@ -95,7 +95,7 @@ end
 
 {======================================================================
 ======================================================================}
-:RelocateActor_Alt // 0@: Actor, 1@: Actor Gender Flag, 2@: Pose, 3@: Place
+:RelocateActor_Alt // 0@: Actor, 1@: Actor Gender Flag, 2@: Pose, 3@: Place, 4@: flag (move player)
 0AB1: @GetData 2 @PlayerPosX 0 10@
 0AB1: @GetData 2 @PlayerPosY 0 11@
 0AB1: @GetData 2 @PlayerPosZ 0 12@
@@ -108,7 +108,9 @@ end
 00A1: put_actor 0@ at 10@ 11@ 12@
 0173: set_actor 0@ Z_angle_to 13@
 
-if 1@ == 0 // female
+if and
+1@ == 0 // female
+4@ == true
 then
     00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
     0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
