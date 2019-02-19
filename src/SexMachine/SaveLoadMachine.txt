@@ -255,5 +255,36 @@ return
 
 {======================================================================
 ======================================================================}
-:LoadData
+:LoadData // entries: none
+if 0AAB:   file_exists SAVE_FILE
+then 0A9A: 0@ = openfile SAVE_FILE mode "rb"  // IF and SET
+else 0AB2: ret 0
+end
+
+094B: 22@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+077E: get_active_interior_to 26@
+if 22@v == ""
+then
+    if 26@ == 0
+    then 22@v = "EXTERIOR"
+    else 22@v = "UNKNOWN"
+    end
+end
+
+// Clean internal storage
+for 27@ = 1 to 12
+0AB1: @WriteLineInIntStorage 20 slot_to_use 27@ interior 0 0 0 0 pose 0 place 0 center_xyz 0.0 0.0 0.0 fem_xyza 0.0 0.0 0.0 0.0 male_xyza 0.0 0.0 0.0 0.0 slot 0 in_use 0
+end
+
+repeat
+    if 0AB1: @ReadLineFromFile 1 0@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    then // Data read successfully, continue
+    else break
+    end
+    if 2@v == 22@v
+    then 0AB1: @WriteLineInIntStorage 20 slot_to_use 19@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    end
+until false
+
+0A9B: closefile 0@
 0AB2: ret 0
