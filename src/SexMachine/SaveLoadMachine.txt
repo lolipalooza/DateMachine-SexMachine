@@ -50,6 +50,20 @@ end
 
 {======================================================================
 ======================================================================}
+:DEBUG_ReadInternalStorage
+0A9A: 30@ = openfile "modloader/date&sex/cleo/int_st.log" mode "wb+"  // IF and SET
+for 31@ = 1 to 12
+    0AB1: @ReadLineFromIntStorage 1 slot_to_read 31@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    0AD9: write_formatted_text "%s center %f %f %f " in_file 30@ interior 2@v center_xyz 8@ 9@ 10@
+    0AD9: write_formatted_text "fem %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
+    0AD9: write_formatted_text "male %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 31@ in_use 20@ 0xd 0xa
+end
+0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
+0A9B: closefile 30@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :WriteLineInIntStorage // inputs 20 slot_to_use 0@ interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
 0AC6: 30@ = label @InternalDataStorage offset
 0085: 31@ = 0@ // (int)          // slot_to_use goes from 1 to 12
@@ -182,9 +196,19 @@ end
 for 30@ = 0 to 11
     0085: 31@ = 30@ // (int)
     31@ *= 64
-    31@ += 62       // offset: 30@ * lile-length (64) + use_flag offset (62)
-    0AB1: @StoreData 3 label @InternalDataStorage value 0 offset 31@
+    31@ += 63       // offset: 30@ * lile-length (64) + use_flag offset (63)
+    0AB1: @StoreInt 3 label @InternalDataStorage value 0 offset 31@
 end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:SetUseFlag // slot 0@ value 1@
+0085: 31@ = 0@ // (int)
+31@--
+31@ *= 64
+31@ += 63       // offset: slot * line-length (64) + use_flag offset (63)
+0AB1: @StoreInt 3 label @InternalDataStorage value 1@ offset 31@
 0AB2: ret 0
 
 {======================================================================
@@ -256,13 +280,15 @@ repeat
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
     0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa
     if and
-    2@v == 22@v                     // interior
-    003B:   0@ == 6@  // (int)      // pose
-    003B:   1@ == 7@  // (int)      // place
+    2@v == 22@v                     // interior check
+    003B:   0@ == 6@  // (int)      // pose check
+    003B:   1@ == 7@  // (int)      // place check
     then
-        31@ = 1 // Report that data from internal storage will be saved
-        0AD9: write_formatted_text "Check! 2@v == 22@v (%s)%c%c" in_file 30@ 22@v 0xd 0xa
-        gosub @SaveDataFromInternalStorage
+        if 31@ == 0                        // internal storage not saved yet
+        then
+            31@ = 1 // Report that data from internal storage will be saved
+            gosub @SaveDataFromInternalStorage
+        end
     else
         0AD9: write_formatted_text "Writing line in save file...%c%c" in_file 30@ 0xd 0xa
         0AB1: @WriteLineInFile 20 file 21@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
@@ -282,7 +308,7 @@ end
 
 
 :SaveDataFromInternalStorage
-0AD9: write_formatted_text "%c%cSaving data from internal storage...%c%c" in_file 30@ 0xd 0xa 0xd 0xa
+0AD9: write_formatted_text "Saving data from internal storage...%c%c" in_file 30@ 0xd 0xa
 for 27@ = 1 to 12
     0AB1: @ReadLineFromIntStorage 1 slot_to_read 27@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
     0AD9: write_formatted_text "Reading from storage: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
@@ -295,6 +321,7 @@ for 27@ = 1 to 12
         0AB1: @WriteLineInFile 20 file 21@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 27@ in_use 20@
     end
 end
+0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
 return
 
 {======================================================================
@@ -341,7 +368,7 @@ repeat
     then
         0AB1: @WriteLineInIntStorage 20 slot_to_use 19@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
         0AD9: write_formatted_text "...Loaded line into storage, slot %d%c%c" in_file 30@ 19@ 0xd 0xa
-    else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 19@ 0xd 0xa
+    else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 0@ 1@ 0xd 0xa
     end
 until false
 0AD9: write_formatted_text "%c%cEND%c%c" in_file 30@ 0xd 0xa 0xd 0xa

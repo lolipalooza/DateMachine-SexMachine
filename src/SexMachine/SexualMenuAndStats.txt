@@ -728,11 +728,14 @@ then
                 then
                     094B: 6@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
                     077E: get_active_interior_to 10@
-                    if and
-                    6@v == ""
-                    10@ == 0
+                    if 6@v == ""
                     then
-                        6@v = "EXTERIOR"
+                        if 10@ == 0
+                        then 6@v = "EXTERIOR"
+                        end
+                    end
+                    if not 6@v == ""
+                    then
                         0AB1: @GetData 2 @PlayerPosX 0 19@
                         0AB1: @GetData 2 @PlayerPosY 0 20@
                         0AB1: @GetData 2 @PlayerPosZ 0 21@
@@ -746,6 +749,7 @@ then
                         0AB1: @GetData 2 @MaleOffset 12 29@
                         0AB1: @ClearAllInUseFlagsFromIntStorage 0
                         0AB1: @WriteLineInIntStorage 20 slot_to_use 16@ interior 6@ 7@ 8@ 9@ pose 3@ place 4@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 16@ in_use 1
+                        0AB1: @DEBUG_ReadInternalStorage 0
                         0ACE: show_formatted_text_box "Saved!"
                     end
                 end
@@ -768,6 +772,9 @@ then
                         0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
                         0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
                         0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+                        0AB1: @ClearAllInUseFlagsFromIntStorage 0
+                        0AB1: @SetUseFlag 2 slot 16@ value 1
+                        0AB1: @DEBUG_ReadInternalStorage 0
                         0ACE: show_formatted_text_box "Loaded!"
                     end
                 end

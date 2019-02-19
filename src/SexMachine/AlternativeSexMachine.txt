@@ -178,17 +178,17 @@ then
 end
 
 // Increase / Decrease Speed
-if and
+{if and
 not SexMenuState == 3
 not SexMenuState == 4
-then
+then}
     if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
     end
     if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
     end
-end
+//end
 
 // Increase Pleasure
 gosub @PleasureMachine
@@ -216,17 +216,17 @@ return
 SexStat_Speed = 40
 
 0AB1: @LoadData 2 SexPoseInt SexPlace
-if 0AB1: @LoadActorsPositionFromIntStorage 0
+{if 0AB1: @LoadActorsPositionFromIntStorage 0
 then // Data with 'in_use' flag was found!
     0AB1: @GetData 2 @PlayerPosX 0 Dummy1
     0AB1: @GetData 2 @PlayerPosY 0 Dummy2
     0AB1: @GetData 2 @PlayerPosZ 0 Dummy3
-else
+else}
     00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
     0AB1: @StoreData 3 @PlayerPosX Dummy1 0
     0AB1: @StoreData 3 @PlayerPosY Dummy2 0
     0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
-end
+//end
 0172: Dummy4 = actor $PLAYER_ACTOR Z_angle
 0AB1: @StoreData 3 @PlayerAngle Dummy4 0
 Dummy3 += -1.0
