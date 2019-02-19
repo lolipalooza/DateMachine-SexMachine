@@ -21,7 +21,7 @@ interiors: ABATOIR,AMMUN1,CARMOD1,FDREST1,GF1,JETINT,LACS1,LAHS1B,MAFCAS,MAFCAS2
 0AB2: ret 0
 
 :ReadLineFromFile // inputs 1 file 0@
-0ADA: 1@ = scan_file 0@ format "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f male_xyza %f %f %f %f slot %d in_use %d" 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ //IF and SET
+0ADA: 1@ = scan_file 0@ format "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f male_xyza %f %f %f %f slot %d in_use %d " 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ //IF and SET
 if 1@ > 0
 then 0485:  return_true
 else 059A:  return_false
@@ -178,8 +178,50 @@ end
 
 {======================================================================
 ======================================================================}
+:ClearAllInUseFlagsFromIntStorage // entries: none
+for 30@ = 0 to 11
+    0085: 31@ = 30@ // (int)
+    31@ *= 64
+    31@ += 62       // offset: 30@ * lile-length (64) + use_flag offset (62)
+    0AB1: @StoreData 3 label @InternalDataStorage value 0 offset 31@
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:LoadActorsPositionFromIntStorage // entries: none
+for 30@ = 1 to 12
+    0AB1: @ReadLineFromIntStorage 1 slot_to_read 30@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    if 20@ == 1
+    then
+        31@ = 1 // Report that there was an actived 'in_use' flag
+        0AB1: @StoreData 3 @PlayerPosX 8@ 0
+        0AB1: @StoreData 3 @PlayerPosY 9@ 0
+        0AB1: @StoreData 3 @PlayerPosZ 10@ 0
+        0AB1: @StoreData 3 @FemaleOffset 11@ 0
+        0AB1: @StoreData 3 @FemaleOffset 12@ 4
+        0AB1: @StoreData 3 @FemaleOffset 13@ 8
+        0AB1: @StoreData 3 @FemaleOffset 14@ 12
+        0AB1: @StoreData 3 @MaleOffset 15@ 0
+        0AB1: @StoreData 3 @MaleOffset 16@ 4
+        0AB1: @StoreData 3 @MaleOffset 17@ 8
+        0AB1: @StoreData 3 @MaleOffset 18@ 12
+        break
+    end
+end
+if 31@ == 1 // Was found an actived 'in_use' flag?
+then 0485:  return_true
+else 059A:  return_false
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :SaveData // pose 0@ place 1@
-0A9A: 30@ = openfile LOG_FILE mode "wb+"  // IF and SET
+0A9A: 30@ = openfile LOG_FILE mode "ab+"  // IF and SET
+0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
+0AD9: write_formatted_text "SAVE DATA ROUTINE%c%c" in_file 30@ 0xd 0xa
+0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
 
 // Duplicate save file as a file to read
 if 0AAB:   file_exists SAVE_FILE
@@ -196,8 +238,6 @@ end
 
 094B: 22@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
 077E: get_active_interior_to 26@
-0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
-
 if 22@v == ""
 then
     if 26@ == 0
@@ -205,6 +245,7 @@ then
     else 22@v = "UNKNOWN"
     end
 end
+0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 repeat
     if 0AB1: @ReadLineFromFile 1 29@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
@@ -259,6 +300,11 @@ return
 {======================================================================
 ======================================================================}
 :LoadData // pose 0@ place 1@
+0A9A: 30@ = openfile LOG_FILE mode "ab+"  // IF and SET
+0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
+0AD9: write_formatted_text "LOAD DATA ROUTINE%c%c" in_file 30@ 0xd 0xa
+0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
+
 if 0AAB:   file_exists SAVE_FILE
 then 0A9A: 21@ = openfile SAVE_FILE mode "rb"  // IF and SET
 else 0AB2: ret 0
@@ -273,6 +319,7 @@ then
     else 22@v = "UNKNOWN"
     end
 end
+0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 // Clean internal storage
 for 27@ = 1 to 12
@@ -284,13 +331,21 @@ repeat
     then // Data read successfully, continue
     else break
     end
+    0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
+    0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
+    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa
     if and
     2@v == 22@v                     // interior
     003B:   0@ == 6@  // (int)      // pose
     003B:   1@ == 7@  // (int)      // place
-    then 0AB1: @WriteLineInIntStorage 20 slot_to_use 19@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    then
+        0AB1: @WriteLineInIntStorage 20 slot_to_use 19@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+        0AD9: write_formatted_text "...Loaded line into storage, slot %d%c%c" in_file 30@ 19@ 0xd 0xa
+    else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 19@ 0xd 0xa
     end
 until false
+0AD9: write_formatted_text "%c%cEND%c%c" in_file 30@ 0xd 0xa 0xd 0xa
 
 0A9B: closefile 21@
+0A9B: closefile 30@
 0AB2: ret 0

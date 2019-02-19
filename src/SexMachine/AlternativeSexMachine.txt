@@ -73,13 +73,16 @@ wait 0
         then gosub @RemovePosesAndActors
         end
         if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
-        then SexMenuState = 3
+        then
+            0AB1: @LoadData 2 SexPoseInt SexPlace
+            SexMenuState = 3
         end
     end
     if or
     SexMenuState == 3
     SexMenuState == 4
     then
+        0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
         if PulseButtonState == PULSED_ENTER_VEH
         then
             if SexMenuState == 4
@@ -88,9 +91,11 @@ wait 0
             end
             PulseButtonState++
         end
-        0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
         if SexMenuState == 0
         then SexMenuState = 2
+        end
+        if SexMenuState == 2
+        then 0AB1: @SaveData 2 SexPoseInt SexPlace
         end
     end
     if ShowSexualStats==true
@@ -209,11 +214,20 @@ return
 ======================================================================}
 :ChangePoseAndPlace_Alt
 SexStat_Speed = 40
-00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
+
+0AB1: @LoadData 2 SexPoseInt SexPlace
+if 0AB1: @LoadActorsPositionFromIntStorage 0
+then // Data with 'in_use' flag was found!
+    0AB1: @GetData 2 @PlayerPosX 0 Dummy1
+    0AB1: @GetData 2 @PlayerPosY 0 Dummy2
+    0AB1: @GetData 2 @PlayerPosZ 0 Dummy3
+else
+    00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
+    0AB1: @StoreData 3 @PlayerPosX Dummy1 0
+    0AB1: @StoreData 3 @PlayerPosY Dummy2 0
+    0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
+end
 0172: Dummy4 = actor $PLAYER_ACTOR Z_angle
-0AB1: @StoreData 3 @PlayerPosX Dummy1 0
-0AB1: @StoreData 3 @PlayerPosY Dummy2 0
-0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
 0AB1: @StoreData 3 @PlayerAngle Dummy4 0
 Dummy3 += -1.0
             
