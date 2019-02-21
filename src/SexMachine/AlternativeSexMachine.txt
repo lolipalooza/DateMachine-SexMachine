@@ -64,18 +64,58 @@ wait 0
         then 01B4: set_player $PLAYER_CHAR can_move 1
         end
     end
+    if SexMenuState == 5
+    then
+        gosub @ShowSexualMenu
+        if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0 // Change Button Click
+        then
+            gosub @RemovePosesAndActors
+            0AB1: @GetInt 1 @SxMn_Pose Dummy1
+            0AB1: @GetInt 1 @SxMn_Place Dummy2
+            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret Dummy3 Dummy4
+            0AB1: @GetPoseFromString 2 Dummy3 Dummy4 ret Dummy1 Dummy5
+            0085: SexPoseInt = Dummy1 // (int)
+            0085: SexPlace = Dummy2 // (int)
+            0085: BodyType = Dummy5 // (int)
+            gosub @ChangePoseAndPlace_Alt
+            SexMenuState = 2
+        end
+        if PulseButtonState == PULSED_ENTER_VEH
+        then 01B4: set_player $PLAYER_CHAR can_move 1
+        end
+    end
     if SexMenuState == 2
     then
         if PulseButtonState == PULSED_ENTER_VEH
-        then gosub @RemovePosesAndActors
+        then
+            gosub @RemovePosesAndActors
+            SexMenuState=0
         end
-        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
-        then gosub @RemovePosesAndActors
+        {if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
+        then
+            gosub @RemovePosesAndActors
+            SexMenuState=0
         end
         if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
         then
             0AB1: @LoadData 2 SexPoseInt SexPlace
             SexMenuState = 3
+        end}
+        if 0AB1: @CursorClickCheck 4 box_position 130.0 398.0 box_size 64.0 12.0 // Poses button
+        then SexMenuState=5
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 130.0 411.0 box_size 64.0 12.0 // Offsets button
+        then
+            0AB1: @LoadData 2 SexPoseInt SexPlace
+            SexMenuState = 3
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 130.0 424.0 box_size 64.0 12.0 // Cameras button
+        then
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 130.0 437.0 box_size 64.0 12.0 // Back button
+        then
+            gosub @RemovePosesAndActors
+            SexMenuState=0
         end
     end
     if or
@@ -180,9 +220,7 @@ then
 end
 
 // Increase / Decrease Speed
-{if and
-not SexMenuState == 3
-not SexMenuState == 4
+if SexMenuState == 2
 then
     if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
@@ -190,7 +228,7 @@ then
     if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
     end
-end}
+end
 0AB1: @GetSpeedStatFromBarClick 1 SexStat_Speed returned_value SexStat_Speed
 
 // Increase Pleasure
@@ -260,7 +298,6 @@ return
 02EB: restore_camera_with_jumpcut
 
 01B4: set_player $PLAYER_CHAR can_move 1
-SexMenuState=0
 SexStat_Speed = 0
 return
 
