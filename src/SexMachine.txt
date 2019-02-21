@@ -600,25 +600,20 @@ end
 
 {======================================================================
 ======================================================================}
-:IncOrDecPercentageIntStat
-const
-    PtSt_Stat = 0@
-    PtSt_Amount = 1@
-    PtSt_IncOrDec = 2@
-end
-if PtSt_IncOrDec == FLAG_INCREASE
+:IncOrDecPercentageIntStat // 0@: stat, 1@: amount, 2@: inc or dec flag
+if 2@ == FLAG_INCREASE
 then
-    005A: PtSt_Stat += PtSt_Amount  // (int)
-    if PtSt_Stat > 100
+    005A: 0@ += 1@  // (int)
+    if 0@ > 100
     then 0AB2: ret 1 100
     end
 else // FLAG_DECREASE
-    0062: PtSt_Stat -= PtSt_Amount  // (int)
-    if 1 > PtSt_Stat
+    0062: 0@ -= 1@  // (int)
+    if 1 > 0@
     then 0AB2: ret 1 1
     end
 end
-0AB2: ret 1 PtSt_Stat
+0AB2: ret 1 0@
 
 {======================================================================
 ======================================================================}
@@ -683,47 +678,35 @@ end
 {======================================================================
 ======================================================================}
 :SpeedMachine
-if SpeedState == 0 // IDLE State
+if and
+not SpeedState == 3
+SexStat_Speed >= SPD_THRESHOLD3
 then
-    if SexStat_Speed > SPD_THRESHOLD1
-    then
-        SpeedState=1
-        0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
-    end
+    SpeedState=3
+    0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_FAST
 end
-if SpeedState == 1 // SLOW state
+if and
+not SpeedState == 2
+SexStat_Speed < SPD_THRESHOLD3
+SexStat_Speed >= SPD_THRESHOLD2
 then
-    if SexStat_Speed < SPD_THRESHOLD1
-    then
-        SpeedState=0
-        0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_IDLE
-    end
-    if SexStat_Speed > SPD_THRESHOLD2
-    then
-        SpeedState=2
-        0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_NORMAL
-    end
+    SpeedState=2
+    0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_NORMAL
 end
-if SpeedState == 2 // NORMAL state
+if and
+not SpeedState == 1
+SexStat_Speed < SPD_THRESHOLD2
+SexStat_Speed >= SPD_THRESHOLD1
 then
-    if SexStat_Speed < SPD_THRESHOLD2
-    then
-        SpeedState=1
-        0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
-    end
-    if SexStat_Speed > SPD_THRESHOLD3
-    then
-        SpeedState=3
-        0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_FAST
-    end
+    SpeedState=1
+    0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
 end
-if SpeedState == 3 // FAST state
+if and
+not SpeedState == 0
+SexStat_Speed < SPD_THRESHOLD1
 then
-    if SexStat_Speed < SPD_THRESHOLD3
-    then
-        SpeedState=2
-        0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_NORMAL
-    end
+    SpeedState=0
+    0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_IDLE
 end
 return
 

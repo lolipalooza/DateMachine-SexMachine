@@ -200,6 +200,38 @@ hex
 end
 
 {======================================================================
+======================================================================}
+:GetSpeedStatFromBarClick // 1 speed_stat 0@
+if 0AB1: @CursorClickCheck 4 box_position 296.0 436.0 box_size 114.0 12.0
+then
+    0AB1: @GetClickPosition 0 click_x 10@ click_y 11@
+
+    // percentage clicked = (click_x - xmin)*100/(xmax - xmin)       xmax = 296.0 + 114.0/2      xmin = 296.0 - 114.0/2
+    19@ = 114.0
+    19@ /= 2.0
+    
+    20@ = 296.0
+    0063: 20@ -= 19@  // (float)  xmin
+    
+    21@ = 296.0
+    005B: 21@ += 19@  // (float)  xmax
+    
+    0063: 21@ -= 20@  // (float)  xmax - xmin
+    
+    0087: 30@ = 10@     // (float)      click_x
+    0063: 30@ -= 20@    // (float)      click_x - xmin
+    0013: 30@ *= 100.0  //              (click_x - xmin)*100
+    0073: 30@ /= 21@    // (float)      (click_x - xmin)*100/(xmax - xmin)
+    
+    0092: 30@ = float 30@ to_integer
+    if 30@ < 1
+    then 30@ = 1
+    end
+else 0085: 30@ = 0@ // (int)
+end
+0AB2: ret 1 speed_stat 30@ // speed_stat: (Int) Min: 1 - Max 100
+
+{======================================================================
     Orgasm-o-meter bar                        Speed-o-meter bar
     min -> posX 170.5 sizeX 1.0               min -> posX 243.5 sizeX 1.0
     min+1 -> posX 171.0 sizeX 2.0             min+1 -> posX 244.0 sizeX 2.0

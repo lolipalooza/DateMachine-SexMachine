@@ -33,7 +33,7 @@ wait 0
     if SexMenuState > 0             // 0 is the only state when player can move
     then 0AB1: @CursorControl 0     // so is best to activate cursor when player can't!
     end
-    gosub @SexMachine2
+    gosub @SexMachine_Alt
     if SexMenuState == 0
     then
         if PulseButtonState == PULSED_ENTER_VEH
@@ -90,6 +90,8 @@ wait 0
             else SexMenuState = 2
             end
             PulseButtonState++
+            0373: set_camera_directly_behind_player
+            02EB: restore_camera_with_jumpcut
         end
         if SexMenuState == 0
         then SexMenuState = 2
@@ -118,7 +120,7 @@ return
 
 {======================================================================
 ======================================================================}
-:SexMachine2
+:SexMachine_Alt
 if SexState == 0
 then
     if and
@@ -181,14 +183,15 @@ end
 {if and
 not SexMenuState == 3
 not SexMenuState == 4
-then}
+then
     if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
     end
     if 00E1:   player 0 pressed_key PAD_NEXT_WEP_ZOOM_OUT
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
     end
-//end
+end}
+0AB1: @GetSpeedStatFromBarClick 1 SexStat_Speed returned_value SexStat_Speed
 
 // Increase Pleasure
 gosub @PleasureMachine

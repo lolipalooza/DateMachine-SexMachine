@@ -10,5 +10,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
-- Create a save/load system for the editable offsets
-- Cameras!
+- highligh 'save - load - delete' selected option in save menu
+- Create editable Cameras and save them in SaveMachine.sav
+- Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).

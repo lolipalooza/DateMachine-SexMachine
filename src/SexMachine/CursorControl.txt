@@ -127,15 +127,32 @@ end
 {======================================================================
 ======================================================================}
 :CursorPositionCheck
-// Inputs: 0@ 1@: center of the box, 2@ 3@: size of the box
-0AB1: @GetData 2 @CursorControlVars CC_POSX 12@
-0AB1: @GetData 2 @CursorControlVars CC_POSY 13@
-0AB1: @CursorGetCorners 4 rectangle_center 0@ 1@ rectangle_size 2@ 3@ return_values superior_left_corner 4@ 5@ inferior_right_corner 6@ 7@
+// Inputs: 0@ 1@: center of the box, 2@ 3@: size of the box, 4@: flag disable box, 5@/6@/7@/8@: rgba
+if 8@ == 0
+then 8@ = 100
+end
+0AB1: @GetData 2 @CursorControlVars CC_POSX 20@
+0AB1: @GetData 2 @CursorControlVars CC_POSY 21@
+0AB1: @CursorGetCorners 4 rectangle_center 0@ 1@ rectangle_size 2@ 3@ return_values superior_left_corner 10@ 11@ inferior_right_corner 12@ 13@
 if and
-0035:   12@ >= 4@  // (float)
-0035:   6@ >= 12@  // (float)
-0035:   13@ >= 5@  // (float)
-0035:   7@ >= 13@  // (float)
-then 038E: draw_box_position 0@ 1@ size 2@ 3@ RGBA 0 0 0 100
+4@ == 0
+0035:   20@ >= 10@  // (float)
+0035:   12@ >= 20@  // (float)
+0035:   21@ >= 11@  // (float)
+0035:   13@ >= 21@  // (float)
+then 038E: draw_box_position 0@ 1@ size 2@ 3@ RGBA 5@ 6@ 7@ 8@
 end
 0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:GetClickPosition // Entries: none
+0AB1: @GetData 2 @CursorControlVars CC_CLICKX 12@
+0AB1: @GetData 2 @CursorControlVars CC_CLICKY 13@
+{0AB1: @GetData 2 @CursorControlVars CC_CFLAG 14@
+if or
+14@ == 1
+80E1:   not player 0 pressed_key PAD_FIREWEAPON // CLICK
+then
+end}
+0AB2: ret 2 click_x 12@ click_y 13@
