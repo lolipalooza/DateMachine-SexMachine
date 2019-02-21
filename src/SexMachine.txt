@@ -13,8 +13,6 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
-
-
 //0ACE: show_formatted_text_box "Testing save data routine..."
 
 {0A9A: 30@ = openfile "modloader/date&sex/cleo/SexMachine.log" mode "wb+"  // IF and SET
@@ -385,8 +383,6 @@ then
     0AB1: call_scm_func @PutPlayerIntoScene 2 SexPoseInt SexPlace
     0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
     0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
-    0AB1: @StoreData 3 @PositionStepIncreaser 0.02 0
-    0AB1: @StoreData 3 @AngleStepIncreaser 90.0 0
     SexMenuState=0
     OnSexActivity = true
     SexState = 0

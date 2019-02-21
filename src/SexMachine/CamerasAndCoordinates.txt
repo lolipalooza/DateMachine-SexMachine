@@ -8,17 +8,17 @@ end
 
 :PlayerPosX
 hex
-00000000
+00000000 00000000 // 1: position, 2: offset
 end
 
 :PlayerPosY
 hex
-00000000
+00000000 00000000
 end
 
 :PlayerPosZ
 hex
-00000000
+00000000 00000000
 end
 
 :PlayerAngle

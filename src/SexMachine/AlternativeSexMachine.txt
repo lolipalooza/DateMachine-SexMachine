@@ -18,8 +18,6 @@ $ONMISSION = 1
     BodyType = BT_NORMAL
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
-0AB1: @StoreData 3 @PositionStepIncreaser 0.02 0
-0AB1: @StoreData 3 @AngleStepIncreaser 90.0 0
 
 0AB1: @InitCursorControl 0
 ShowSexualStats = true
@@ -27,6 +25,11 @@ SexState = 0
 SexMenuState = 0
 SexStat_Speed = 0
 07CC: set_player $PLAYER_CHAR button_15 0
+
+// Initialize offset to 0.0
+0AB1: @StoreData 3 @PlayerPosX 0.0 4
+0AB1: @StoreData 3 @PlayerPosY 0.0 4
+0AB1: @StoreData 3 @PlayerPosZ 0.0 4
 
 while true
 wait 0
@@ -111,6 +114,12 @@ wait 0
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 424.0 box_size 64.0 12.0 // Cameras button
         then
+            0AB1: @LoadData 2 SexPoseInt SexPlace
+            0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 0 // Set free cam
+            0AB1: @StoreInt 2 @CameraMode 0
+            0AB1: @ToggleSexualCamera 2 SexPoseInt SexPlace
+            0AB1: @CreateFreeCamCenter 0
+            SexMenuState = 6
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 437.0 box_size 64.0 12.0 // Back button
         then
@@ -121,15 +130,31 @@ wait 0
     if or
     SexMenuState == 3
     SexMenuState == 4
+    SexMenuState == 6
+    SexMenuState == 7
     then
-        0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
+        if or
+        SexMenuState == 3
+        SexMenuState == 4
+        then 0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
+        end
+        if or
+        SexMenuState == 6
+        SexMenuState == 7
+        then 0AB1: @CameraOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
+        end
         if PulseButtonState == PULSED_ENTER_VEH
         then
-            if SexMenuState == 4
+            if or
+            SexMenuState == 4
+            SexMenuState == 7
             then SexMenuState = 3
             else SexMenuState = 2
             end
             PulseButtonState++
+            0AB1: @RemoveFreeCamCenter 0
+            0AB1: @StoreInt 2 @CameraMode 0
+            0AB1: @RelocateFreeCamCenter 0
             0373: set_camera_directly_behind_player
             02EB: restore_camera_with_jumpcut
         end
@@ -166,6 +191,8 @@ then
     if and
     not SexMenuState == 3
     not SexMenuState == 4
+    not SexMenuState == 6
+    not SexMenuState == 7
     then
         {if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0
         then SexState=1
@@ -257,29 +284,19 @@ return
 SexStat_Speed = 40
 
 0AB1: @LoadData 2 SexPoseInt SexPlace
-{if 0AB1: @LoadActorsPositionFromIntStorage 0
-then // Data with 'in_use' flag was found!
-    0AB1: @GetData 2 @PlayerPosX 0 Dummy1
-    0AB1: @GetData 2 @PlayerPosY 0 Dummy2
-    0AB1: @GetData 2 @PlayerPosZ 0 Dummy3
-else}
-    00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
-    0AB1: @StoreData 3 @PlayerPosX Dummy1 0
-    0AB1: @StoreData 3 @PlayerPosY Dummy2 0
-    0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
-//end
+00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
+0AB1: @StoreData 3 @PlayerPosX Dummy1 0
+0AB1: @StoreData 3 @PlayerPosY Dummy2 0
+0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
 0172: Dummy4 = actor $PLAYER_ACTOR Z_angle
-0AB1: @StoreData 3 @PlayerAngle Dummy4 0
-Dummy3 += -1.0
-            
+0AB1: @StoreData 3 @PlayerAngle Dummy4 0            
 0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
 //0AB1: @CreateActor 4 gender_flag 0 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActress
 //0AB1: @CreateActor 4 gender_flag 1 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActor
 0AB1: @GenerateActors_Alt 0 ret PornActress PornActor
 0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
 0619: enable_actor $PLAYER_ACTOR collision_detection 0
-00A1: put_actor $PLAYER_ACTOR at Dummy1 Dummy2 Dummy3
-0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+0AB1: @RelocateFreeCamCenter 0
 01B4: set_player $PLAYER_CHAR can_move 1
 return
 
