@@ -149,10 +149,10 @@ end
 :GetClickPosition // Entries: none
 0AB1: @GetData 2 @CursorControlVars CC_CLICKX 12@
 0AB1: @GetData 2 @CursorControlVars CC_CLICKY 13@
-{0AB1: @GetData 2 @CursorControlVars CC_CFLAG 14@
+0AB1: @GetData 2 @CursorControlVars CC_CFLAG 14@
 if or
 14@ == 1
 80E1:   not player 0 pressed_key PAD_FIREWEAPON // CLICK
 then
-end}
+end
 0AB2: ret 2 click_x 12@ click_y 13@
