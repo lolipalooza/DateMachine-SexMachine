@@ -242,10 +242,10 @@ end
 {======================================================================
 ======================================================================}
 :SaveData // pose 0@ place 1@
-0A9A: 30@ = openfile LOG_FILE mode "ab+"  // IF and SET
+{0A9A: 30@ = openfile LOG_FILE mode "ab+"  // IF and SET
 0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
 0AD9: write_formatted_text "SAVE DATA ROUTINE%c%c" in_file 30@ 0xd 0xa
-0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
+0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa}
 
 // Duplicate save file as a file to read
 if 0AAB:   file_exists SAVE_FILE
@@ -269,16 +269,16 @@ then
     else 22@v = "UNKNOWN"
     end
 end
-0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
+//0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 repeat
     if 0AB1: @ReadLineFromFile 1 29@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
     then // Data read successfully, continue
     else break
     end
-    0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
+    {0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
-    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa
+    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
     if and
     2@v == 22@v                     // interior check
     003B:   0@ == 6@  // (int)      // pose check
@@ -290,7 +290,7 @@ repeat
             gosub @SaveDataFromInternalStorage
         end
     else
-        0AD9: write_formatted_text "Writing line in save file...%c%c" in_file 30@ 0xd 0xa
+        //0AD9: write_formatted_text "Writing line in save file...%c%c" in_file 30@ 0xd 0xa
         0AB1: @WriteLineInFile 20 file 21@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
     end
 until false
@@ -299,38 +299,38 @@ if 31@ == 0 // data from internal storage is not saved yet?
 then gosub @SaveDataFromInternalStorage
 end
 
-0AD9: write_formatted_text "%c%cEND%c%c" in_file 30@ 0xd 0xa 0xd 0xa
+//0AD9: write_formatted_text "%c%cEND%c%c" in_file 30@ 0xd 0xa 0xd 0xa
 0A9B: closefile 29@
 0A9B: closefile 21@
-0A9B: closefile 30@
+//0A9B: closefile 30@
 0B00: delete_file TEMP_FILE  // IF and SET
 0AB2: ret 0
 
 
 :SaveDataFromInternalStorage
-0AD9: write_formatted_text "Saving data from internal storage...%c%c" in_file 30@ 0xd 0xa
+//0AD9: write_formatted_text "Saving data from internal storage...%c%c" in_file 30@ 0xd 0xa
 for 27@ = 1 to 12
     0AB1: @ReadLineFromIntStorage 1 slot_to_read 27@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
-    0AD9: write_formatted_text "Reading from storage: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
+    {0AD9: write_formatted_text "Reading from storage: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
-    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa
+    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
     if 2@v == ""
-    then 0AD9: write_formatted_text "... Not data found in slot %d%c%c" in_file 30@ 27@ 0xd 0xa
+    then //0AD9: write_formatted_text "... Not data found in slot %d%c%c" in_file 30@ 27@ 0xd 0xa
     else
-        0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
+        //0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
         0AB1: @WriteLineInFile 20 file 21@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 27@ in_use 20@
     end
 end
-0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
+//0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
 return
 
 {======================================================================
 ======================================================================}
 :LoadData // pose 0@ place 1@
-0A9A: 30@ = openfile LOG_FILE mode "ab+"  // IF and SET
+{0A9A: 30@ = openfile LOG_FILE mode "ab+"  // IF and SET
 0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
 0AD9: write_formatted_text "LOAD DATA ROUTINE%c%c" in_file 30@ 0xd 0xa
-0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa
+0AD9: write_formatted_text "==========================================%c%c" in_file 30@ 0xd 0xa}
 
 if 0AAB:   file_exists SAVE_FILE
 then 0A9A: 21@ = openfile SAVE_FILE mode "rb"  // IF and SET
@@ -346,7 +346,7 @@ then
     else 22@v = "UNKNOWN"
     end
 end
-0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
+//0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 // Clean internal storage
 for 27@ = 1 to 12
@@ -358,21 +358,21 @@ repeat
     then // Data read successfully, continue
     else break
     end
-    0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
+    {0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
-    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa
+    0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
     if and
     2@v == 22@v                     // interior
     003B:   0@ == 6@  // (int)      // pose
     003B:   1@ == 7@  // (int)      // place
     then
         0AB1: @WriteLineInIntStorage 20 slot_to_use 19@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
-        0AD9: write_formatted_text "...Loaded line into storage, slot %d%c%c" in_file 30@ 19@ 0xd 0xa
-    else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 0@ 1@ 0xd 0xa
+        //0AD9: write_formatted_text "...Loaded line into storage, slot %d%c%c" in_file 30@ 19@ 0xd 0xa
+    //else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 0@ 1@ 0xd 0xa
     end
 until false
-0AD9: write_formatted_text "%c%cEND%c%c" in_file 30@ 0xd 0xa 0xd 0xa
+//0AD9: write_formatted_text "%c%cEND%c%c" in_file 30@ 0xd 0xa 0xd 0xa
 
 0A9B: closefile 21@
-0A9B: closefile 30@
+//0A9B: closefile 30@
 0AB2: ret 0
