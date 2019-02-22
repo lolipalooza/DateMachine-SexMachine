@@ -870,60 +870,61 @@ then
     0AB2: ret 1 sex_menu_state 0@
 else
 
-    // Change angle of view
-    10@s = 'CFG_D7' // <
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 170.0 389.0 GXT 10@ 11@
-    10@s = 'CFG_C3' // Change Angle of View
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 183.0 390.0 GXT 10@ 11@
-    10@s = 'CFG_D8' // >
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 286.0 389.0 GXT 10@ 11@
-    if 0AB1: @CursorClickCheck 4 box_position 175.0 395.0 box_size 16.0 10.0 // <
+    if 20@ == 0
     then
-        0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 12@
-        12@ += 90.0
-        0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
-        0AB1: @CamsOffsets_SetFixedCamera 0
+        // Change angle of view
+        10@s = 'CFG_D7' // <
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 170.0 389.0 GXT 10@ 11@
+        10@s = 'CFG_C3' // Change Angle of View
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 183.0 390.0 GXT 10@ 11@
+        10@s = 'CFG_D8' // >
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 286.0 389.0 GXT 10@ 11@
+        if 0AB1: @CursorClickCheck 4 box_position 175.0 395.0 box_size 16.0 10.0 // <
+        then
+            0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 12@
+            12@ += 90.0
+            0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
+            0AB1: @CamsOffsets_SetFixedCamera 0
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 289.0 395.0 box_size 16.0 10.0 // >
+        then
+            0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 12@
+            12@ -= 90.0
+            0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
+            0AB1: @CamsOffsets_SetFixedCamera 0
+        end
+        
+        10@s = 'CFG_O6' // Reset
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
+        if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
+        then
+            0AB1: @StoreData 3 @PlayerPosX 0.0 4
+            0AB1: @StoreData 3 @PlayerPosY 0.0 4
+            0AB1: @StoreData 3 @PlayerPosZ 0.0 4
+            0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z 0.0
+        end
     end
-    if 0AB1: @CursorClickCheck 4 box_position 289.0 395.0 box_size 16.0 10.0 // >
-    then
-        0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 12@
-        12@ -= 90.0
-        0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
-        0AB1: @CamsOffsets_SetFixedCamera 0
-    end
-
-    {10@s = 'CFG_O6' // Reset
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
-    if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
-    then
-        0AB1: @StoreData 3 @MaleOffset 0.0 0
-        0AB1: @StoreData 3 @MaleOffset 0.0 4
-        0AB1: @StoreData 3 @MaleOffset 0.0 8
-        0AB1: @StoreData 3 @MaleOffset 0.0 12
-        0AB1: @StoreData 3 @FemaleOffset 0.0 0
-        0AB1: @StoreData 3 @FemaleOffset 0.0 4
-        0AB1: @StoreData 3 @FemaleOffset 0.0 8
-        0AB1: @StoreData 3 @FemaleOffset 0.0 12
-        21@ = 1
-    end}
+    
+    0AB1: @FirstPersonCameraControl_Alt 1 flag_edit 1
     
     // Manage the camera
     0AB1: @GetInt 2 @CamsOffsetsMenu_OffsetToModify 1 21@
     if 803B:   not 20@ == 21@  // (int)
     then
-        if 20@ == 0
+        if 20@ == 0 // Free camera
         then
             0AB1: @StoreInt 2 @CameraMode -1
             0AB1: @ToggleSexualCamera 2 pose 3@ place 4@
             0AB1: @CreateFreeCamCenter 0
         end
-        if 20@ == 1
+        if 20@ == 1 // First person camera
         then
             0AB1: @RemoveFreeCamCenter 0
             0AB1: @StoreInt 2 @CameraMode 2
-            0AB1: @ToggleSexualCamera 2 pose 3@ place 4@
+            0AB1: @InitFirstPersonCameraVars_Alt 0 ret 10@ 11@ 12@ 13@ 14@
+            0AB1: @CreateFirstPersonPoint 5 cam_pos 10@ 11@ 12@ angle 13@ dummy_angle 14@
         end
-        if 20@ == 2
+        if 20@ == 2 // Fixed camera
         then
             0AB1: @RemoveFreeCamCenter 0
             0AB1: @StoreInt 2 @CameraMode -1
@@ -957,39 +958,51 @@ else
     end
 end
 
-0AB1: @GetIncreaseSteps_Cam 1 0.01 returned_values steps 12@ 13@ negative_steps 14@ 15@
-
-if 0AB0:   key_pressed KEY_W // front +
-then 0AB1: @MoveFreeCamCenter 3 step_x 12@ step_y 13@ step_z 0.0
-end
-if 0AB0:   key_pressed KEY_S // front -
-then 0AB1: @MoveFreeCamCenter 3 step_x 14@ step_y 15@ step_z 0.0
-end
-if 0AB0:   key_pressed KEY_D // sides ->
-then 0AB1: @MoveFreeCamCenter 3 step_x 13@ step_y 14@ step_z 0.0
-end
-if 0AB0:   key_pressed KEY_A // sides <-
-then 0AB1: @MoveFreeCamCenter 3 step_x 15@ step_y 12@ step_z 0.0
-end
-if 0AB0:   key_pressed KEY_E // up
-then 0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z 0.01
-end
-if 0AB0:   key_pressed KEY_Q // down
-then 0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z -0.01
-end
-{if 0AB0:   key_pressed 37 // left
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step -10.0 pos_offset 12 ret 21@
-end
-if 0AB0:   key_pressed 39 // right
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 10.0 pos_offset 12 ret 21@
-end}
-
-{if 21@ == true
+if 20@ == 0 // Free Camera Edit
 then
-    0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 0
-    0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 0
-    0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
-end}
+    0AB1: @GetIncreaseSteps_Cam 1 OFF_INC_STEP returned_values steps 12@ 13@ negative_steps 14@ 15@
+        
+    if 0AB0:   key_pressed KEY_W // front +
+    then 0AB1: @MoveFreeCamCenter 3 step_x 12@ step_y 13@ step_z 0.0
+    end
+    if 0AB0:   key_pressed KEY_S // front -
+    then 0AB1: @MoveFreeCamCenter 3 step_x 14@ step_y 15@ step_z 0.0
+    end
+    if 0AB0:   key_pressed KEY_D // sides ->
+    then 0AB1: @MoveFreeCamCenter 3 step_x 13@ step_y 14@ step_z 0.0
+    end
+    if 0AB0:   key_pressed KEY_A // sides <-
+    then 0AB1: @MoveFreeCamCenter 3 step_x 15@ step_y 12@ step_z 0.0
+    end
+    if 0AB0:   key_pressed KEY_E // up
+    then 0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z OFF_INC_STEP
+    end
+    if 0AB0:   key_pressed KEY_Q // down
+    then 0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z OFF_DEC_STEP
+    end
+end
+
+if 20@ == 1 // First Person Camera Edit
+then
+    if 0AB0:   key_pressed KEY_W // front +
+    then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.01 -1.0
+    end
+    if 0AB0:   key_pressed KEY_S // front -
+    then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 -0.01 -1.0
+    end
+    if 0AB0:   key_pressed KEY_D // sides ->
+    then 0AB1: @MoveFirstPersonPoint 3 offset 0.01 0.0 -1.0
+    end
+    if 0AB0:   key_pressed KEY_A // sides <-
+    then 0AB1: @MoveFirstPersonPoint 3 offset -0.01 0.0 -1.0
+    end
+    if 0AB0:   key_pressed KEY_E // up
+    then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.0 -0.99
+    end
+    if 0AB0:   key_pressed KEY_Q // down
+    then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.0 -1.01
+    end
+end
 
 0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 20@
 0AB2: ret 1 sex_menu_state 0@
@@ -1116,10 +1129,10 @@ else
 end
 
 {// Debug
-0AB1: @GetData 1 @FirstPersonCameraVars 29@
+0AB1: @GetData 1 @FirstPersonCameraVars_Actor 29@
 if 056D:   actor 29@ defined
 then
-    0AB1: @GetData 2 @FirstPersonCameraVars 4 30@
+    0AB1: @GetData 1 @FirstPersonCameraVars_Rotation 30@
     0172: 31@ = actor 29@ Z_angle
     0AD0: show_formatted_text_lowpriority "rotation: %f, angle: %f" time 1 30@ 31@
 end}

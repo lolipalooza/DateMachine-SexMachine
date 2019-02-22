@@ -275,7 +275,11 @@ end
 gosub @PulseButtonMachine
 
 // First Person Camera control
-0AB1: @FirstPersonCameraControl 0
+if and
+not SexMenuState == 6
+not SexMenuState == 7
+then 0AB1: @FirstPersonCameraControl_Alt 0
+end
 return
 
 {======================================================================

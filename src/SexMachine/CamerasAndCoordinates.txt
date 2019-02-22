@@ -66,8 +66,7 @@ end
 
 {======================================================================
 ======================================================================}
-:ToggleSexualCamera
-// 0@: sexual pose, 1@: sex place
+:ToggleSexualCamera // pose 0@ place 1@
 0AB1: @GetInt 1 @CameraMode 11@
 if 11@ == 0 // Free mode
 then 02EB: restore_camera_with_jumpcut
@@ -81,45 +80,14 @@ then
 end
 if 11@ == 2 // First person mode
 then
-    const
-        FPV_ROTATION = 4
-        FPV_MINROTATION = 8
-        FPV_MAXROTATION = 12
-        FPV_MINANGLE = 16
-        FPV_MAXANGLE = 20
-    end
     0AB1: @GetFirstPersonCamCoordinates 2 pose 0@ place 1@ ret cam_pos 4@ 5@ 6@ cam_target 7@ 8@ 9@ rotation 14@ angle 15@ min_rotation 16@ max_rotation 17@ min_angle 18@ max_angle 19@
-    0AB1: @StoreData 3 @FirstPersonCameraVars 14@ FPV_ROTATION
-    0AB1: @StoreData 3 @FirstPersonCameraVars 16@ FPV_MINROTATION
-    0AB1: @StoreData 3 @FirstPersonCameraVars 17@ FPV_MAXROTATION
-    0AB1: @StoreData 3 @FirstPersonCameraVars 18@ FPV_MINANGLE
-    0AB1: @StoreData 3 @FirstPersonCameraVars 19@ FPV_MAXANGLE
-    
-    0AB1: @GetData 1 @FirstPersonCameraVars 10@
-    if 856D:   not actor 10@ defined
-    then
-        Model.Load(#NULL)
-        repeat
-        wait 0 
-        until Model.Available(#NULL)
-        10@ = Actor.Create(Mission1, #NULL, 4@, 5@, 6@)
-        Actor.Health(10@) = 2000
-        Actor.SetImmunities(10@, 1, 1, 1, 1, 1)
-        Actor.Angle(10@) = 15@
-        0337: set_actor 10@ visibility 0 
-        0619: enable_actor 10@ collision_detection 0 
-        Model.Destroy(#NULL)
-    else
-        00A1: put_actor 10@ at 4@ 5@ 6@
-        Actor.Angle(10@) = 7@
-    end
-    0AB1: @StoreData 2 @FirstPersonCameraVars 10@
-else
-    0AB1: @GetData 1 @FirstPersonCameraVars 10@
-    if 056D:   actor 10@ defined
-    then 009B: destroy_actor 10@
-    end
-    0AB1: @StoreData 2 @FirstPersonCameraVars 10@
+    0AB1: @StoreData 2 @FirstPersonCameraVars_Rotation 14@
+    0AB1: @StoreData 2 @FirstPersonCameraVars_MinRotation 16@
+    0AB1: @StoreData 2 @FirstPersonCameraVars_MaxRotation 17@
+    0AB1: @StoreData 2 @FirstPersonCameraVars_MinAngle 18@
+    0AB1: @StoreData 2 @FirstPersonCameraVars_MaxAngle 19@
+    0AB1: @CreateFirstPersonPoint 5 cam_pos 4@ 5@ 6@ angle 15@ dummy_angle 7@
+else 0AB1: @RemoveFirstPersonPoint 0
 end
 0AB2: ret 0
 
@@ -430,18 +398,18 @@ end
 {======================================================================
 ======================================================================}
 :FirstPersonCameraControl
-0AB1: @GetData 1 @FirstPersonCameraVars 0@
+0AB1: @GetData 1 @FirstPersonCameraVars_Actor 0@
 if 056D:   actor 0@ defined
 then
     0AB1: @GetInt 1 @CameraMode 11@
     if 11@ == 2 // First person mode
     then
-        0AB1: @GetData 2 @FirstPersonCameraVars FPV_MINROTATION 14@
-        0AB1: @GetData 2 @FirstPersonCameraVars FPV_MAXROTATION 15@
-        0AB1: @GetData 2 @FirstPersonCameraVars FPV_MINANGLE 16@
-        0AB1: @GetData 2 @FirstPersonCameraVars FPV_MAXANGLE 17@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MinRotation 14@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MaxRotation 15@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MinAngle 16@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MaxAngle 17@
 
-        0AB1: @GetData 2 @FirstPersonCameraVars FPV_ROTATION 30@
+        0AB1: @GetData 1 @FirstPersonCameraVars_Rotation 30@
         
         0A4A: store_joystick_X_offset_to 4@ Y_offset_to 5@
         0172: 9@ = actor 0@ Z_angle
@@ -465,21 +433,161 @@ then
         0173: set_actor 0@ Z_angle_to 9@
         067C: put_camera_on_actor 0@ offset 0.0 0.0 -1.0 rotation 0.0 0.5 30@ tilt 0.0 switchstyle 2 
         
-        0AB1: @StoreData 3 @FirstPersonCameraVars 30@ FPV_ROTATION
+        0AB1: @StoreData 2 @FirstPersonCameraVars_Rotation 30@
     end
 end
 0AB2: ret 0
 
-:FirstPersonCameraVars
+{======================================================================
+======================================================================}
+:InitFirstPersonCameraVars_Alt // pos_offset 0@ 1@ 2@ angle 3@ rotation 4@ trgt_x 5@
+3@ = 270.0  // Angle
+4@ = -0.885 // Rotation
+
+0AB1: @GetData 2 @PlayerPosX 0 10@
+0AB1: @GetData 2 @PlayerPosY 0 11@
+0AB1: @GetData 2 @PlayerPosZ 0 12@
+12@-=1.0
+0AB1: @AddOffsetTo3DCoord 5 3dcoord 10@ 11@ 12@ 13@ gender 1 store_in 10@ 11@ 12@ 13@
+
+0087: 14@ = 4@ // (float)       // Min Rotation
+14@ -= 0.4
+0087: 15@ = 4@ // (float)       // Min Rotation
+15@ += 0.4
+
+0087: 16@ = 3@ // (float)      // Min Angle
+16@ -= 45.0
+0087: 17@ = 3@ // (float)      // Max Angle
+17@ += 45.0
+
+0AB1: @StoreData 2 @FirstPersonCameraVars_Rotation -0.885
+0AB1: @StoreData 2 @FirstPersonCameraVars_MinRotation 14@
+0AB1: @StoreData 2 @FirstPersonCameraVars_MaxRotation 15@
+0AB1: @StoreData 2 @FirstPersonCameraVars_MinAngle 16@
+0AB1: @StoreData 2 @FirstPersonCameraVars_MaxAngle 17@
+0AB2: ret 5 position 10@ 11@ 12@ angle 3@ trgt_x 5@
+
+{======================================================================
+======================================================================}
+:FirstPersonCameraControl_Alt // flag_edit 0@
+0AB1: @GetData 1 @FirstPersonCameraVars_Actor 10@
+if 056D:   actor 10@ defined
+then
+    0AB1: @GetInt 1 @CameraMode 11@
+    if 11@ == 2 // First person mode
+    then
+        0AB1: @GetData 1 @FirstPersonCameraVars_MinRotation 14@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MaxRotation 15@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MinAngle 16@
+        0AB1: @GetData 1 @FirstPersonCameraVars_MaxAngle 17@
+        
+        0AB1: @GetData 1 @FirstPersonCameraVars_Rotation 30@
+        
+        0A4A: store_joystick_X_offset_to 4@ Y_offset_to 5@
+        0172: 9@ = actor 10@ Z_angle
+        0063: 9@ -= 4@ // (float)
+        
+        5@ /= 200.0 
+        005B: 30@ += 5@ // (float)
+        
+        if 0@ == 0
+        then
+            if 0025:   30@ > 15@  // (float)   MAX ROTATION
+            then 0087: 30@ = 15@ // (float)
+            end
+            if 0025:   14@ > 30@  // (float)   MIN ROTATION
+            then 0087: 30@ = 14@ // (float)
+            end
+            if 0025:   9@ > 17@  // (float)   MAX ROTATION
+            then 0087: 9@ = 17@ // (float)
+            end
+            if 0025:   16@ > 9@  // (float)   MIN ROTATION
+            then 0087: 9@ = 16@ // (float)
+            end
+        end
+        0173: set_actor 10@ Z_angle_to 9@
+        067C: put_camera_on_actor 10@ offset 0.0 0.0 -1.0 rotation 0.0 0.5 30@ tilt 0.0 switchstyle 2 
+        
+        0AB1: @StoreData 2 @FirstPersonCameraVars_Rotation 30@
+    end
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:FirstPersonCameraVars_Actor
 hex
-    00 00 00 00 // Actor           offset: 0
-    00 00 00 00 // Rotation        offset: 4
-    00 00 00 00 // Min rotation    offset: 8
-    00 00 00 00 // Max rotation    offset: 12
-    00 00 00 00 // Min angle       offset: 16
-    00 00 00 00 // Max angle       offset: 20
+00 00 00 00
+end
+:FirstPersonCameraVars_Rotation
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MinRotation
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MaxRotation
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MinAngle
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MaxAngle
+hex
+00 00 00 00
 end
 
+{======================================================================
+======================================================================}
+:CreateFirstPersonPoint // cam_pos 0@ 1@ 2@ angle 3@ dummy_angle 4@
+0AB1: @GetData 1 @FirstPersonCameraVars_Actor 10@
+if 856D:   not actor 10@ defined
+then
+    Model.Load(#NULL)
+    repeat
+    wait 0 
+    until Model.Available(#NULL)
+    10@ = Actor.Create(Mission1, #NULL, 0@, 1@, 2@)
+    Actor.Health(10@) = 2000
+    Actor.SetImmunities(10@, 1, 1, 1, 1, 1)
+    Actor.Angle(10@) = 3@
+    0337: set_actor 10@ visibility 0 
+    0619: enable_actor 10@ collision_detection 0 
+    Model.Destroy(#NULL)
+else
+    00A1: put_actor 10@ at 0@ 1@ 2@
+    Actor.Angle(10@) = 4@
+end
+0AB1: @StoreData 2 @FirstPersonCameraVars_Actor 10@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:RemoveFirstPersonPoint // entries: none
+0AB1: @GetData 1 @FirstPersonCameraVars_Actor 10@
+if 056D:   actor 10@ defined
+then 009B: destroy_actor 10@
+end
+0AB1: @StoreData 2 @FirstPersonCameraVars_Actor 10@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:MoveFirstPersonPoint // offset 0@ 1@ 2@
+0AB1: @GetData 1 @FirstPersonCameraVars_Actor 10@
+if 056D:   actor 10@ defined
+then
+    04C4: store_coords_to 11@ 12@ 13@ from_actor 10@ with_offset 0@ 1@ 2@
+    Actor.PutAt(10@, 11@, 12@, 13@)
+    0AB1: @StoreData 2 @FirstPersonCameraVars_Actor 10@
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :GetData // 0@: label, 1@: offset for address
 0AC6: 10@ = label 0@ offset
 005A: 10@ += 1@  // (int)
