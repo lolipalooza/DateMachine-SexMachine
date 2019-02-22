@@ -145,18 +145,25 @@ wait 0
         end
         if PulseButtonState == PULSED_ENTER_VEH
         then
-            if or
-            SexMenuState == 4
-            SexMenuState == 7
-            then SexMenuState = 3
-            else SexMenuState = 2
+            0AB1: @GetInt 1 @CursorControl_FlagShowCursor Dummy1
+            if Dummy1 == 1 // If cursor was hidden, then show it again, and close FPV edit mode
+            then
+                if or
+                SexMenuState == 4
+                SexMenuState == 7
+                then SexMenuState = 3
+                else SexMenuState = 2
+                end
+                PulseButtonState++
+                0AB1: @RemoveFreeCamCenter 0
+                0AB1: @StoreInt 2 @CameraMode 0
+                0AB1: @RelocateFreeCamCenter 0
+                0373: set_camera_directly_behind_player
+                02EB: restore_camera_with_jumpcut
+            else
+                0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1
+                0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 0
             end
-            PulseButtonState++
-            0AB1: @RemoveFreeCamCenter 0
-            0AB1: @StoreInt 2 @CameraMode 0
-            0AB1: @RelocateFreeCamCenter 0
-            0373: set_camera_directly_behind_player
-            02EB: restore_camera_with_jumpcut
         end
         if SexMenuState == 0
         then SexMenuState = 2

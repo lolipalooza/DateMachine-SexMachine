@@ -11,6 +11,22 @@ const
     CC_SIZE_Y = 12.0
 end
 
+:CursorControl_FlagShowCursor
+hex
+1 // show by default
+end
+
+:CursorControlVars
+hex
+    00 00 00 00 // X position
+    00 00 00 00 // Y position
+    00 00 00 00 // X clicked
+    00 00 00 00 // Y clicked
+    00 00 00 00 // click flag
+end
+
+{======================================================================
+======================================================================}
 :InitCursorControl // call it once at begining
 0390: load_txd_dictionary 'ftend'
 038F: load_texture "smouse" as 1
@@ -19,6 +35,8 @@ end
 0AB1: @StoreData 3 @CursorControlVars 224.0 CC_POSY
 0AB2: ret 0
 
+{======================================================================
+======================================================================}
 :CursorControl // Needs to be in loop
 0AB1: @GetData 2 @CursorControlVars CC_POSX 12@
 0AB1: @GetData 2 @CursorControlVars CC_POSY 13@
@@ -46,7 +64,10 @@ end
 11@/=2.0
 005B: 10@ += 12@  // (float)
 005B: 11@ += 13@  // (float)
-038D: draw_texture 1 position 10@ 11@ size 12.0 12.0 RGBA 255 255 255 255
+0AB1: @GetInt 1 @CursorControl_FlagShowCursor 31@
+if 31@ == 1
+then 038D: draw_texture 1 position 10@ 11@ size 12.0 12.0 RGBA 255 255 255 255
+end
 0AB1: @StoreData 3 @CursorControlVars 12@ CC_POSX
 0AB1: @StoreData 3 @CursorControlVars 13@ CC_POSY
 if 00E1:   player 0 pressed_key PAD_FIREWEAPON // CLICK
@@ -60,15 +81,6 @@ else
     end
 end
 0AB2: ret 0
-
-:CursorControlVars
-hex
-    00 00 00 00 // X position
-    00 00 00 00 // Y position
-    00 00 00 00 // X clicked
-    00 00 00 00 // Y clicked
-    00 00 00 00 // click flag
-end
 
 {======================================================================
 ======================================================================}
@@ -93,12 +105,12 @@ end
 
 {======================================================================
 ======================================================================}
-:CursorClickCheck // example: if 0AB1: @CursorClickCheck 4 box_position 263.0 395.0 box_size 13.0 12.0
+:CursorClickCheck // box_position 0@ 1@ box_size 2@ 3@ disable_draw_box 4@
 // 0@: corner 1 x-point
 // 1@: corner 1 y-point
 // 2@: corner 2 x-point
 // 3@: corner 2 y-point
-0AB1: @CursorPositionCheck 4 rectangle_center 0@ 1@ rectangle_size 2@ 3@
+0AB1: @CursorPositionCheck 5 rectangle_center 0@ 1@ rectangle_size 2@ 3@ disable_draw_box 4@
 0AB1: @GetData 2 @CursorControlVars CC_CLICKX 12@
 0AB1: @GetData 2 @CursorControlVars CC_CLICKY 13@
 0AB1: @CursorGetCorners 4 rectangle_center 0@ 1@ rectangle_size 2@ 3@ return_values superior_left_corner 0@ 1@ inferior_right_corner 2@ 3@

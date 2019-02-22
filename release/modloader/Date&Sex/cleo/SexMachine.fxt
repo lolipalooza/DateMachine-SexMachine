@@ -88,6 +88,10 @@ CFG_T7	Change position
 CFG_T8	Actors offsets
 CFG_T9	~b~~k~~PED_ANSWER_PHONE~~w~: Go to the desired place and press ~k~~PED_ANSWER_PHONE~ to select pose.
 
+CFG_M1	Poses
+CFG_M2	Offsets
+CFG_M3	Cameras
+
 CFG_C1	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (Free Camera)
 CFG_C2	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (Fixed Camera ~1~)
 CFG_C3	~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~w~: Change view (First Person)
@@ -118,8 +122,11 @@ CFG_O9	Both offset
 CFG_OA	Device offset
 
 CFG_C1	Free cam offset
-CFG_C2	First person offset
+CFG_C2	FPV offset
 CFG_C3	Change Angle of View
+CFG_C4	Fixed offset ~1~
+CFG_C5	Enter FPV edit mode
+CFG_C6	FPV edit mode - Click anywhere to close
 
 INT_1	~1~
 
