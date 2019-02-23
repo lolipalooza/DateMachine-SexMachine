@@ -9,11 +9,14 @@ SexMachine: (A lot but still missing)%
 
 ## To do
 
+Short-term
 - Fix hj sofa male animation!
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
 - highligh 'save - load - delete' selected option in save menu
+- Sexual menu: activate the "cancel" button on new mode
+
+Long-Term
 - Create editable Cameras and save them in SaveMachine.sav
 - Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
 - Show in "select pose and place" menu (sexual menu) if is there saved offsets available
-- Sexual menu: activate the "cancel" button on new mode
 - Change Free and FPV cams functionality. Deactivate cursor control when having these cam modes actived, and back from these modes with a single click.
