@@ -1085,23 +1085,27 @@ then
     0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
     if 12@ == 1 // In edit FPV cam mode
     then
+        14@ = OFF_INC_STEP
+        if 0AB0:   key_pressed KEY_SHIFT // speed boost
+        then 14@ *= 5.0
+        end
         if 0AB0:   key_pressed KEY_W // front +
-        then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.01 -1.0
+        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front 1 height 0 speed 14@
         end
         if 0AB0:   key_pressed KEY_S // front -
-        then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 -0.01 -1.0
+        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front -1 height 0 speed 14@
         end
         if 0AB0:   key_pressed KEY_D // sides ->
-        then 0AB1: @MoveFirstPersonPoint 3 offset 0.01 0.0 -1.0
+        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 1 front 0 height 0 speed 14@
         end
         if 0AB0:   key_pressed KEY_A // sides <-
-        then 0AB1: @MoveFirstPersonPoint 3 offset -0.01 0.0 -1.0
+        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides -1 front 0 height 0 speed 14@
         end
         if 0AB0:   key_pressed KEY_E // up
-        then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.0 -0.99
+        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front 0 height 1 speed 14@
         end
         if 0AB0:   key_pressed KEY_Q // down
-        then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.0 -1.01
+        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front 0 height -1 speed 14@
         end
         
         // Player moved the mouse cursor?
@@ -1111,7 +1115,7 @@ then
         if or
         8045:   not 22@ == 24@  // (float)
         8045:   not 23@ == 25@  // (float)
-        then 0AB1: @MoveFirstPersonPoint 3 offset 0.0 0.0 -1.0
+        then 0AB1: @MoveFirstPersonPoint 3 normalized_dirs sides 0 front 0 height 0
         end
     end
     0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
@@ -1123,9 +1127,9 @@ then
     0AB1: @GetInt 1 @CamsOffsetsMenu_FixedId 13@
     if 12@ == 1 // In edit FPV cam mode
     then
+        14@ = OFF_INC_STEP
         if 0AB0:   key_pressed KEY_SHIFT // speed boost
-        then 14@ = 0.05
-        else 14@ = 0.01
+        then 14@ *= 5.0
         end
         if 0AB0:   key_pressed KEY_W // front +
         then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides 0 front 1 height 0 speed 14@
