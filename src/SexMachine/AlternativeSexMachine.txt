@@ -158,6 +158,7 @@ wait 0
                 0AB1: @RemoveFreeCamCenter 0
                 0AB1: @StoreInt 2 @CameraMode 0
                 0AB1: @RelocateFreeCamCenter 0
+                0AB1: @RemoveFirstPersonPoint 0
                 0373: set_camera_directly_behind_player
                 02EB: restore_camera_with_jumpcut
             else
