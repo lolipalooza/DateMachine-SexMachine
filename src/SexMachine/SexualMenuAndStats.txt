@@ -971,7 +971,7 @@ else
                 0AB1: @RemoveFirstPersonPoint 0
                 0AB1: @IncOrDecIntVariable 4 variable 13@ min_value 0 max_value 11 flag FLAG_DECREASE return_in 13@
                 0AB1: @GetFixedCam 1 cam_id 13@ store_in cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@
-                0AB1: @InitEditableFixedCam 6 cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@ return_in position 21@ 22@ 23@ angle 24@ trgt_x 26@
+                0AB1: @InitFixedCam 6 cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@ return_in position 21@ 22@ 23@ angle 24@ trgt_x 26@
                 0AB1: @CreateFirstPersonPoint 5 cam_pos 21@ 22@ 23@ angle 24@ trgt_x 26@
             end
             if 0AB1: @CursorClickCheck 4 box_position 345.0 395.0 box_size 16.0 10.0 // >
@@ -979,7 +979,7 @@ else
                 0AB1: @RemoveFirstPersonPoint 0
                 0AB1: @IncOrDecIntVariable 4 variable 13@ min_value 0 max_value 11 flag FLAG_INCREASE return_in 13@
                 0AB1: @GetFixedCam 1 cam_id 13@ store_in cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@
-                0AB1: @InitEditableFixedCam 6 cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@ return_in position 21@ 22@ 23@ angle 24@ trgt_x 26@
+                0AB1: @InitFixedCam 6 cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@ return_in position 21@ 22@ 23@ angle 24@ trgt_x 26@
                 0AB1: @CreateFirstPersonPoint 5 cam_pos 21@ 22@ 23@ angle 24@ trgt_x 26@
             end
             if 0AB1: @CursorClickCheck 4 box_position 260.0 395.0 box_size 150.0 11.0 // Text
@@ -1057,7 +1057,7 @@ else
             0AB1: @StoreInt 2 @CameraMode 2
             0AB1: @StoreInt 2 @CamsOffsetsMenu_FixedId 0
             0AB1: @GetFixedCam 1 cam_id 0 store_in cam_pos 10@ 11@ 12@ angle 13@ rotation 14@ trgt_x 15@
-            0AB1: @InitEditableFixedCam 6 cam_pos 10@ 11@ 12@ angle 13@ rotation 14@ trgt_x 15@ return_in position 10@ 11@ 12@ angle 13@ trgt_x 15@
+            0AB1: @InitFixedCam 6 cam_pos 10@ 11@ 12@ angle 13@ rotation 14@ trgt_x 15@ return_in position 10@ 11@ 12@ angle 13@ trgt_x 15@
             0AB1: @CreateFirstPersonPoint 5 cam_pos 10@ 11@ 12@ angle 13@ trgt_x 15@
         end
         0AB1: @StoreInt 3 @CamsOffsetsMenu_OffsetToModify 20@ 1 // Store current state in previous state slot
@@ -1273,36 +1273,6 @@ end
 0013: 19@ *= -1.0
 
 0AB2: ret 4 step_x 8@ step_y 9@ n_step_x 18@ n_step_y 19@
-
-{======================================================================
-======================================================================}
-:StoreFPVCamData // position 0@ 1@ 2@ angle 3@ rotation 4@ trgt_x 5@
-0AB1: @GetData 2 @PlayerPosX 0 10@
-0AB1: @GetData 2 @PlayerPosY 0 11@
-0AB1: @GetData 2 @PlayerPosZ 0 12@
-
-0063: 0@ -= 10@  // (float)
-0063: 1@ -= 11@  // (float)
-0063: 2@ -= 12@  // (float)
-    
-0AB1: @StoreData 3 @CamsOffsetsMenu_FPVCamPosition 0@ 0
-0AB1: @StoreData 3 @CamsOffsetsMenu_FPVCamPosition 1@ 4
-0AB1: @StoreData 3 @CamsOffsetsMenu_FPVCamPosition 2@ 8
-0AB1: @StoreData 2 @CamsOffsetsMenu_FPVCamAngle 3@
-0AB1: @StoreData 2 @CamsOffsetsMenu_FPVCamRotation 4@
-0AB1: @StoreData 2 @CamsOffsetsMenu_FPVCamTrgtX 5@
-0AB2: ret 0
-
-{======================================================================
-======================================================================}
-:GetFPVCamData // entries: none
-0AB1: @GetData 2 @CamsOffsetsMenu_FPVCamPosition 0 10@
-0AB1: @GetData 2 @CamsOffsetsMenu_FPVCamPosition 4 11@
-0AB1: @GetData 2 @CamsOffsetsMenu_FPVCamPosition 8 12@
-0AB1: @GetData 1 @CamsOffsetsMenu_FPVCamAngle 13@
-0AB1: @GetData 1 @CamsOffsetsMenu_FPVCamRotation 14@
-0AB1: @GetData 1 @CamsOffsetsMenu_FPVCamTrgtX 15@
-0AB2: ret 6 pos_offset 10@ 11@ 12@ angle 13@ rotation 14@ trgt_x 15@
 
 {======================================================================
 ======================================================================}
