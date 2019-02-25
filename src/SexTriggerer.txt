@@ -1,6 +1,5 @@
 {$CLEO .cs}
 thread 'SexTriggerer'
-062A: change_float_stat 68 to 1000.0 // Respect
 
 0ADF: add_dynamic_GXT_entry "CMSEX" text "~b~Press ~s~F/ENTER ~b~to start ~s~Sex~b~."
 while true
