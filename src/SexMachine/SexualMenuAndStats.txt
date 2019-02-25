@@ -922,37 +922,6 @@ else
     0AB1: @StoreInt 2 @CamsOffsetsMenu_FixedId 13@
     
     
-    // Change between camera modes
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
-    if 12@ == 0 // Not in edit FPV cam mode
-    then
-        if 20@ == 0
-        then 10@s = 'CFG_C1' // Free cam offset
-        end
-        if 20@ == 1
-        then 10@s = 'CFG_C2' // First person offset
-        end
-        if 20@ == 2
-        then 10@s = 'CFG_C4' // Fixed Camera ~1~
-        end
-        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 45.0 399.0 GXT 10@ 11@
-        
-        10@s = 'CFG_D7' // <
-        0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 20.0 400.0 GXT 10@ 11@
-        10@s = 'CFG_D8' // >
-        0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 127.0 400.0 GXT 10@ 11@
-    
-        if 0AB1: @CursorClickCheck 4 box_position 25.0 406.0 box_size 19.0 12.0 // <
-        then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_DECREASE return_in 20@
-        end
-        if 0AB1: @CursorClickCheck 4 box_position 132.0 406.0 box_size 19.0 12.0 // >
-        then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_INCREASE return_in 20@
-        end
-    end
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 20@
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
-    
-    
     // Manage the camera
     0AB1: @GetInt 1 @CamsOffsetsMenu_OffsetToModify 20@ // Current state
     0AB1: @GetInt 2 @CamsOffsetsMenu_OffsetToModify 1 21@ // Previous state
@@ -985,6 +954,37 @@ else
         end
         0AB1: @StoreInt 3 @CamsOffsetsMenu_OffsetToModify 20@ 1 // Store current state in previous state slot
     end
+    
+    
+    // Change between camera modes
+    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    if 12@ == 0 // Not in edit FPV cam mode
+    then
+        if 20@ == 0
+        then 10@s = 'CFG_C1' // Free cam offset
+        end
+        if 20@ == 1
+        then 10@s = 'CFG_C2' // First person offset
+        end
+        if 20@ == 2
+        then 10@s = 'CFG_C4' // Fixed Camera ~1~
+        end
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 45.0 399.0 GXT 10@ 11@
+        
+        10@s = 'CFG_D7' // <
+        0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 20.0 400.0 GXT 10@ 11@
+        10@s = 'CFG_D8' // >
+        0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 127.0 400.0 GXT 10@ 11@
+    
+        if 0AB1: @CursorClickCheck 4 box_position 25.0 406.0 box_size 19.0 12.0 // <
+        then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_DECREASE return_in 20@
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 132.0 406.0 box_size 19.0 12.0 // >
+        then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_INCREASE return_in 20@
+        end
+    end
+    0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 20@
+    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
 end
 
 0AB1: @GetInt 1 @CamsOffsetsMenu_OffsetToModify 20@
