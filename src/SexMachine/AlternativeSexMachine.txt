@@ -297,7 +297,18 @@ then
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECREASE SexStat_Speed
     end
 end
-0AB1: @GetSpeedStatFromBarClick 1 SexStat_Speed returned_value SexStat_Speed
+
+// Increase / Decrease Speed (Clickable bar)
+0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable Dummy1
+if Dummy1 == 0 // not in Edit Mode (FPV/Fixed)
+then
+    if or
+    SexMenuState == 2 // Having sex
+    SexMenuState == 3 // Changing actors offsets
+    SexMenuState == 6 // Changing cameras offsets
+    then 0AB1: @GetSpeedStatFromBarClick 1 SexStat_Speed returned_value SexStat_Speed
+    end
+end
 
 // Increase Pleasure
 gosub @PleasureMachine

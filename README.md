@@ -10,7 +10,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Disable speed bar from clicking when on edit mode of fpv or fixed cameras.
 - Show in "select pose and place" menu (sexual menu) if is there saved offsets available
 
 Short-term
