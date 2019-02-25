@@ -18,6 +18,7 @@ Short-term
 - highligh 'save - load - delete' selected option in save menu
 - Sexual menu: activate the "cancel" button on new mode
 - Fade in/out when loading/changing a pose. Perhaps it doesn't need the fade when stopping.
+- Compatibility with classic mode.
 
 Long-Term
 - Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
