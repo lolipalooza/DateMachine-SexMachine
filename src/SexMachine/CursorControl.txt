@@ -168,3 +168,11 @@ if or
 then
 end
 0AB2: ret 2 click_x 12@ click_y 13@
+
+{======================================================================
+======================================================================}
+:WaitUntilReleaseClickButton // entries: none
+repeat
+wait 0
+until 80E1:   not player 0 pressed_key PAD_FIREWEAPON // CLICK
+return
