@@ -111,7 +111,8 @@ end
 0AD9: write_formatted_text "%c%c" in_file 0@ 0xd 0xa
 0AB2: ret 0
 
-
+{======================================================================
+======================================================================}
 :WriteInFile_Actors // inputs 20 file 0@ interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
 0AD9: write_formatted_text "interior %s " in_file 0@ 1@v
 0AD9: write_formatted_text "pose %d " in_file 0@ 5@
@@ -174,7 +175,8 @@ end
 0485:  return_true
 0AB2: ret 0
 
-
+{======================================================================
+======================================================================}
 :ReadFromFile_Actors // file 0@
 0ADA: 31@ = scan_file 0@ format "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f male_xyza %f %f %f %f slot %d in_use %d " interior 1@v pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@ //IF and SET
 if 31@ > 0
@@ -238,15 +240,29 @@ end
 
 {======================================================================
 ======================================================================}
-:DEBUG_ReadInternalStorage
+:DEBUG_ReadInternalStorage // entries: none
 0A9A: 30@ = openfile "modloader/date&sex/cleo/int_st.log" mode "wb+"  // IF and SET
 for 31@ = 1 to 12
-    0AB1: @ReadLineFromIntStorage 1 slot_to_read 31@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    0AB1: @IntLine2TempStorage 1 line 31@
+    
+    0AB1: @ReadFromTempStorage_Actors 0 ret interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
     0AD9: write_formatted_text "%s center %f %f %f " in_file 30@ interior 2@v center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
-    0AD9: write_formatted_text "male %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 31@ in_use 20@ 0xd 0xa
+    0AD9: write_formatted_text "male %f %f %f %f slot %d in_use %d " in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 31@ in_use 20@
+    
+    0AB1: @ReadFromTempStorage_FreeCam 0 ret cam_center 2@ 3@ 4@
+    0AD9: write_formatted_text "cam_center %f %f %f " in_file 30@ cam_center 2@ 3@ 4@
+    
+    0AB1: @ReadFromTempStorage_FPVCam 0 ret fpv_pos 2@ 3@ 4@ fpv_angle 5@ fpv_rotation 6@
+    0AD9: write_formatted_text "fpv_pos %f %f %f fpv_angle %f fpv_rotation %f " in_file 30@ fpv_pos 2@ 3@ 4@ fpv_angle 5@ fpv_rotation 6@
+    
+    for 29@ = 0 to 11
+        0AB1: @ReadFromTempStorage_FixedCam 1 cam_id 29@ ret fixed_pos 2@ 3@ 4@ fixed_angle 5@ fixed_rotation 6@
+        0AD9: write_formatted_text "fixed_pos %f %f %f fixed_angle %f fixed_rotation %f " in_file 30@ fixed_pos 2@ 3@ 4@ fixed_angle 5@ fixed_rotation 6@
+    end
+    
+    0AD9: write_formatted_text "%c%c" in_file 30@ line_break 0xd 0xa
 end
-0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
 0A9B: closefile 30@
 0AB2: ret 0
 
@@ -695,12 +711,12 @@ repeat
     {0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
     0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
-    0AB1: @GetData 2 @TempStorage 0 2@
+    0AB1: @GetData 2 @TempStorage 0 2@  // Interior Name
     0AB1: @GetData 2 @TempStorage 4 3@
     0AB1: @GetData 2 @TempStorage 8 4@
     0AB1: @GetData 2 @TempStorage 12 5@
-    0AB1: @GetInt 2 @TempStorage 16 6@
-    0AB1: @GetInt 2 @TempStorage 17 7@
+    0AB1: @GetInt 2 @TempStorage 16 6@ // Pose
+    0AB1: @GetInt 2 @TempStorage 17 7@ // Place
     if and
     2@v == 22@v                     // interior check
     003B:   0@ == 6@  // (int)      // pose check

@@ -10,7 +10,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Load camera info (specially free cam) from actors offsets menu.
 - Enable Resets for FPV and Fixed cameras.
 - Reactivate the cameras on sexmachine new mode (AlternativeSexMachine).
 

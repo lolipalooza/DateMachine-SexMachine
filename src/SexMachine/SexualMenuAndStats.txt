@@ -458,6 +458,7 @@ then
         0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
         0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
         0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+        0AB1: @RelocateFreeCamCenter 0
         0373: set_camera_directly_behind_player
         02EB: restore_camera_with_jumpcut
     end
@@ -489,7 +490,9 @@ then
             if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
             then
                 if 30@ == 0 // Save
-                then 0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
+                then
+                    0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
+                    0AB1: @DEBUG_ReadInternalStorage 0
                 end
                 if 30@ == 1 // Load
                 then 0AB1: @RetrieveInformationFromInternalStorage 6 slot 16@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
@@ -771,7 +774,9 @@ then
             if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
             then
                 if 30@ == 0 // Save
-                then 0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
+                then
+                    0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
+                    0AB1: @DEBUG_ReadInternalStorage 0
                 end
                 if 30@ == 1 // Load
                 then
