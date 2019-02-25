@@ -10,7 +10,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Sexual menu: activate the "cancel" button on new mode
 
 Short-term
 - Fix hj sofa male animation!

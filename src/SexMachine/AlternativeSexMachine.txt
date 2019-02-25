@@ -65,6 +65,12 @@ wait 0
             gosub @ChangePoseAndPlace_Alt
             SexMenuState = 2
         end
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Cancel Button
+        then
+            gosub @WaitUntilReleaseClickButton
+            SexMenuState = 0
+            01B4: set_player $PLAYER_CHAR can_move 1
+        end
         if PulseButtonState == PULSED_ENTER_VEH
         then 01B4: set_player $PLAYER_CHAR can_move 1
         end
