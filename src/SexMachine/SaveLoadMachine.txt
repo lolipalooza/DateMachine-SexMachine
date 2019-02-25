@@ -1,51 +1,151 @@
 {======================================================================
 ======================================================================}
-{
-Save/load format
-interior(long string)(4bytes*4), fem_xyza (4bytes*4), male_xyza (4bytes*4), pose, place, slot
-interiors: ABATOIR,AMMUN1,CARMOD1,FDREST1,GF1,JETINT,LACS1,LAHS1B,MAFCAS,MAFCAS2,SMASHTV,SVVGHO1,SWEETS,TSDINER,WUZIBET,BARBERS,BDUPS1,CARMOD2,CARTER,GF2,LAHS1A,LASTRIP,RYDERS,SVVGHO2,VGHSB1,VGHSB3,BARBER2,BDUPS,BIKESCH,BROTHL1,CARLS,CARMOD3,CHANGER,CSSPRT,DRIVES,DRIVES2,GENOTB,GF3,LAHSB4,OGLOCS,PAPER,PDOMES,PDOMES2,POLICE3,SEXSHOP,S1TEST,STRIP2,STUDIO,TATTO3,AMMUN2,DINER1,DIRBIKE,GF4,LAHS2A,LAHSS6,SFHSM2,X711S2,CSDESGN,DINER2,FDPIZA,GANG,GF5,GYM1,LACRAK,LAHSB3,MADDOGS,MDDOGS,SFHSB1,SVHOT1,VGHSM2,AMMUN3,AMMUN5,BROTHEL,GF6,GYM2,LAHSB1,POLICE1,RCPLAY,REST2,SFHSB2,SFHSS2,SVCUNT,SVSFSM,X7_11S,8TRACK,AMMUN4,GYM3,LAHSB2,OFTEST,BURHOUS,SFHSS1,SVLAMD,FDCHICK,LAHS2B,SFHSB3,SVGNMT2,SVVGMD,DESHOUS,FDBURG,POLICE2,SVGNMT1,TRICAS,SVSFMD,VGHSM3,X711S3,BAR2,SVLASM,BARBER3,MOROOM,SVLABIG,CSEXL,AIRPOR2,AIRPORT,CSCHP,MOTEL1,SFHSM1,VGHSS1,VGSHM2,VGSHM3,VGSHS2,TATTOO,X7_11C,BAR1,DAMIN,FDDONUT,TATTO2,X7_11D,ATRIUME,ATRIUMX,CLOTHGP,GENWRHS,UFOBAR,X7_11B
-}
+//interiors: ABATOIR,AMMUN1,CARMOD1,FDREST1,GF1,JETINT,LACS1,LAHS1B,MAFCAS,MAFCAS2,SMASHTV,SVVGHO1,SWEETS,TSDINER,WUZIBET,BARBERS,BDUPS1,CARMOD2,CARTER,GF2,LAHS1A,LASTRIP,RYDERS,SVVGHO2,VGHSB1,VGHSB3,BARBER2,BDUPS,BIKESCH,BROTHL1,CARLS,CARMOD3,CHANGER,CSSPRT,DRIVES,DRIVES2,GENOTB,GF3,LAHSB4,OGLOCS,PAPER,PDOMES,PDOMES2,POLICE3,SEXSHOP,S1TEST,STRIP2,STUDIO,TATTO3,AMMUN2,DINER1,DIRBIKE,GF4,LAHS2A,LAHSS6,SFHSM2,X711S2,CSDESGN,DINER2,FDPIZA,GANG,GF5,GYM1,LACRAK,LAHSB3,MADDOGS,MDDOGS,SFHSB1,SVHOT1,VGHSM2,AMMUN3,AMMUN5,BROTHEL,GF6,GYM2,LAHSB1,POLICE1,RCPLAY,REST2,SFHSB2,SFHSS2,SVCUNT,SVSFSM,X7_11S,8TRACK,AMMUN4,GYM3,LAHSB2,OFTEST,BURHOUS,SFHSS1,SVLAMD,FDCHICK,LAHS2B,SFHSB3,SVGNMT2,SVVGMD,DESHOUS,FDBURG,POLICE2,SVGNMT1,TRICAS,SVSFMD,VGHSM3,X711S3,BAR2,SVLASM,BARBER3,MOROOM,SVLABIG,CSEXL,AIRPOR2,AIRPORT,CSCHP,MOTEL1,SFHSM1,VGHSS1,VGSHM2,VGSHM3,VGSHS2,TATTOO,X7_11C,BAR1,DAMIN,FDDONUT,TATTO2,X7_11D,ATRIUME,ATRIUMX,CLOTHGP,GENWRHS,UFOBAR,X7_11B
 
-:WriteLineInFile // inputs 20 file 0@ interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
-//0AD9: write_formatted_text "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f " in_file 0@ values 1@v pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@
+:TempStorage2FileLine // file 0@
+//Actors offsets
+0AB1: @ReadFromTempStorage_Actors 0 ret interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
+0AB1: @WriteInFile_Actors 20 file 0@ interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
+
+// Free Camera
+0AB1: @ReadFromTempStorage_FreeCam 0 ret cam_center 1@ 2@ 3@
+0AB1: @WriteInFile_FreeCam 4 file 0@ cam_center 1@ 2@ 3@
+
+// First Person View Camera
+0AB1: @ReadFromTempStorage_FPVCam 0 ret fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+0AB1: @WriteInFile_FPVCam 6 file 0@ fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+
+// Fixed Cameras
+for 10@ = 0 to 11
+    0AB1: @ReadFromTempStorage_FixedCam 1 cam_id 10@ ret fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+    0AB1: @WriteInFile_FixedCam 6 file 0@ fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+end
+0AD9: write_formatted_text "%c%c" in_file 0@ 0xd 0xa
+0AB2: ret 0
+
+
+:WriteInFile_Actors // inputs 20 file 0@ interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
 0AD9: write_formatted_text "interior %s " in_file 0@ 1@v
 0AD9: write_formatted_text "pose %d " in_file 0@ 5@
 0AD9: write_formatted_text "place %d " in_file 0@ 6@
 0AD9: write_formatted_text "center_xyz %f %f %f " in_file 0@ 7@ 8@ 9@
 0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 0@ 10@ 11@ 12@ 13@
-//0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 0@ values male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@ line_break 0xd 0xa
 0AD9: write_formatted_text "male_xyza %f %f %f %f " in_file 0@ 14@ 15@ 16@ 17@
 0AD9: write_formatted_text "slot %d " in_file 0@ 18@
-0AD9: write_formatted_text "in_use %d" in_file 0@ 19@
-0AD9: write_formatted_text "%c%c" in_file 0@ 0xd 0xa
+0AD9: write_formatted_text "in_use %d " in_file 0@ 19@
 0AB2: ret 0
 
-:ReadLineFromFile // inputs 1 file 0@
-0ADA: 1@ = scan_file 0@ format "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f male_xyza %f %f %f %f slot %d in_use %d " 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ //IF and SET
-if 1@ > 0
+:WriteInFile_FreeCam // file 0@ cam_center 1@ 2@ 3@
+0AD9: write_formatted_text "free_cam %f %f %f " in_file 0@ free_cam_center 1@ 2@ 3@
+0AB2: ret 0
+
+:WriteInFile_FPVCam // file 0@ fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+0AD9: write_formatted_text "fpv_pos %f %f %f fpv_angle %f fpv_rotation %f " in_file 0@ fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+0AB2: ret 0
+
+:WriteInFile_FixedCam // file 0@ fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+0AD9: write_formatted_text "fixed_pos %f %f %f angle %f rot %f " in_file 0@ fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:FileLine2TempStorage // file 0@
+if 0AB1: @ReadFromFile_Actors 1 file 0@ ret interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
+then //0485:  return_true
+else
+    059A:  return_false
+    0AB2: ret 0
+end
+0AB1: @WriteInTempStorage_Actors 19 interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
+
+if 0AB1: @ReadFromFile_FreeCam 1 file 0@ ret free_cam_center 1@ 2@ 3@
+then //0485:  return_true
+else
+    059A:  return_false
+    0AB2: ret 0
+end
+0AB1: @WriteInTempStorage_FreeCam 3 cam_center 1@ 2@ 3@
+
+if 0AB1: @ReadFromFile_FPVCam 1 file 0@ ret fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+then //0485:  return_true
+else
+    059A:  return_false
+    0AB2: ret 0
+end
+0AB1: @WriteInTempStorage_FPVCam 5 fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+
+for 30@ = 0 to 11
+    if 0AB1: @ReadFromFile_FixedCam 1 file 0@ ret fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+    then //0485:  return_true
+    else
+        059A:  return_false
+        0AB2: ret 0
+    end
+    0AB1: @WriteInTempStorage_FixedCam 6 cam_id 30@ ret fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+end
+0485:  return_true
+0AB2: ret 0
+
+
+:ReadFromFile_Actors // file 0@
+0ADA: 31@ = scan_file 0@ format "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f male_xyza %f %f %f %f slot %d in_use %d " interior 1@v pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@ //IF and SET
+if 31@ > 0
 then 0485:  return_true
 else 059A:  return_false
 end
-0AB2: ret 19 interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+0AB2: ret 19 interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
 
+:ReadFromFile_FreeCam // file 0@
+0ADA: 31@ = scan_file 0@ format "free_cam %f %f %f " free_cam_center 1@ 2@ 3@ //IF and SET
+if 31@ > 0
+then 0485:  return_true
+else 059A:  return_false
+end
+0AB2: ret 3 free_cam_center 1@ 2@ 3@
+
+:ReadFromFile_FPVCam // file 0@
+0ADA: 31@ = scan_file 0@ format "fpv_pos %f %f %f fpv_angle %f fpv_rotation %f " fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@ //IF and SET
+if 31@ > 0
+then 0485:  return_true
+else 059A:  return_false
+end
+0AB2: ret 5 fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+
+:ReadFromFile_FixedCam // file 0@
+0ADA: 31@ = scan_file 0@ format "fixed_pos %f %f %f angle %f rot %f " fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@ //IF and SET
+if 31@ > 0
+then 0485:  return_true
+else 059A:  return_false
+end
+0AB2: ret 5 fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+
+{======================================================================
+======================================================================}
+const
+    ST_LINELENGTH = 336
+end
 {======================================================================
 ======================================================================}
 :InternalDataStorage
 hex
-// Long string interior name            Pose    Place   Center XYZ                      Female XYZA                             Male XYZA                               Slot    In use       Free Cam Center offset
-//       (4)      (8)      (12)         (16)    (17)    (18)     (22)     (26)          (30)     (34)     (38)     (42)         (46)     (50)     (54)     (58)         (62)    (63)
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      1      00           //00000000 00000000 00000000
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      2      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      3      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      4      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      5      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      6      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      7      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      8      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      9      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000     10      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000     11      00
-00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000     12      00
+// Long string interior name            Pose    Place   Center XYZ                      Female XYZA                             Male XYZA                               Slot    In use       Free Camera                    First Person View Camera                        Fixed Camera 1                                  Fixed Camera 2                                  Fixed Camera 3                                  Fixed Camera 4                                  Fixed Camera 5                                  Fixed Camera 6                                  Fixed Camera 7                                  Fixed Camera 8                                  Fixed Camera 9                                  Fixed Camera 10                                 Fixed Camera 11                                 Fixed Camera 12
+//       (4)      (8)      (12)         (16)    (17)    (18)     (22)     (26)          (30)     (34)     (38)     (42)         (46)     (50)     (54)     (58)         (62)    (63)         (64)     (68)     (72)         (76)     (80)     (84)     (88)     (92)        (96)     (100)    (104)    (108)    (112)       (116)    (120)    (124)    (128)    (132)       (136)                                           (156)                                           (176)                                           (196)                                           (216)                                           (236)                                           (256)                                           (276)                                           (296)                                           (316)                               (332)
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      1      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      2      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      3      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      4      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      5      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      6      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      7      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      8      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      9      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000     10      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000     11      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000     12      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
+end
+:TempStorage
+hex
+00000000 00000000 00000000 00000000     00      00      00000000 00000000 00000000      00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000      0      00           00000000 00000000 00000000     00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000 00000000
 end
 
 {======================================================================
@@ -64,12 +164,29 @@ end
 
 {======================================================================
 ======================================================================}
+:ClearStorages
+9@ = ST_LINELENGTH
+9@ *= 12 // Number of lines
+9@ -= 1
+for 31@ = 0 to 9@
+0AB1: @StoreInt 3 label @InternalDataStorage value 0 offset 31@
+end
+
+9@ = ST_LINELENGTH
+9@ -= 1
+for 31@ = 0 to 9@
+0AB1: @StoreInt 3 label @TempStorage value 0 offset 31@
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :WriteLineInIntStorage // inputs 20 slot_to_use 0@ interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
 0AC6: 30@ = label @InternalDataStorage offset
 0085: 31@ = 0@ // (int)          // slot_to_use goes from 1 to 12
 31@--
-31@ *= 64
-005A: 30@ += 31@  // (int)       // 30@ + slot_id * 64, where slot_id goes from 0 to 11
+31@ *= ST_LINELENGTH
+005A: 30@ += 31@  // (int)       // 30@ + slot_id * line_length, where slot_id goes from 0 to 11
 
 // Interior name
 0A8C: write_memory 30@ size 4 value 1@ virtual_protect 0
@@ -132,8 +249,8 @@ end
 0AC6: 30@ = label @InternalDataStorage offset
 0085: 31@ = 0@ // (int)          // slot_to_use goes from 1 to 12
 31@--
-31@ *= 64
-005A: 30@ += 31@  // (int)       // 30@ + slot_id * 64, where slot_id goes from 0 to 11
+31@ *= ST_LINELENGTH
+005A: 30@ += 31@  // (int)       // 30@ + slot_id * line_length, where slot_id goes from 0 to 11
 
 // Interior name
 0A8D: 2@ = read_memory 30@ size 4 virtual_protect 0
@@ -192,11 +309,207 @@ end
 
 {======================================================================
 ======================================================================}
+:IntLine2TempStorage // line 0@
+0AC6: 20@ = label @InternalDataStorage offset
+0AC6: 21@ = label @TempStorage offset
+
+0085: 31@ = 0@ // (int)          // slot_to_use goes from 1 to 12
+31@--
+31@ *= ST_LINELENGTH
+005A: 20@ += 31@  // (int)       // 20@ + slot_id * line_length, where slot_id goes from 0 to 11
+
+9@ = ST_LINELENGTH
+9@ -= 1
+for 10@ = 0 to 9@
+    0A8D: 1@ = read_memory 20@ size 1 virtual_protect 0
+    20@++
+    0A8C: write_memory 21@ size 1 value 1@ virtual_protect 0
+    21@++
+end
+0AB2: ret 0
+
+
+:TempStorage2IntLine // slot 0@
+0AC6: 20@ = label @InternalDataStorage offset
+0AC6: 21@ = label @TempStorage offset
+
+0085: 31@ = 0@ // (int)          // slot_to_use goes from 1 to 12
+31@--
+31@ *= ST_LINELENGTH
+005A: 20@ += 31@  // (int)       // 20@ + slot_id * line_length, where slot_id goes from 0 to 11
+
+9@ = ST_LINELENGTH
+9@ -= 1
+for 10@ = 0 to 9@
+    0A8D: 1@ = read_memory 21@ size 1 virtual_protect 0
+    21@++
+    0A8C: write_memory 20@ size 1 value 1@ virtual_protect 0
+    20@++
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:ReadFromTempStorage_Actors
+0AC6: 30@ = label @TempStorage offset
+
+// Interior name
+0A8D: 2@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 3@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 4@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 5@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+
+// Pose
+0A8D: 6@ = read_memory 30@ size 1 virtual_protect 0
+30@++
+
+// Place
+0A8D: 7@ = read_memory 30@ size 1 virtual_protect 0
+30@++
+
+// Center XYZ
+0A8D: 8@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 9@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 10@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+
+// Female XYZA
+0A8D: 11@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 12@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 13@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 14@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+
+// Male XYZA
+0A8D: 15@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 16@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 17@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 18@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+
+// Slot
+0A8D: 19@ = read_memory 30@ size 1 virtual_protect 0
+30@++
+
+// In use
+0A8D: 20@ = read_memory 30@ size 1 virtual_protect 0
+0AB2: ret 19 interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+
+
+:ReadFromTempStorage_FreeCam
+0AC6: 30@ = label @TempStorage offset
+30@ += 64 // free cam offset
+
+0A8D: 1@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 2@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 3@ = read_memory 30@ size 4 virtual_protect 0
+0AB2: ret 3 cam_center 1@ 2@ 3@
+
+
+:ReadFromTempStorage_FPVCam
+0AC6: 30@ = label @TempStorage offset
+30@ += 76 // fpv cam offset
+
+0A8D: 1@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 2@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 3@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 4@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 5@ = read_memory 30@ size 4 virtual_protect 0
+0AB2: ret 5 fpv_pos 1@ 2@ 3@ fpv_angle 4@ fpv_rotation 5@
+
+
+:ReadFromTempStorage_FixedCam // cam_id 0@
+0AC6: 30@ = label @TempStorage offset
+30@ += 96 // fixed cam offset
+0006: 31@ = 20
+006A: 31@ *= 0@  // (int)
+005A: 30@ += 31@  // (int)
+
+0A8D: 1@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 2@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 3@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 4@ = read_memory 30@ size 4 virtual_protect 0
+30@ += 4
+0A8D: 5@ = read_memory 30@ size 4 virtual_protect 0
+0AB2: ret 5 fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+
+{======================================================================
+======================================================================}
+:WriteInTempStorage_Actors // interior 0@ 1@ 2@ 3@ pose 4@ place 5@ center_xyz 6@ 7@ 8@ fem_xyza 9@ 10@ 11@ 12@ male_xyza 13@ 14@ 15@ 16@ slot 17@ in_use 18@
+0AB1: @StoreData  3  @TempStorage   0@   0 // Interior Name
+0AB1: @StoreData  3  @TempStorage   1@   4 // Interior Name
+0AB1: @StoreData  3  @TempStorage   2@   8 // Interior Name
+0AB1: @StoreData  3  @TempStorage   3@  12 // Interior Name
+0AB1: @StoreInt   3  @TempStorage   4@  16 // Pose
+0AB1: @StoreInt   3  @TempStorage   5@  17 // Place
+0AB1: @StoreData  3  @TempStorage   6@  18 // Center X
+0AB1: @StoreData  3  @TempStorage   7@  22 // Center Y
+0AB1: @StoreData  3  @TempStorage   8@  26 // Center Z
+0AB1: @StoreData  3  @TempStorage   9@  30 // Female X
+0AB1: @StoreData  3  @TempStorage  10@  34 // Female Y
+0AB1: @StoreData  3  @TempStorage  11@  38 // Female Z
+0AB1: @StoreData  3  @TempStorage  12@  42 // Female A
+0AB1: @StoreData  3  @TempStorage  13@  46 // Male X
+0AB1: @StoreData  3  @TempStorage  14@  50 // Male Y
+0AB1: @StoreData  3  @TempStorage  15@  54 // Male Z
+0AB1: @StoreData  3  @TempStorage  16@  58 // Male A
+0AB1: @StoreInt   3  @TempStorage  17@  62 // Slot
+0AB1: @StoreInt   3  @TempStorage  18@  63 // In Use
+0AB2: ret 0
+
+:WriteInTempStorage_FreeCam // cam_center 0@ 1@ 2@
+0AB1: @StoreData  3  @TempStorage   0@  64
+0AB1: @StoreData  3  @TempStorage   1@  68
+0AB1: @StoreData  3  @TempStorage   2@  72
+0AB2: ret 0
+
+:WriteInTempStorage_FPVCam // fpv_pos 0@ 1@ 2@ fpv_angle 3@ fpv_rotation 4@
+0AB1: @StoreData  3  @TempStorage   0@  76
+0AB1: @StoreData  3  @TempStorage   1@  80
+0AB1: @StoreData  3  @TempStorage   2@  84
+0AB1: @StoreData  3  @TempStorage   3@  88
+0AB1: @StoreData  3  @TempStorage   4@  92
+0AB2: ret 0
+
+:WriteInTempStorage_FixedCam // cam_id 0@ fixed_pos 1@ 2@ 3@ fixed_angle 4@ fixed_rotation 5@
+0006: 30@ = 96 // fixed cam offset
+0006: 31@ = 20
+006A: 31@ *= 0@  // (int)
+005A: 30@ += 31@  // (int)
+for 20@ = 0 to 4
+    0AB1: @StoreData 3 label @TempStorage value 1@(20@,5f) offset 30@
+    30@ += 4
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :ClearAllInUseFlagsFromIntStorage // entries: none
 for 30@ = 0 to 11
     0085: 31@ = 30@ // (int)
-    31@ *= 64
-    31@ += 63       // offset: 30@ * lile-length (64) + use_flag offset (63)
+    31@ *= ST_LINELENGTH
+    31@ += 63       // offset: 30@ * lile-length + use_flag offset (63)
     0AB1: @StoreInt 3 label @InternalDataStorage value 0 offset 31@
 end
 0AB2: ret 0
@@ -206,8 +519,8 @@ end
 :SetUseFlag // slot 0@ value 1@
 0085: 31@ = 0@ // (int)
 31@--
-31@ *= 64
-31@ += 63       // offset: slot * line-length (64) + use_flag offset (63)
+31@ *= ST_LINELENGTH
+31@ += 63       // offset: slot * line-length + use_flag offset (63)
 0AB1: @StoreInt 3 label @InternalDataStorage value 1@ offset 31@
 0AB2: ret 0
 
@@ -272,13 +585,17 @@ end
 //0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 repeat
-    if 0AB1: @ReadLineFromFile 1 29@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    if 0AB1: @FileLine2TempStorage 1 file 29@
     then // Data read successfully, continue
     else break
     end
     {0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
     0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
+    0AB1: @GetData 2 @TempStorage 0 2@
+    0AB1: @GetData 2 @TempStorage 4 3@
+    0AB1: @GetData 2 @TempStorage 8 4@
+    0AB1: @GetData 2 @TempStorage 12 5@
     if and
     2@v == 22@v                     // interior check
     003B:   0@ == 6@  // (int)      // pose check
@@ -291,7 +608,7 @@ repeat
         end
     else
         //0AD9: write_formatted_text "Writing line in save file...%c%c" in_file 30@ 0xd 0xa
-        0AB1: @WriteLineInFile 20 file 21@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+        0AB1: @TempStorage2FileLine 1 file 21@
     end
 until false
 
@@ -310,15 +627,19 @@ end
 :SaveDataFromInternalStorage
 //0AD9: write_formatted_text "Saving data from internal storage...%c%c" in_file 30@ 0xd 0xa
 for 27@ = 1 to 12
-    0AB1: @ReadLineFromIntStorage 1 slot_to_read 27@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    0AB1: @IntLine2TempStorage 1 line 27@
     {0AD9: write_formatted_text "Reading from storage: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
     0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
+    0AB1: @GetData 2 @TempStorage 0 2@
+    0AB1: @GetData 2 @TempStorage 4 3@
+    0AB1: @GetData 2 @TempStorage 8 4@
+    0AB1: @GetData 2 @TempStorage 12 5@
     if 2@v == ""
     then //0AD9: write_formatted_text "... Not data found in slot %d%c%c" in_file 30@ 27@ 0xd 0xa
     else
         //0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
-        0AB1: @WriteLineInFile 20 file 21@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 27@ in_use 20@
+        0AB1: @TempStorage2FileLine 1 file 21@
     end
 end
 //0AD9: write_formatted_text "%c%c" in_file 30@ 0xd 0xa
@@ -349,12 +670,9 @@ end
 //0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 // Clean internal storage
-for 27@ = 1 to 12
-0AB1: @WriteLineInIntStorage 20 slot_to_use 27@ interior 0 0 0 0 pose 0 place 0 center_xyz 0.0 0.0 0.0 fem_xyza 0.0 0.0 0.0 0.0 male_xyza 0.0 0.0 0.0 0.0 slot 0 in_use 0
-end
-
+0AB1: @ClearStorages 0
 repeat
-    if 0AB1: @ReadLineFromFile 1 21@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+    if 0AB1: @FileLine2TempStorage 1 file 21@
     then // Data read successfully, continue
     else break
     end
@@ -366,7 +684,8 @@ repeat
     003B:   0@ == 6@  // (int)      // pose
     003B:   1@ == 7@  // (int)      // place
     then
-        0AB1: @WriteLineInIntStorage 20 slot_to_use 19@ interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
+        0AB1: @GetData 2 @TempStorage 62 19@
+        0AB1: @TempStorage2IntLine 1 slot 19@
         //0AD9: write_formatted_text "...Loaded line into storage, slot %d%c%c" in_file 30@ 19@ 0xd 0xa
     //else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 0@ 1@ 0xd 0xa
     end
