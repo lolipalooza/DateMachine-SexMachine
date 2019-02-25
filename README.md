@@ -28,6 +28,7 @@ Long-Term
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 
 Bugs
+- Disable speed bar from clicking when on edit mode of fpv or fixed cameras.
 - Perhaps cameras don't save from 'actors offsets' menu save button.
 - Looks like z don't increase progressively like x or y (actors offsets menu).
 - Looks like cameras menu doesn't save an interior's line contiguous to the other lines in same interior.
