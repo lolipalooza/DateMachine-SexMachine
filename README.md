@@ -9,6 +9,11 @@ SexMachine: (A lot but still missing)%
 
 ## To do
 
+Next
+- Load camera info (specially free cam) from actors offsets menu.
+- Enable Resets for FPV and Fixed cameras.
+- Reactivate the cameras on sexmachine new mode (AlternativeSexMachine).
+
 Short-term
 - Fix hj sofa male animation!
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
