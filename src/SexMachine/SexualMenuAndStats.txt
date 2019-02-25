@@ -824,16 +824,6 @@ else
             0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
             0AB1: @CamsOffsets_SetFixedCamera 0
         end
-        
-        10@s = 'CFG_O6' // Reset
-        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
-        if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
-        then
-            0AB1: @StoreData 3 @PlayerPosX 0.0 4
-            0AB1: @StoreData 3 @PlayerPosY 0.0 4
-            0AB1: @StoreData 3 @PlayerPosZ 0.0 4
-            0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z 0.0
-        end
     end
     
     
@@ -985,6 +975,40 @@ else
     end
     0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 20@
     0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
+    
+    
+    
+    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    if 12@ == 0 // Not in edit FPV cam mode
+    then
+        10@s = 'CFG_O6' // Reset
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
+        if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
+        then
+            if 20@ == 0 // Free camera
+            then
+                0AB1: @StoreData 3 @PlayerPosX 0.0 4
+                0AB1: @StoreData 3 @PlayerPosY 0.0 4
+                0AB1: @StoreData 3 @PlayerPosZ 0.0 4
+                0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z 0.0
+            end
+            if 20@ == 1 // First person camera
+            then
+                0AB1: @RemoveFirstPersonPoint 0
+                0AB1: @StoreFPVCamData 5 position 0.0 0.0 0.0 angle 0.0 rotation 0.0
+                0AB1: @InitFirstPersonCameraVars_Alt 6 pos_offset 0.0 0.0 0.0 angle 0.0 rotation 0.0 trgt_x 0.0 ret update_values position 10@ 11@ 12@ angle 13@ trgt_x 15@
+                0AB1: @CreateFirstPersonPoint 5 cam_pos 10@ 11@ 12@ angle 13@ trgt_x 15@
+            end
+            if 20@ == 2 // Fixed camera
+            then
+                0AB1: @RemoveFirstPersonPoint 0
+                0AB1: @GetInt 1 @CamsOffsetsMenu_FixedId 13@
+                0AB1: @StoreFixedCam 6 cam_id 13@ cam_pos 0.0 0.0 0.0 angle 0.0 rotation 0.0
+                0AB1: @InitFixedCam 6 cam_pos 0.0 0.0 0.0 angle 0.0 rotation 0.0 trgt_x 0.0 return_in position 10@ 11@ 12@ angle 13@ trgt_x 15@
+                0AB1: @CreateFirstPersonPoint 5 cam_pos 10@ 11@ 12@ angle 13@ trgt_x 15@
+            end
+        end
+    end
 end
 
 0AB1: @GetInt 1 @CamsOffsetsMenu_OffsetToModify 20@
