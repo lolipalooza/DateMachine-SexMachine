@@ -1267,11 +1267,7 @@ then
     gosub @SettingTexts_CameraMode
     gosub @SettingTexts_Animations
 else
-    if and
-    not 0@ == 3
-    not 0@ == 4
-    not 0@ == 6
-    not 0@ == 7
+    if 0@ == 2
     then
         gosub @SettingTexts_CameraMode
         gosub @SettingTexts_Animations

@@ -203,11 +203,7 @@ return
 :SexMachine_Alt
 if SexState == 0
 then
-    if and
-    not SexMenuState == 3
-    not SexMenuState == 4
-    not SexMenuState == 6
-    not SexMenuState == 7
+    if SexMenuState == 2
     then
         if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0 // Camera mode Button
         then
