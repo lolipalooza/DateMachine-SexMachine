@@ -10,13 +10,12 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Reactivate the cameras on sexmachine new mode (AlternativeSexMachine).
+- Sexual menu: activate the "cancel" button on new mode
 
 Short-term
 - Fix hj sofa male animation!
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
 - highligh 'save - load - delete' selected option in save menu
-- Sexual menu: activate the "cancel" button on new mode
 - Fade in/out when loading/changing a pose. Perhaps it doesn't need the fade when stopping.
 - Compatibility with classic mode.
 

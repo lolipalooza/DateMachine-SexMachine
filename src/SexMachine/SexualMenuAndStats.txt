@@ -407,7 +407,7 @@ end
 // Change angle of view
 10@s = 'CFG_D7' // <
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 170.0 389.0 GXT 10@ 11@
-10@s = 'CFG_C3' // Change Angle of View
+10@s = 'CFG_E3' // Change Angle of View
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 183.0 390.0 GXT 10@ 11@
 10@s = 'CFG_D8' // >
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 286.0 389.0 GXT 10@ 11@
@@ -806,7 +806,7 @@ else
         // Change angle of view
         10@s = 'CFG_D7' // <
         0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 170.0 389.0 GXT 10@ 11@
-        10@s = 'CFG_C3' // Change Angle of View
+        10@s = 'CFG_E3' // Change Angle of View
         0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 183.0 390.0 GXT 10@ 11@
         10@s = 'CFG_D8' // >
         0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 286.0 389.0 GXT 10@ 11@
@@ -834,8 +834,8 @@ else
     if 20@ == 1
     then
         if 12@ == 0
-        then 10@s = 'CFG_C5' // Enter FPV edit mode
-        else 10@s = 'CFG_C6' // FPV edit mode - Click anywhere to close
+        then 10@s = 'CFG_E5' // Enter FPV edit mode
+        else 10@s = 'CFG_E6' // FPV edit mode - Click anywhere to close
         end
         0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 170.0 389.0 GXT 10@ 11@
         
@@ -871,10 +871,10 @@ else
             0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 170.0 389.0 GXT 10@ 11@
             10@s = 'CFG_D8' // >
             0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 344.0 389.0 GXT 10@ 11@
-            10@s = 'CFG_C7' // Enter Fixed camera ~1~ edit mode
+            10@s = 'CFG_E7' // Enter Fixed camera ~1~ edit mode
             0AB1: @SetDrawTextRGB_1Number 12 font 2 linewidth 600.0 size 0.2 1.0 position 188.0 390.0 GXT 10@ 11@ rgb 255 255 255 integer 14@
         else
-            10@s = 'CFG_C8' // Fixed cam ~1~ edit mode - click to exit
+            10@s = 'CFG_E8' // Fixed cam ~1~ edit mode - click to exit
             0AB1: @SetDrawTextRGB_1Number 12 font 2 linewidth 600.0 size 0.2 1.0 position 170.0 389.0 GXT 10@ 11@ rgb 255 255 255 integer 14@
         end
         if 12@ == 0
@@ -951,13 +951,13 @@ else
     if 12@ == 0 // Not in edit FPV cam mode
     then
         if 20@ == 0
-        then 10@s = 'CFG_C1' // Free cam offset
+        then 10@s = 'CFG_E1' // Free cam offset
         end
         if 20@ == 1
-        then 10@s = 'CFG_C2' // First person offset
+        then 10@s = 'CFG_E2' // FPV offset
         end
         if 20@ == 2
-        then 10@s = 'CFG_C4' // Fixed Camera ~1~
+        then 10@s = 'CFG_E4' // Fixed offsets
         end
         0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 45.0 399.0 GXT 10@ 11@
         

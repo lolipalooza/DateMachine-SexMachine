@@ -9,6 +9,7 @@ $ONMISSION = 1
 0085: SexStat_Speed = 2@ // (int)
 0AB1: @StoreActorsInfo 4 gxt_fem 3@ 4@ gtx_male 5@ 6@
 
+// Initialize Machine
     0581: enable_radar 0
     0826: enable_hud 0
     03F0: enable_text_draw 1
@@ -19,6 +20,7 @@ $ONMISSION = 1
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
 
+    0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
 0AB1: @InitCursorControl 0
 ShowSexualStats = true
 SexState = 0
@@ -95,11 +97,6 @@ wait 0
     end
     if SexMenuState == 2
     then
-        if PulseButtonState == PULSED_ENTER_VEH
-        then
-            gosub @RemovePosesAndActors
-            SexMenuState=0
-        end
         {if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
         then
             gosub @RemovePosesAndActors
@@ -123,11 +120,15 @@ wait 0
             0AB1: @LoadData 2 SexPoseInt SexPlace
             0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 0 // Set free cam
             0AB1: @StoreInt 2 @CameraMode 0
-            0AB1: @ToggleSexualCamera 2 SexPoseInt SexPlace
             0AB1: @CreateFreeCamCenter 0
             SexMenuState = 6
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 437.0 box_size 64.0 12.0 // Back button
+        then
+            gosub @RemovePosesAndActors
+            SexMenuState=0
+        end
+        if PulseButtonState == PULSED_ENTER_VEH
         then
             gosub @RemovePosesAndActors
             SexMenuState=0
@@ -208,13 +209,13 @@ then
     not SexMenuState == 6
     not SexMenuState == 7
     then
-        {if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0
-        then SexState=1
+        if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0 // Camera mode Button
+        then
             0AB1: @GetInt 1 @CameraMode Dummy1
             0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 0 max_value 2 flag FLAG_INCREASE store_into Dummy1
             0AB1: @StoreInt 2 @CameraMode Dummy1
-            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
-        end}
+            0AB1: call_scm_func @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+        end
         if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
         then
             0AB1: @GetInt 1 @CurrentAnimation Dummy1
@@ -225,7 +226,7 @@ then
         end
     end
 
-    {0AB1: @GetInt 1 @CameraMode Dummy1
+    0AB1: @GetInt 1 @CameraMode Dummy1
     if Dummy1 == 1 // Fixed Camera
     then
         0494: get_joystick 0 data_to MoveAxisX MoveAxisY SpAxisX SpAxisY
@@ -234,30 +235,54 @@ then
             0AB1: @GetInt 1 @CurrentCamera MoveAxisY
             0AB1: call_scm_func @IncOrDecIntVariable 4 MoveAxisY 0 11 FLAG_INCREASE MoveAxisY
             0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
-            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+            0AB1: call_scm_func @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
         end
         if 001A:   -100 > SpAxisX // LEFT
         then SexState = 5
             0AB1: @GetInt 1 @CurrentCamera MoveAxisY
             0AB1: @IncOrDecIntVariable 4 var_to_increase MoveAxisY min_value 0 max_value 11 flag FLAG_DECREASE store_into MoveAxisY
             0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
-            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+            0AB1: call_scm_func @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
         end
         if 0AB1: @CursorClickCheck 4 box_position 247.0 395.0 box_size 13.0 12.0
         then
             0AB1: @GetInt 1 @CurrentCamera MoveAxisY
             0AB1: @IncOrDecIntVariable 4 var_to_increase MoveAxisY min_value 0 max_value 11 flag FLAG_DECREASE store_into MoveAxisY
             0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
-            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+            0AB1: call_scm_func @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
         end
         if 0AB1: @CursorClickCheck 4 box_position 263.0 395.0 box_size 13.0 12.0
         then
             0AB1: @GetInt 1 @CurrentCamera MoveAxisY
             0AB1: call_scm_func @IncOrDecIntVariable 4 MoveAxisY 0 11 FLAG_INCREASE MoveAxisY
             0AB1: @StoreInt 2 @CurrentCamera MoveAxisY
-            0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace
+            0AB1: call_scm_func @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
         end
-    end}
+    end
+end
+if SexState == 1
+then
+    if 80E1:   not player 0 pressed_key PAD_CHANGE_CAMERA_VIEW
+    then SexState=0
+    end
+end
+if SexState == 2
+then
+    if 80E1:   not player 0 pressed_key PAD_ANSWER_PHONE
+    then SexState=0
+    end
+end
+if SexState == 4
+then
+    if 8018:   not SpAxisX > 100
+    then SexState = 0
+    end
+end
+if SexState == 5
+then
+    if 801A:   not -100 > SpAxisX
+    then SexState = 0
+    end
 end
 
 // Increase / Decrease Speed
@@ -292,7 +317,7 @@ gosub @PulseButtonMachine
 if and
 not SexMenuState == 6
 not SexMenuState == 7
-then 0AB1: @FirstPersonCameraControl_Alt 0
+then 0AB1: @FirstPersonCameraControl_Alt 2 flag_edit 0 flag_moveable 1
 end
 return
 
@@ -332,6 +357,7 @@ gosub @WaitUntilReleaseClickButton
 0173: set_actor $PLAYER_ACTOR Z_angle_to Dummy4
 0373: set_camera_directly_behind_player
 02EB: restore_camera_with_jumpcut
+0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
 
 01B4: set_player $PLAYER_CHAR can_move 1
 SexStat_Speed = 0

@@ -121,14 +121,14 @@ CFG_O7	Restore
 CFG_O9	Both offset
 CFG_OA	Device offset
 
-CFG_C1	Free cam offset
-CFG_C2	FPV offset
-CFG_C3	Change Angle of View
-CFG_C4	Fixed offsets
-CFG_C5	Enter FPV edit mode
-CFG_C6	FPV edit mode - Click anywhere to close
-CFG_C7	Enter Fixed camera ~1~ edit mode
-CFG_C8	Fixed cam ~1~ edit mode - click to exit
+CFG_E1	Free cam offset
+CFG_E2	FPV offset
+CFG_E3	Change Angle of View
+CFG_E4	Fixed offsets
+CFG_E5	Enter FPV edit mode
+CFG_E6	FPV edit mode - Click anywhere to close
+CFG_E7	Enter Fixed camera ~1~ edit mode
+CFG_E8	Fixed cam ~1~ edit mode - click to exit
 
 INT_1	~1~
 
