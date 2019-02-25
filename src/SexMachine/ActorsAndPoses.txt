@@ -309,23 +309,3 @@ until 023D:   special_actor 1 loaded and 023D:   special_actor 2 loaded
 0296: unload_special_actor 1
 0296: unload_special_actor 2
 0AB2: ret 2 actress 30@ actor 31@
-
-{======================================================================
-======================================================================}
-:RelocateFreeCamCenter // entries: none
-0AB1: @GetData 2 @PlayerPosX 0 10@
-0AB1: @GetData 2 @PlayerPosY 0 11@
-0AB1: @GetData 2 @PlayerPosZ 0 12@
-
-0AB1: @GetData 2 @PlayerPosX 4 20@
-0AB1: @GetData 2 @PlayerPosY 4 21@
-0AB1: @GetData 2 @PlayerPosZ 4 22@
-
-005B: 10@ += 20@  // (float)
-005B: 11@ += 21@  // (float)
-005B: 12@ += 22@  // (float)
-
-12@ += -1.0
-00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
-0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
-0AB2: ret 0

@@ -348,7 +348,7 @@ then 0AB2: ret 1 PL_FOOT
 end
 0AB2: ret 1 404
 
-:GetPoseFromString
+:GetPoseFromString // gxt_entry 0@ 1@
 if 0@s == 'S_BJ_1'
 then 0AB2: ret 1 SEX_BJ
 end
@@ -374,9 +374,9 @@ if 0@s == 'S_FJ_1'
 then 0AB2: ret 1 SEX_FJ
 end
 if 0@s == 'S_BL_1'
-then 0AB2: ret 2 pose SEX_BJ fem_body_type BT_LOLI
+then 0AB2: ret 2 pose SEX_BJ body_type BT_LOLI
 end
-0AB2: ret 2 404 0
+0AB2: ret 2 pose 404 body_type 0
 
 {======================================================================
 ======================================================================}
@@ -393,6 +393,26 @@ if and
 then 059A: return_false
 else 0485: return_true
 end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:RelocateFreeCamCenter // entries: none
+0AB1: @GetData 2 @PlayerPosX 0 10@
+0AB1: @GetData 2 @PlayerPosY 0 11@
+0AB1: @GetData 2 @PlayerPosZ 0 12@
+
+0AB1: @GetData 2 @PlayerPosX 4 20@
+0AB1: @GetData 2 @PlayerPosY 4 21@
+0AB1: @GetData 2 @PlayerPosZ 4 22@
+
+005B: 10@ += 20@  // (float)
+005B: 11@ += 21@  // (float)
+005B: 12@ += 22@  // (float)
+
+12@ += -1.0
+00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
+0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
 0AB2: ret 0
 
 {======================================================================

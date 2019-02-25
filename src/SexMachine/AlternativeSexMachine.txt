@@ -75,13 +75,19 @@ wait 0
             gosub @RemovePosesAndActors
             0AB1: @GetInt 1 @SxMn_Pose Dummy1
             0AB1: @GetInt 1 @SxMn_Place Dummy2
-            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret Dummy3 Dummy4
-            0AB1: @GetPoseFromString 2 Dummy3 Dummy4 ret Dummy1 Dummy5
-            0085: SexPoseInt = Dummy1 // (int)
-            0085: SexPlace = Dummy2 // (int)
-            0085: BodyType = Dummy5 // (int)
-            gosub @ChangePoseAndPlace_Alt
-            SexMenuState = 2
+            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret gxt_entry Dummy3 Dummy4
+            0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
+            {if or
+            803B:   not Dummy1 == SexPoseInt  // (int)
+            803B:   not Dummy2 == SexPlace  // (int)
+            803B:   not Dummy5 == BodyType  // (int)
+            then}
+                0085: SexPoseInt = Dummy1 // (int)
+                0085: SexPlace = Dummy2 // (int)
+                0085: BodyType = Dummy5 // (int)
+                gosub @ChangePoseAndPlace_Alt
+                SexMenuState = 2
+            {end}
         end
         if PulseButtonState == PULSED_ENTER_VEH
         then 01B4: set_player $PLAYER_CHAR can_move 1
@@ -294,7 +300,6 @@ return
 ======================================================================}
 :ChangePoseAndPlace_Alt
 SexStat_Speed = 40
-
 0AB1: @LoadData 2 SexPoseInt SexPlace
 00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
 0AB1: @StoreData 3 @PlayerPosX Dummy1 0
@@ -321,6 +326,7 @@ return
 0AB1: @GetData 2 @PlayerPosY 0 Dummy2
 0AB1: @GetData 2 @PlayerPosZ 0 Dummy3
 0AB1: @GetData 2 @PlayerAngle 0 Dummy4
+Dummy3 += -1.0
 00A1: put_actor $PLAYER_ACTOR at Dummy1 Dummy2 Dummy3
 0173: set_actor $PLAYER_ACTOR Z_angle_to Dummy4
 0373: set_camera_directly_behind_player
