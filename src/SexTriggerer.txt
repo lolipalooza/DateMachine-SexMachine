@@ -1,5 +1,6 @@
 {$CLEO .cs}
 thread 'SexTriggerer'
+062A: change_float_stat 68 to 1000.0 // Respect
 
 0ADF: add_dynamic_GXT_entry "CMSEX" text "~b~Press ~s~F/ENTER ~b~to start ~s~Sex~b~."
 while true
@@ -18,7 +19,7 @@ wait 0
         0173: set_actor $PLAYER_ACTOR Z_angle_to 0.0
         0373: set_camera_directly_behind_player
     end}
-    for 30@ = 2 to 13
+    for 30@ = 2 to 14
         0AB1: @GetInterior 1 30@ ret pos_xyz 1@ 2@ 3@ angle 4@ cheat_string 10@ 11@ 12@ 13@
         if 0ADC:   test_cheat 10@v // "INXX" where XX is 30@
         then
@@ -87,6 +88,7 @@ Interiors Collection
 2235.1826 1285.2806 10.8203		270.0			// Hotel Suit	// PROPERTY_TO_BUY[17]	// SVVGHO1     IN11
 -2423.28 336.4034 36.5712		60.0			// Hotel Suit	// PROPERTY_TO_BUY[21]	// SVHOT1      IN12
 2111.3367 -1282.7655 25.4922	0.0				// House		// PROPERTY_TO_BUY[26]	// SVLASM      IN13
+2111.3367 -1282.7655 25.4922	0.0				// Jefferson Motel		                // ?           IN14
 ===================================================================================================}    
 :GetInterior // 0@: interior id
 0AD3: 10@v = format "IN%.2d" 0@
@@ -128,6 +130,9 @@ then 0AB1: @SetCoordinates 4    -2423.28 336.4034 36.5712		60.0     return_in   
 end
 if 0@ == 13
 then 0AB1: @SetCoordinates 4    2111.3367 -1282.7655 25.4922	0.0      return_in    1@ 2@ 3@ 4@   
+end
+if 0@ == 14
+then 0AB1: @SetCoordinates 4    2229.6946 -1159.7786 25.8081	270.0    return_in    1@ 2@ 3@ 4@   
 end
 0AB2: ret 8 pos_xyz 1@ 2@ 3@ angle 4@ cheat_string 10@ 11@ 12@ 13@
 

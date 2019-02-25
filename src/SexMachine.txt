@@ -148,8 +148,8 @@ const
     SEXPLACES_FILE = "data/SexPlaces.dat"
     ANIMATIONS_FILE = "data/SexAnimations.dat"
     COORDINATES_FILE = "data/SexCoordinates.dat"
-    SAVE_FILE = "modloader/date&sex/cleo/SexMachine.sav"
-    TEMP_FILE = "modloader/date&sex/cleo/SexMachine~"
+    SAVE_FILE = "modloader/date&sex/savedata/SexMachine.sav"
+    TEMP_FILE = "modloader/date&sex/savedata/SexMachine~"
                    
     // Sex Menu States
     SX_MENU_LEFT_FIRST_ELEM = 1
