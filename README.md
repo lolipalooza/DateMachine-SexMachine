@@ -16,7 +16,6 @@ Short-term
 - Sexual menu: activate the "cancel" button on new mode
 
 Long-Term
-- Create editable Cameras and save them in SaveMachine.sav
 - Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
 - Show in "select pose and place" menu (sexual menu) if is there saved offsets available
 - Change Free and FPV cams functionality. Deactivate cursor control when having these cam modes actived, and back from these modes with a single click.
