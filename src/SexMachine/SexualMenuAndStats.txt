@@ -489,59 +489,15 @@ then
             if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
             then
                 if 30@ == 0 // Save
-                then
-                    094B: 6@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
-                    077E: get_active_interior_to 10@
-                    if 6@v == ""
-                    then
-                        if 10@ == 0
-                        then 6@v = "EXTERIOR"
-                        end
-                    end
-                    if not 6@v == ""
-                    then
-                        0AB1: @GetData 2 @PlayerPosX 0 19@
-                        0AB1: @GetData 2 @PlayerPosY 0 20@
-                        0AB1: @GetData 2 @PlayerPosZ 0 21@
-                        0AB1: @GetData 2 @FemaleOffset 0 22@
-                        0AB1: @GetData 2 @FemaleOffset 4 23@
-                        0AB1: @GetData 2 @FemaleOffset 8 24@
-                        0AB1: @GetData 2 @FemaleOffset 12 25@
-                        0AB1: @GetData 2 @MaleOffset 0 26@
-                        0AB1: @GetData 2 @MaleOffset 4 27@
-                        0AB1: @GetData 2 @MaleOffset 8 28@
-                        0AB1: @GetData 2 @MaleOffset 12 29@
-                        0AB1: @ClearAllInUseFlagsFromIntStorage 0
-                        0AB1: @WriteLineInIntStorage 20 slot_to_use 16@ interior 6@ 7@ 8@ 9@ pose 3@ place 4@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 16@ in_use 1
-                        0ACE: show_formatted_text_box "Saved!"
-                    end
+                then 0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
                 end
                 if 30@ == 1 // Load
-                then
-                    0AB1: @ReadLineFromIntStorage 1 slot_to_read 16@ returned_values interior 6@ 7@ 8@ 9@ pose 10@ place 10@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 10@ in_use 10@
-                    if not 6@v == ""
-                    then
-                        0AB1: @StoreData 3 @PlayerPosX 19@ 0
-                        0AB1: @StoreData 3 @PlayerPosY 20@ 0
-                        0AB1: @StoreData 3 @PlayerPosZ 21@ 0
-                        0AB1: @StoreData 3 @FemaleOffset 22@ 0
-                        0AB1: @StoreData 3 @FemaleOffset 23@ 4
-                        0AB1: @StoreData 3 @FemaleOffset 24@ 8
-                        0AB1: @StoreData 3 @FemaleOffset 25@ 12
-                        0AB1: @StoreData 3 @MaleOffset 26@ 0
-                        0AB1: @StoreData 3 @MaleOffset 27@ 4
-                        0AB1: @StoreData 3 @MaleOffset 28@ 8
-                        0AB1: @StoreData 3 @MaleOffset 29@ 12
-                        0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
-                        0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
-                        0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
-                        0AB1: @ClearAllInUseFlagsFromIntStorage 0
-                        0AB1: @SetUseFlag 2 slot 16@ value 1
-                        0ACE: show_formatted_text_box "Loaded!"
-                    end
+                then 0AB1: @RetrieveInformationFromInternalStorage 6 slot 16@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
                 end
                 if 30@ == 2 // Delete
-                then 0AB1: @WriteLineInIntStorage 20 slot_to_use 16@ interior 0 0 0 0 pose 0 place 0 center_xyz 0.0 0.0 0.0 fem_xyza 0.0 0.0 0.0 0.0 male_xyza 0.0 0.0 0.0 0.0 slot 16@ in_use 0
+                then
+                    0AB1: @ClearStorageLine 1 line 16@
+                    0AB1: @ClearTempStorage 0
                     0ACE: show_formatted_text_box "Deleted!"
                 end
             end
@@ -815,59 +771,21 @@ then
             if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
             then
                 if 30@ == 0 // Save
-                then
-                    094B: 6@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
-                    077E: get_active_interior_to 10@
-                    if 6@v == ""
-                    then
-                        if 10@ == 0
-                        then 6@v = "EXTERIOR"
-                        end
-                    end
-                    if not 6@v == ""
-                    then
-                        0AB1: @GetData 2 @PlayerPosX 0 19@
-                        0AB1: @GetData 2 @PlayerPosY 0 20@
-                        0AB1: @GetData 2 @PlayerPosZ 0 21@
-                        0AB1: @GetData 2 @FemaleOffset 0 22@
-                        0AB1: @GetData 2 @FemaleOffset 4 23@
-                        0AB1: @GetData 2 @FemaleOffset 8 24@
-                        0AB1: @GetData 2 @FemaleOffset 12 25@
-                        0AB1: @GetData 2 @MaleOffset 0 26@
-                        0AB1: @GetData 2 @MaleOffset 4 27@
-                        0AB1: @GetData 2 @MaleOffset 8 28@
-                        0AB1: @GetData 2 @MaleOffset 12 29@
-                        0AB1: @ClearAllInUseFlagsFromIntStorage 0
-                        0AB1: @WriteLineInIntStorage 20 slot_to_use 16@ interior 6@ 7@ 8@ 9@ pose 3@ place 4@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 16@ in_use 1
-                        0ACE: show_formatted_text_box "Saved!"
-                    end
+                then 0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
                 end
                 if 30@ == 1 // Load
                 then
-                    0AB1: @ReadLineFromIntStorage 1 slot_to_read 16@ returned_values interior 6@ 7@ 8@ 9@ pose 10@ place 10@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 10@ in_use 10@
-                    if not 6@v == ""
-                    then
-                        0AB1: @StoreData 3 @PlayerPosX 19@ 0
-                        0AB1: @StoreData 3 @PlayerPosY 20@ 0
-                        0AB1: @StoreData 3 @PlayerPosZ 21@ 0
-                        0AB1: @StoreData 3 @FemaleOffset 22@ 0
-                        0AB1: @StoreData 3 @FemaleOffset 23@ 4
-                        0AB1: @StoreData 3 @FemaleOffset 24@ 8
-                        0AB1: @StoreData 3 @FemaleOffset 25@ 12
-                        0AB1: @StoreData 3 @MaleOffset 26@ 0
-                        0AB1: @StoreData 3 @MaleOffset 27@ 4
-                        0AB1: @StoreData 3 @MaleOffset 28@ 8
-                        0AB1: @StoreData 3 @MaleOffset 29@ 12
-                        0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
-                        0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
-                        0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
-                        0AB1: @ClearAllInUseFlagsFromIntStorage 0
-                        0AB1: @SetUseFlag 2 slot 16@ value 1
-                        0ACE: show_formatted_text_box "Loaded!"
-                    end
+                    0AB1: @RetrieveInformationFromInternalStorage 6 slot 16@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
+                    0AB1: @StoreInt 2 label @CamsOffsetsMenu_OffsetToModify value 0
+                    0AB1: @RemoveFreeCamCenter 0
+                    0AB1: @RemoveFirstPersonPoint 0
+                    0AB1: @CreateFreeCamCenter 0
+                    0AB1: @StoreInt 2 @CameraMode -1
                 end
                 if 30@ == 2 // Delete
-                then 0AB1: @WriteLineInIntStorage 20 slot_to_use 16@ interior 0 0 0 0 pose 0 place 0 center_xyz 0.0 0.0 0.0 fem_xyza 0.0 0.0 0.0 0.0 male_xyza 0.0 0.0 0.0 0.0 slot 16@ in_use 0
+                then
+                    0AB1: @ClearStorageLine 1 line 16@
+                    0AB1: @ClearTempStorage 0
                     0ACE: show_formatted_text_box "Deleted!"
                 end
             end

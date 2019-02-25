@@ -2,6 +2,94 @@
 ======================================================================}
 //interiors: ABATOIR,AMMUN1,CARMOD1,FDREST1,GF1,JETINT,LACS1,LAHS1B,MAFCAS,MAFCAS2,SMASHTV,SVVGHO1,SWEETS,TSDINER,WUZIBET,BARBERS,BDUPS1,CARMOD2,CARTER,GF2,LAHS1A,LASTRIP,RYDERS,SVVGHO2,VGHSB1,VGHSB3,BARBER2,BDUPS,BIKESCH,BROTHL1,CARLS,CARMOD3,CHANGER,CSSPRT,DRIVES,DRIVES2,GENOTB,GF3,LAHSB4,OGLOCS,PAPER,PDOMES,PDOMES2,POLICE3,SEXSHOP,S1TEST,STRIP2,STUDIO,TATTO3,AMMUN2,DINER1,DIRBIKE,GF4,LAHS2A,LAHSS6,SFHSM2,X711S2,CSDESGN,DINER2,FDPIZA,GANG,GF5,GYM1,LACRAK,LAHSB3,MADDOGS,MDDOGS,SFHSB1,SVHOT1,VGHSM2,AMMUN3,AMMUN5,BROTHEL,GF6,GYM2,LAHSB1,POLICE1,RCPLAY,REST2,SFHSB2,SFHSS2,SVCUNT,SVSFSM,X7_11S,8TRACK,AMMUN4,GYM3,LAHSB2,OFTEST,BURHOUS,SFHSS1,SVLAMD,FDCHICK,LAHS2B,SFHSB3,SVGNMT2,SVVGMD,DESHOUS,FDBURG,POLICE2,SVGNMT1,TRICAS,SVSFMD,VGHSM3,X711S3,BAR2,SVLASM,BARBER3,MOROOM,SVLABIG,CSEXL,AIRPOR2,AIRPORT,CSCHP,MOTEL1,SFHSM1,VGHSS1,VGSHM2,VGSHM3,VGSHS2,TATTOO,X7_11C,BAR1,DAMIN,FDDONUT,TATTO2,X7_11D,ATRIUME,ATRIUMX,CLOTHGP,GENWRHS,UFOBAR,X7_11B
 
+{======================================================================
+======================================================================}
+:StoreInformationInInternalStorage // slot 0@ pose 1@ place 2@
+094B: 6@v = get_active_interior_name_from_actor $PLAYER_ACTOR // 16-byte string
+077E: get_active_interior_to 10@
+if 6@v == ""
+then
+    if 10@ == 0
+    then 6@v = "EXTERIOR"
+    end
+end
+if 6@v == ""
+then 0AB2: ret 0
+end
+0AB1: @GetData 2 @PlayerPosX 0 19@
+0AB1: @GetData 2 @PlayerPosY 0 20@
+0AB1: @GetData 2 @PlayerPosZ 0 21@
+0AB1: @GetData 2 @FemaleOffset 0 22@
+0AB1: @GetData 2 @FemaleOffset 4 23@
+0AB1: @GetData 2 @FemaleOffset 8 24@
+0AB1: @GetData 2 @FemaleOffset 12 25@
+0AB1: @GetData 2 @MaleOffset 0 26@
+0AB1: @GetData 2 @MaleOffset 4 27@
+0AB1: @GetData 2 @MaleOffset 8 28@
+0AB1: @GetData 2 @MaleOffset 12 29@
+0AB1: @ClearAllInUseFlagsFromIntStorage 0
+0AB1: @WriteInTempStorage_Actors 19 interior 6@ 7@ 8@ 9@ pose 1@ place 2@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 0@ in_use 1
+
+0AB1: @GetData 2 @PlayerPosX 4 19@
+0AB1: @GetData 2 @PlayerPosY 4 20@
+0AB1: @GetData 2 @PlayerPosZ 4 21@
+0AB1: @WriteInTempStorage_FreeCam 3 cam_center 19@ 20@ 21@
+
+0AB1: @GetFPVCamData 0 ret pos_offset 10@ 11@ 12@ angle 13@ rotation 14@ trgt_x 15@
+0AB1: @WriteInTempStorage_FPVCam 5 fpv_pos 10@ 11@ 12@ fpv_angle 13@ fpv_rotation 14@
+
+for 30@ = 0 to 11
+0AB1: @GetFixedCam 1 cam_id 30@ store_in cam_pos 21@ 22@ 23@ angle 24@ rotation 25@ trgt_x 26@
+0AB1: @WriteInTempStorage_FixedCam 6 cam_id 30@ fixed_pos 21@ 22@ 23@ fixed_angle 24@ fixed_rotation 25@
+end
+
+0AB1: @TempStorage2IntLine 1 slot 0@
+0ACE: show_formatted_text_box "Saved!"
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:RetrieveInformationFromInternalStorage // slot 0@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
+0AB1: @IntLine2TempStorage 1 line 0@
+0AB1: @ReadFromTempStorage_Actors 0 ret interior 6@ 7@ 8@ 9@ pose 10@ place 11@ center_xyz 19@ 20@ 21@ fem_xyza 22@ 23@ 24@ 25@ male_xyza 26@ 27@ 28@ 29@ slot 12@ in_use 13@
+if 6@v == ""
+then 0AB2: ret 0
+end
+0AB1: @StoreData 3 @PlayerPosX 19@ 0
+0AB1: @StoreData 3 @PlayerPosY 20@ 0
+0AB1: @StoreData 3 @PlayerPosZ 21@ 0
+0AB1: @StoreData 3 @FemaleOffset 22@ 0
+0AB1: @StoreData 3 @FemaleOffset 23@ 4
+0AB1: @StoreData 3 @FemaleOffset 24@ 8
+0AB1: @StoreData 3 @FemaleOffset 25@ 12
+0AB1: @StoreData 3 @MaleOffset 26@ 0
+0AB1: @StoreData 3 @MaleOffset 27@ 4
+0AB1: @StoreData 3 @MaleOffset 28@ 8
+0AB1: @StoreData 3 @MaleOffset 29@ 12
+0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
+0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
+0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+0AB1: @ClearAllInUseFlagsFromIntStorage 0
+0AB1: @SetUseFlag 2 slot 0@ value 1
+
+0AB1: @ReadFromTempStorage_FreeCam 0 ret cam_center 19@ 20@ 21@
+0AB1: @StoreData 3 @PlayerPosX 19@ 4
+0AB1: @StoreData 3 @PlayerPosY 20@ 4
+0AB1: @StoreData 3 @PlayerPosZ 21@ 4
+
+0AB1: @ReadFromTempStorage_FPVCam 0 ret fpv_pos 19@ 20@ 21@ fpv_angle 22@ fpv_rotation 23@
+0AB1: @StoreFPVCamData 5 position 19@ 20@ 21@ angle 22@ rotation 23@
+
+for 30@ = 0 to 11
+0AB1: @ReadFromTempStorage_FixedCam 1 cam_id 30@ ret fixed_pos 19@ 20@ 21@ fixed_angle 22@ fixed_rotation 23@
+0AB1: @StoreFixedCam 6 cam_id 30@ cam_pos 19@ 20@ 21@ angle 22@ rotation 23@
+end
+
+0ACE: show_formatted_text_box "Loaded!"
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :TempStorage2FileLine // file 0@
 //Actors offsets
 0AB1: @ReadFromTempStorage_Actors 0 ret interior 1@ 2@ 3@ 4@ pose 5@ place 6@ center_xyz 7@ 8@ 9@ fem_xyza 10@ 11@ 12@ 13@ male_xyza 14@ 15@ 16@ 17@ slot 18@ in_use 19@
@@ -164,18 +252,33 @@ end
 
 {======================================================================
 ======================================================================}
-:ClearStorages
+:ClearInternalStorage
 9@ = ST_LINELENGTH
 9@ *= 12 // Number of lines
 9@ -= 1
 for 31@ = 0 to 9@
 0AB1: @StoreInt 3 label @InternalDataStorage value 0 offset 31@
 end
+0AB2: ret 0
 
+:ClearTempStorage
 9@ = ST_LINELENGTH
 9@ -= 1
 for 31@ = 0 to 9@
 0AB1: @StoreInt 3 label @TempStorage value 0 offset 31@
+end
+0AB2: ret 0
+
+:ClearStorageLine // line 0@
+0085: 31@ = 0@ // (int)          // slot_to_use goes from 1 to 12
+31@--
+31@ *= ST_LINELENGTH
+005A: 30@ += 31@  // (int)       // 30@ + slot_id * line_length, where slot_id goes from 0 to 11
+9@ = ST_LINELENGTH
+9@ -= 1
+for 31@ = 0 to 9@
+0AB1: @StoreInt 3 label @InternalDataStorage value 0 offset 30@
+30@ += 1
 end
 0AB2: ret 0
 
@@ -596,6 +699,8 @@ repeat
     0AB1: @GetData 2 @TempStorage 4 3@
     0AB1: @GetData 2 @TempStorage 8 4@
     0AB1: @GetData 2 @TempStorage 12 5@
+    0AB1: @GetInt 2 @TempStorage 16 6@
+    0AB1: @GetInt 2 @TempStorage 17 7@
     if and
     2@v == 22@v                     // interior check
     003B:   0@ == 6@  // (int)      // pose check
@@ -670,7 +775,8 @@ end
 //0AD9: write_formatted_text "Active interior: %d - %s%c%c" in_file 30@ 26@ 22@v 0xd 0xa
 
 // Clean internal storage
-0AB1: @ClearStorages 0
+0AB1: @ClearInternalStorage 0
+0AB1: @ClearTempStorage 0
 repeat
     if 0AB1: @FileLine2TempStorage 1 file 21@
     then // Data read successfully, continue
@@ -679,12 +785,18 @@ repeat
     {0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
     0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
     0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa}
+    0AB1: @GetData 2 @TempStorage 0 2@
+    0AB1: @GetData 2 @TempStorage 4 3@
+    0AB1: @GetData 2 @TempStorage 8 4@
+    0AB1: @GetData 2 @TempStorage 12 5@
+    0AB1: @GetInt 2 @TempStorage 16 6@
+    0AB1: @GetInt 2 @TempStorage 17 7@
     if and
     2@v == 22@v                     // interior
     003B:   0@ == 6@  // (int)      // pose
     003B:   1@ == 7@  // (int)      // place
     then
-        0AB1: @GetData 2 @TempStorage 62 19@
+        0AB1: @GetInt 2 @TempStorage 62 19@
         0AB1: @TempStorage2IntLine 1 slot 19@
         //0AD9: write_formatted_text "...Loaded line into storage, slot %d%c%c" in_file 30@ 19@ 0xd 0xa
     //else 0AD9: write_formatted_text "...Nothing to load (current: pose %d place %d)%c%c" in_file 30@ 0@ 1@ 0xd 0xa

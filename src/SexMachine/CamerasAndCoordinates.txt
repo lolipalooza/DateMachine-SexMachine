@@ -440,6 +440,33 @@ end
 
 {======================================================================
 ======================================================================}
+:FirstPersonCameraVars_Actor
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_Rotation
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MinRotation
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MaxRotation
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MinAngle
+hex
+00 00 00 00
+end
+:FirstPersonCameraVars_MaxAngle
+hex
+00 00 00 00
+end
+
+{======================================================================
+======================================================================}
 :InitFirstPersonCameraVars_Alt // pos_offset 0@ 1@ 2@ angle 3@ rotation 4@ trgt_x 5@
 if and
 0@ == 0.0
@@ -528,42 +555,7 @@ end
 
 {======================================================================
 ======================================================================}
-:FirstPersonCameraVars_Actor
-hex
-00 00 00 00
-end
-:FirstPersonCameraVars_Rotation
-hex
-00 00 00 00
-end
-:FirstPersonCameraVars_MinRotation
-hex
-00 00 00 00
-end
-:FirstPersonCameraVars_MaxRotation
-hex
-00 00 00 00
-end
-:FirstPersonCameraVars_MinAngle
-hex
-00 00 00 00
-end
-:FirstPersonCameraVars_MaxAngle
-hex
-00 00 00 00
-end
-
-{======================================================================
-======================================================================}
 :StoreFPVCamData // position 0@ 1@ 2@ angle 3@ rotation 4@ trgt_x 5@
-0AB1: @GetData 2 @PlayerPosX 0 10@
-0AB1: @GetData 2 @PlayerPosY 0 11@
-0AB1: @GetData 2 @PlayerPosZ 0 12@
-
-0063: 0@ -= 10@  // (float)
-0063: 1@ -= 11@  // (float)
-0063: 2@ -= 12@  // (float)
-    
 0AB1: @StoreData 3 @CamsOffsetsMenu_FPVCamPosition 0@ 0
 0AB1: @StoreData 3 @CamsOffsetsMenu_FPVCamPosition 1@ 4
 0AB1: @StoreData 3 @CamsOffsetsMenu_FPVCamPosition 2@ 8
@@ -643,6 +635,15 @@ then
     068E: get_camera_target_point_to 25@ 26@ 27@
     0172: 23@ = actor 10@ Z_angle
     0AB1: @GetData 1 @FirstPersonCameraVars_Rotation 24@
+
+    0AB1: @GetData 2 @PlayerPosX 0 20@
+    0AB1: @GetData 2 @PlayerPosY 0 21@
+    0AB1: @GetData 2 @PlayerPosZ 0 22@
+    
+    0063: 11@ -= 20@  // (float)
+    0063: 12@ -= 21@  // (float)
+    0063: 13@ -= 22@  // (float)
+    
     0AB1: @StoreFPVCamData 6 position 11@ 12@ 13@ angle 23@ rotation 24@ trgt_x 25@
 end
 0AB2: ret 0
@@ -663,22 +664,6 @@ end
 {======================================================================
 ======================================================================}
 :StoreFixedCam // cam_id 0@ cam_pos 1@ 2@ 3@ cam_trgt 4@ 5@ 6@
-0AB1: @GetData 1 @PlayerPosX 10@
-0AB1: @GetData 1 @PlayerPosY 11@
-0AB1: @GetData 1 @PlayerPosZ 12@
-
-0AB1: @GetData 2 @FemaleOffset 0 20@
-0AB1: @GetData 2 @FemaleOffset 4 21@
-0AB1: @GetData 2 @FemaleOffset 8 22@
-
-0063: 1@ -= 10@  // (float)
-0063: 2@ -= 11@  // (float)
-0063: 3@ -= 12@  // (float)
-
-0063: 1@ -= 20@  // (float)
-0063: 2@ -= 21@  // (float)
-0063: 3@ -= 22@  // (float)
-    
 0085: 30@ = 0@ // (int)
 0012: 30@ *= 6
 0012: 30@ *= 4
@@ -743,6 +728,23 @@ then
     068E: get_camera_target_point_to 25@ 26@ 27@
     0172: 23@ = actor 10@ Z_angle
     0AB1: @GetData 1 @FirstPersonCameraVars_Rotation 24@
+    
+    0AB1: @GetData 1 @PlayerPosX 20@
+    0AB1: @GetData 1 @PlayerPosY 21@
+    0AB1: @GetData 1 @PlayerPosZ 22@
+    
+    0AB1: @GetData 2 @FemaleOffset 0 25@
+    0AB1: @GetData 2 @FemaleOffset 4 26@
+    0AB1: @GetData 2 @FemaleOffset 8 27@
+    
+    0063: 11@ -= 20@  // (float)
+    0063: 12@ -= 21@  // (float)
+    0063: 13@ -= 22@  // (float)
+    
+    0063: 11@ -= 25@  // (float)
+    0063: 12@ -= 26@  // (float)
+    0063: 13@ -= 27@  // (float)
+    
     0AB1: @StoreFixedCam 7 cam_id 0@ cam_pos 11@ 12@ 13@ angle 23@ rotation 24@ trgt_x 25@
 end
 0AB2: ret 0
