@@ -100,7 +100,6 @@ end
 0AB1: @GetData 2 @PlayerPosY 0 11@
 0AB1: @GetData 2 @PlayerPosZ 0 12@
 13@ = 0.0
-12@-=1.0
 
 0AB1: @AddOffsetTo3DCoord 5 3dcoord 10@ 11@ 12@ 13@ gender 1@ store_in 10@ 11@ 12@ 13@
 00A1: put_actor 0@ at 10@ 11@ 12@
@@ -280,7 +279,6 @@ until 023D:   special_actor 1 loaded
 0AB1: @GetData 2 @PlayerPosZ 0 12@
 10@ += 0.0
 11@ += 0.0
-12@ += -1.0
 13@ = 0.0
 
 0AB1: @SetNumbers 4 fem_coords 10@ 11@ 12@ 13@ ret male_coords 20@ 21@ 22@ 23@ dummy_output 31@ 31@ 31@ 31@ 31@ 31@

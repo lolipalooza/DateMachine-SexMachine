@@ -302,6 +302,7 @@ return
 SexStat_Speed = 40
 0AB1: @LoadData 2 SexPoseInt SexPlace
 00A0: store_actor $PLAYER_ACTOR position_to Dummy1 Dummy2 Dummy3
+Dummy3 += -1.0
 0AB1: @StoreData 3 @PlayerPosX Dummy1 0
 0AB1: @StoreData 3 @PlayerPosY Dummy2 0
 0AB1: @StoreData 3 @PlayerPosZ Dummy3 0
@@ -326,7 +327,6 @@ return
 0AB1: @GetData 2 @PlayerPosY 0 Dummy2
 0AB1: @GetData 2 @PlayerPosZ 0 Dummy3
 0AB1: @GetData 2 @PlayerAngle 0 Dummy4
-Dummy3 += -1.0
 00A1: put_actor $PLAYER_ACTOR at Dummy1 Dummy2 Dummy3
 0173: set_actor $PLAYER_ACTOR Z_angle_to Dummy4
 0373: set_camera_directly_behind_player

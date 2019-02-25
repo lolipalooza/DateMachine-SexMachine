@@ -1114,6 +1114,7 @@ then
     005B: 10@ += 20@  // (float)
     005B: 11@ += 21@  // (float)
     005B: 12@ += 22@  // (float)
+    12@ += 1.0 // Correct a ghost offset in PlayerPosZ
     029B: 30@ = init_object 0@ at 10@ 11@ 12@
     //0107: 30@ = create_object 0@ at 10@ 11@ 12@
     0249: release_model 0@
@@ -1154,6 +1155,8 @@ end
 005B: 10@ += 20@  // (float)
 005B: 11@ += 21@  // (float)
 005B: 12@ += 22@  // (float)
+
+12@ += 1.0 // Correct a ghost offset in PlayerPosZ
 
 01BC: put_object 30@ at 10@ 11@ 12@
 0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
