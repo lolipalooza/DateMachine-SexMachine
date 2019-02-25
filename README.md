@@ -10,6 +10,7 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
+- Show in "select pose and place" menu (sexual menu) if is there saved offsets available
 
 Short-term
 - Fix hj sofa male animation!
@@ -20,7 +21,6 @@ Short-term
 
 Long-Term
 - Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
-- Show in "select pose and place" menu (sexual menu) if is there saved offsets available
 - Change Free and FPV cams functionality. Deactivate cursor control when having these cam modes actived, and back from these modes with a single click.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 
