@@ -16,7 +16,6 @@ Next
 Short-term
 - Fix hj sofa male animation!
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
-- highligh 'save - load - delete' selected option in save menu
 
 Long-Term
 - Separate the Save/load from the offsets menu, join actors and cameras into one offset menu
