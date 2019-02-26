@@ -103,6 +103,19 @@ wait 0
                 SexMenuState = 2
                 wait 250
                 fade 1 750
+            else
+                if and
+                003B:   Dummy1 == SexPoseInt  // (int)
+                003B:   Dummy2 == SexPlace  // (int)
+                then
+                    0AB1: @GetInt 1 @SxMn_Slot Dummy3
+                    if not Dummy3 == 0
+                    then
+                        SexMenuState = 2
+                        0AB1: @RetrieveInformationFromInternalStorage 6 slot Dummy3 PornActress PornActor SexPoseInt SexPlace SpeedState
+                        0AB1: @RestoreCamera 3 1 SexPoseInt SexPlace
+                    end
+                end
             end
         end
         if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Cancel Button

@@ -146,15 +146,22 @@ end
 
 {======================================================================
 ======================================================================}
-:RestoreCamera
+:RestoreCamera // reset_flag 0@ pose 1@ place 2@
 0AB1: @GetInt 1 @CameraMode 30@
 if 30@ == 0 // Free Camera
 then //03C8: set_camera_directly_before_player//015A: restore_camera
-03C8: set_camera_directly_before_player
-02EB: restore_camera_with_jumpcut
+    03C8: set_camera_directly_before_player
+    02EB: restore_camera_with_jumpcut
+end
+if 30@ == 1 // Fixed Camera
+then 0AB1: @ToggleSexualCamera_Alt 2 pose 1@ place 2@
 end
 if 30@ == 2 // First Person View Camera
-then 0AB1: @StoreInt 2 @FPVCamMoveable 1
+then 
+    if 0@ == 1
+    then 0AB1: @ToggleSexualCamera_Alt 2 pose 1@ place 2@
+    end
+    0AB1: @StoreInt 2 @FPVCamMoveable 1
 end
 0AB2: ret 0
 
