@@ -33,6 +33,8 @@ DummyString = 'S_OPT5' // Cancel
 0AB1: @SexualMenu_CheckBoxes 2 SexPlace SexPoseInt
 return
 
+
+
 {======================================================================
 ======================================================================}
 :SexualMenu_GetContent
@@ -45,7 +47,7 @@ for 11@ = 1 to 3
         0AD3: 12@v = format "S_PL_%d" 20@
         0AB1: @SxMn_GetCoord 3 index 10@ start_point 56.0 offset 64.0 ret 20@ // xpos = 56 + (x-1)*64
         0AB1: @SxMn_GetCoord 3 index 11@ start_point 152.0 offset 38.0 ret 21@ // ypos = 152 + (y-1)*38
-        if 10@ == 1
+        {if 10@ == 1
         then 14@=120.0
         end
         if 10@ == 2
@@ -53,7 +55,8 @@ for 11@ = 1 to 3
         end
         if 10@ == 3
         then 14@=260.0
-        end
+        end}
+        14@=260.0
         0AB1: @SetDrawText 8 font 2 linewidth 14@ size 0.2 1.2 position 20@ 21@ GXT 12@ 13@
     end
 end
@@ -65,7 +68,7 @@ for 11@ = 1 to 5
         then
             0AB1: @SxMn_GetCoord 3 index 10@ start_point 276.0 offset 66.0 ret 20@ // xpos = 276 + (x-1)*66
             0AB1: @SxMn_GetCoord 3 index 11@ start_point 152.0 offset 38.0 ret 21@ // ypos = 152 + (y-1)*38
-            if 10@ == 1
+            {if 10@ == 1
             then 14@=340.0
             end
             if 10@ == 2
@@ -79,10 +82,32 @@ for 11@ = 1 to 5
             end
             if 10@ == 5
             then 14@=600.0
-            end
+            end}
+            14@=600.0
             0AB1: @SetDrawText 8 font 2 linewidth 14@ size 0.2 1.2 position 20@ 21@ GXT 12@ 13@
         end
     end
+end
+for 11@ = 1 to 3
+    for 10@ = 1 to 4
+        0AB1: @SxMn_GetIntegerFromArray 3 x_val 10@ y_val 11@ width 4 ret 20@ // i = x + (y-1)*5 - 1
+        20@++
+        0AB1: @IntLine2TempStorage 1 line 20@
+        0AB1: @ReadFromTempStorage_Actors 0 ret interior 4@ 5@ 6@ 7@ pose 8@ place 8@ center_xyz 8@ 8@ 8@ fem_xyza 8@ 8@ 8@ 8@ male_xyza 8@ 8@ 8@ 8@ slot 8@ in_use 8@
+        if not 4@v == ""
+        then
+            29@ = 1 // At least one data found!
+            0AB1: @SxMn_GetCoord 3 index 10@ start_point 460.0 offset 40.0 ret 21@ // xpos = 276 + (x-1)*66
+            0AB1: @SxMn_GetCoord 3 index 11@ start_point  33.0 offset 28.0 ret 22@ // ypos = 152 + (y-1)*38
+            12@s = 'CFSV_4' // Slot ~1~
+            0AB1: @SetDrawTextRGB_1Number 12 font 2 linewidth 610.0 size 0.2 1.2 position 21@ 22@ GXT 12@ 13@ rgb 255 255 255 integer 20@
+        end
+    end
+end
+if 29@ == 1 // At least one data found?
+then
+    12@s = 'CFSV_8' // Current Position
+    0AB1: @SetDrawText 8 font 2 linewidth 610.0 size 0.2 1.2 position 460.0 114.0 GXT 12@ 13@
 end
 0AB2: ret 0
 
@@ -151,6 +176,7 @@ end
 {======================================================================
 ======================================================================}
 :SexualMenu_CheckBoxes // 0@ place, 1@: pose
+0AB1: @GetInt 1 @SxMn_Slot 29@
 0AB1: @GetInt 1 @SxMn_Place 30@
 0AB1: @GetInt 1 @SxMn_Pose 31@
 for 11@ = 1 to 3
@@ -165,6 +191,10 @@ for 11@ = 1 to 3
         then
             0085: 30@ = 20@ // (int)
             0006: 31@ = 0
+            0006: 29@ = 0
+            0AB1: @SxMn_GetGXTPose 2 place 30@ offset 31@ ret gxt_entry 12@ 13@
+            0AB1: @GetPoseFromString 2 gxt_entry 12@ 13@ ret pose 28@ body_type 27@
+            0AB1: @LoadData 2 pose 28@ place 30@
         end
     end
 end
@@ -180,11 +210,47 @@ for 11@ = 1 to 5
         if 85AE:   not 12@s == "______" // @s == 'short'
         then
             if 0AB1: @CursorClickCheck 4 box_position 21@ 22@ box_size 62.0 36.0
-            then 0085: 31@ = 20@ // (int)
+            then
+                0085: 31@ = 20@ // (int)
+                0006: 29@ = 0
+                0AB1: @SxMn_GetGXTPose 2 place 30@ offset 31@ ret gxt_entry 12@ 13@
+                0AB1: @GetPoseFromString 2 gxt_entry 12@ 13@ ret pose 28@ body_type 27@
+                0AB1: @LoadData 2 pose 28@ place 30@
             end
         end
     end
 end
+for 11@ = 1 to 3
+    for 10@ = 1 to 4
+        0AB1: @SxMn_GetIntegerFromArray 3 x_val 10@ y_val 11@ width 4 ret 20@ // i = x + (y-1)*5 - 1
+        20@++
+        0AB1: @IntLine2TempStorage 1 line 20@
+        0AB1: @ReadFromTempStorage_Actors 0 ret interior 4@ 5@ 6@ 7@ pose 8@ place 8@ center_xyz 8@ 8@ 8@ fem_xyza 8@ 8@ 8@ 8@ male_xyza 8@ 8@ 8@ 8@ slot 8@ in_use 8@
+        if not 4@v == ""
+        then
+            27@ = 1 // At least one data found!
+            0AB1: @SxMn_GetCoord 3 index 10@ start_point 474.0 offset 40.0 ret 21@ // xpos = 306 + (x-1)*66
+            0AB1: @SxMn_GetCoord 3 index 11@ start_point 39.0 offset 28.0 ret 22@ // ypos = 159 + (y-1)*39
+            if 003B:   29@ == 20@  // (int)
+            then 038E: draw_box_position 21@ 22@ size 38.0 26.0 RGBA 0 0 160 120 // highlight selected
+            end
+            if 0AB1: @CursorClickCheck 4 box_position 21@ 22@ box_size 38.0 26.0
+            then 0085: 29@ = 20@ // (int)
+            end
+        end
+    end
+end
+if 27@ == 1 // At least one data found?
+then
+    038E: draw_box_position 518.0 67.0 size 243.0 134.0 RGBA 0 0 0 120 // Decoration bar
+    if 0AB1: @CursorClickCheck 4 box_position 500.0 122.0 size 90.0 25.0 // 'Current Position' button
+    then 29@ = 0
+    end
+    if 29@ == 0
+    then 038E: draw_box_position 500.0 122.0 size 90.0 25.0 RGBA 0 0 160 120 // highlight 'Current Position' button
+    end
+end
+0AB1: @StoreInt 2 @SxMn_Slot 29@
 0AB1: @StoreInt 2 @SxMn_Place 30@
 0AB1: @StoreInt 2 @SxMn_Pose 31@
 0AB2: ret 0
@@ -193,8 +259,11 @@ end
 hex
     0
 end
-
 :SxMn_Pose
+hex
+    0
+end
+:SxMn_Slot
 hex
     0
 end
@@ -490,9 +559,7 @@ then
             if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
             then
                 if 30@ == 0 // Save
-                then
-                    0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
-                    0AB1: @DEBUG_ReadInternalStorage 0
+                then 0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
                 end
                 if 30@ == 1 // Load
                 then 0AB1: @RetrieveInformationFromInternalStorage 6 slot 16@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
@@ -776,7 +843,6 @@ then
                 if 30@ == 0 // Save
                 then
                     0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
-                    0AB1: @DEBUG_ReadInternalStorage 0
                 end
                 if 30@ == 1 // Load
                 then

@@ -10,7 +10,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Show in "select pose and place" menu (sexual menu) if is there saved offsets available
 
 Short-term
 - Fix hj sofa male animation!

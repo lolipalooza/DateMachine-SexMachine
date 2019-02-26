@@ -17,8 +17,10 @@ $ONMISSION = 1
     08E7: disable_entrance_markers 1
 
     BodyType = BT_NORMAL
+    0AB1: @StoreInt 2 @SxMn_Slot 0
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
+    0AB1: @LoadData 2 SexPoseInt SexPlace
 
     0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
 0AB1: @InitCursorControl 0
@@ -57,8 +59,8 @@ wait 0
         then
             0AB1: @GetInt 1 @SxMn_Pose Dummy1
             0AB1: @GetInt 1 @SxMn_Place Dummy2
-            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret Dummy3 Dummy4
-            0AB1: @GetPoseFromString 2 Dummy3 Dummy4 ret Dummy1 Dummy5
+            0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret gxt_entry Dummy3 Dummy4
+            0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
             0085: SexPoseInt = Dummy1 // (int)
             0085: SexPlace = Dummy2 // (int)
             0085: BodyType = Dummy5 // (int)
@@ -97,8 +99,15 @@ wait 0
                 SexMenuState = 2
             end
         end
+        if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Cancel Button
+        then
+            gosub @WaitUntilReleaseClickButton
+            SexMenuState = 2
+        end
         if PulseButtonState == PULSED_ENTER_VEH
-        then 01B4: set_player $PLAYER_CHAR can_move 1
+        then
+            SexMenuState = 2
+            PulseButtonState++
         end
     end
     if SexMenuState == 2
@@ -354,6 +363,12 @@ Dummy3 += -1.0
 0619: enable_actor $PLAYER_ACTOR collision_detection 0
 0AB1: @RelocateFreeCamCenter 0
 01B4: set_player $PLAYER_CHAR can_move 1
+
+0AB1: @GetInt 1 @SxMn_Slot Dummy1
+if not Dummy1 == 0 // A slot was selected
+then 0AB1: @RetrieveInformationFromInternalStorage 6 slot Dummy1 PornActress PornActor SexPoseInt SexPlace SpeedState
+else
+end
 return
 
 :RemovePosesAndActors
