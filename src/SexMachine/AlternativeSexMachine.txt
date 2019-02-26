@@ -21,6 +21,7 @@ $ONMISSION = 1
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
     0AB1: @LoadData 2 SexPoseInt SexPlace
+    0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
 
     0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
 0AB1: @InitCursorControl 0
@@ -54,7 +55,7 @@ wait 0
     end
     if SexMenuState == 1
     then
-        gosub @ShowSexualMenu
+        0AB1: @ShowSexualMenu 3 SexPoseInt SexPlace generate_sex_files 1
         if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0 // Change Button Click
         then
             0AB1: @GetInt 1 @SxMn_Pose Dummy1
@@ -79,7 +80,7 @@ wait 0
     end
     if SexMenuState == 5
     then
-        gosub @ShowSexualMenu
+        0AB1: @ShowSexualMenu 3 SexPoseInt SexPlace generate_sex_files 0
         if 0AB1: @CursorClickCheck 4 box_position 542.0 416.0 box_size 162.0 48.0 // Change Button Click
         then
             0AB1: @GetInt 1 @SxMn_Pose Dummy1
@@ -91,12 +92,17 @@ wait 0
             803B:   not Dummy2 == SexPlace  // (int)
             803B:   not Dummy5 == BodyType  // (int)
             then
+                fade 0 750
+                wait 750
                 0085: SexPoseInt = Dummy1 // (int)
                 0085: SexPlace = Dummy2 // (int)
                 0085: BodyType = Dummy5 // (int)
                 gosub @RemovePosesAndActors
+                0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
                 gosub @ChangePoseAndPlace_Alt
                 SexMenuState = 2
+                wait 250
+                fade 1 750
             end
         end
         if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Cancel Button
@@ -144,11 +150,13 @@ wait 0
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 437.0 box_size 64.0 12.0 // Back button
         then
+            0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
             gosub @RemovePosesAndActors
             SexMenuState=0
         end
         if PulseButtonState == PULSED_ENTER_VEH
         then
+            0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
             gosub @RemovePosesAndActors
             SexMenuState=0
         end
@@ -363,7 +371,10 @@ Dummy3 += -1.0
 0172: Dummy4 = actor $PLAYER_ACTOR Z_angle
 0AB1: @StoreData 3 @PlayerAngle Dummy4 0            
 
-0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
+repeat // Give time to GenerateSexFiles to work
+wait 0
+until 0029:   32@ >= SEXFILES_MINIMUM_WAIT_TIME
+
 //0AB1: @CreateActor 4 gender_flag 0 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActress
 //0AB1: @CreateActor 4 gender_flag 1 xyz_offsets 0.0 0.0 -1.0 ret_values actor_handle PornActor
 0AB1: @GenerateActors_Alt 0 ret PornActress PornActor
@@ -394,7 +405,6 @@ gosub @WaitUntilReleaseClickButton
 0173: set_actor $PLAYER_ACTOR Z_angle_to Dummy4
 0373: set_camera_directly_behind_player
 02EB: restore_camera_with_jumpcut
-0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
 
 01B4: set_player $PLAYER_CHAR can_move 1
 SexStat_Speed = 0

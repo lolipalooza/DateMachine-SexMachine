@@ -150,6 +150,9 @@ const
     COORDINATES_FILE = "data/SexCoordinates.dat"
     SAVE_FILE = "modloader/date&sex/savedata/SexMachine.sav"
     TEMP_FILE = "modloader/date&sex/savedata/SexMachine~"
+    
+    // Generate sex files
+    SEXFILES_MINIMUM_WAIT_TIME = 1200
                    
     // Sex Menu States
     SX_MENU_LEFT_FIRST_ELEM = 1

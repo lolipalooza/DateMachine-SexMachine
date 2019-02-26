@@ -17,12 +17,10 @@ Short-term
 - Fix hj sofa male animation!
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
 - highligh 'save - load - delete' selected option in save menu
-- Fade in/out when loading/changing a pose. Perhaps it doesn't need the fade when stopping.
 
 Long-Term
 - Separate the Save/load from the offsets menu, join actors and cameras into one offset menu
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
-- Possible trick to reduce poses load time: put GenerateSexFiles routine on the buttons clicking on the Sexual Menu and enable a timer that forces the script to wait the minimum while files are copying. The idea is that time will be running while player decides to choose the poses!
 - Compatibility with classic mode.
 
 Bugs

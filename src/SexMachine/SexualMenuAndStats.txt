@@ -1,13 +1,13 @@
 {======================================================================
 ======================================================================}
-:ShowSexualMenu
+:ShowSexualMenu // pose 0@ place 1@ generate_sex_files 2@
 // Pink Box Title
 038E: draw_box_position 199.0 106.0 size 347.0 43.0 RGBA 255 147 251 80
 038E: draw_box_position 206.0 111.0 size 346.0 43.0 RGBA 255 147 251 40
 038E: draw_box_position 201.0 105.0 size 323.0 52.0 RGBA 255 147 251 70
 038E: draw_box_position 202.0 115.0 size 355.0 11.0 RGBA 255 147 251 80
-DummyString = 'CFG_T7' // Change position
-0AB1: @SetDrawText 8 font 0 linewidth 600.0 size 0.6 2.5 position 66.0 92.0 GXT Dummy1 Dummy2
+10@s = 'CFG_T7' // Change position
+0AB1: @SetDrawText 8 font 0 linewidth 600.0 size 0.6 2.5 position 66.0 92.0 GXT 10@ 11@
 
 // Black boxes options
 038E: draw_box_position 318.0 250.0 size 592.0 262.0 RGBA 0 0 0 80
@@ -24,14 +24,14 @@ DummyString = 'CFG_T7' // Change position
 038E: draw_box_position 538.0 414.0 size 154.0 30.0 RGBA 255 147 251 50
 038E: draw_box_position 541.0 416.0 size 139.0 48.0 RGBA 255 147 251 60
 038E: draw_box_position 542.0 422.0 size 161.0 6.0 RGBA 255 147 251 100
-DummyString = 'S_OPT4' // Change!
-0AB1: @SetDrawText 8 font 2 linewidth 640.0 size 0.3 1.5 position 524.0 409.0 GXT Dummy1 Dummy2
-DummyString = 'S_OPT5' // Cancel
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT Dummy1 Dummy2
+10@s = 'S_OPT4' // Change!
+0AB1: @SetDrawText 8 font 2 linewidth 640.0 size 0.3 1.5 position 524.0 409.0 GXT 10@ 11@
+10@s = 'S_OPT5' // Cancel
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
 
 0AB1: @SexualMenu_GetContent 0
-0AB1: @SexualMenu_CheckBoxes 2 SexPlace SexPoseInt
-return
+0AB1: @SexualMenu_CheckBoxes 3 place 1@ pose 0@ generate_sex_files 2@
+0AB2: ret 0
 
 
 
@@ -175,7 +175,7 @@ end
 
 {======================================================================
 ======================================================================}
-:SexualMenu_CheckBoxes // 0@ place, 1@: pose
+:SexualMenu_CheckBoxes // 0@ place, 1@: pose, 2@: generate sex files flag
 0AB1: @GetInt 1 @SxMn_Slot 29@
 0AB1: @GetInt 1 @SxMn_Place 30@
 0AB1: @GetInt 1 @SxMn_Pose 31@
@@ -194,6 +194,9 @@ for 11@ = 1 to 3
             0006: 29@ = 0
             0AB1: @SxMn_GetGXTPose 2 place 30@ offset 31@ ret gxt_entry 12@ 13@
             0AB1: @GetPoseFromString 2 gxt_entry 12@ 13@ ret pose 28@ body_type 27@
+            if 2@ == 1
+            then 0AB1: @GenerateSexFiles 3 pose 28@ place 30@ body_type 27@
+            end
             0AB1: @LoadData 2 pose 28@ place 30@
         end
     end
@@ -215,6 +218,9 @@ for 11@ = 1 to 5
                 0006: 29@ = 0
                 0AB1: @SxMn_GetGXTPose 2 place 30@ offset 31@ ret gxt_entry 12@ 13@
                 0AB1: @GetPoseFromString 2 gxt_entry 12@ 13@ ret pose 28@ body_type 27@
+                if 2@ == 1
+                then 0AB1: @GenerateSexFiles 3 pose 28@ place 30@ body_type 27@
+                end
                 0AB1: @LoadData 2 pose 28@ place 30@
             end
         end

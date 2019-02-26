@@ -122,5 +122,5 @@ then
     then 0B05: copy_directory "models\files\sex\Footjob on Sofa" to DEST_DIR //IF and SET
     end
 end
-wait 1200
+32@ = 0
 0AB2: ret 0
