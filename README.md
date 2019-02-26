@@ -24,6 +24,5 @@ Long-Term
 
 Bugs
 - Perhaps cameras don't save from 'actors offsets' menu save button.
-- Looks like z don't increase progressively like x or y (actors offsets menu).
 - Looks like cameras menu doesn't save an interior's line contiguous to the other lines in same interior.
 - Climax stops from rising at some point, maybe after cameras menu.
