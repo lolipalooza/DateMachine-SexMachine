@@ -125,6 +125,7 @@ then
     0AB1: @GetFPVCamData 0 ret pos_offset 20@ 21@ 22@ angle 23@ rotation 24@ trgt_x 25@
     0AB1: @InitFirstPersonCameraVars_Alt 6 pos_offset 20@ 21@ 22@ angle 23@ rotation 24@ trgt_x 25@ ret update_values position 20@ 21@ 22@ angle 23@ trgt_x 25@
     0AB1: @CreateFirstPersonPoint 5 cam_pos 20@ 21@ 22@ angle 23@ trgt_x 25@
+    0AB1: @StoreInt 2 @FPVCamMoveable 1
 end
 0AB2: ret 0
 

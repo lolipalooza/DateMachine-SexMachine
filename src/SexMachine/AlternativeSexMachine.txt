@@ -130,16 +130,6 @@ wait 0
     end
     if SexMenuState == 2
     then
-        {if 0AB1: @CursorClickCheck 4 box_position 76.0 436.0 box_size 143.0 13.0 // Change Position button
-        then
-            gosub @RemovePosesAndActors
-            SexMenuState=0
-        end
-        if 0AB1: @CursorClickCheck 4 box_position 76.0 416.0 box_size 143.0 13.0 // Actors Offsets button
-        then
-            0AB1: @LoadData 2 SexPoseInt SexPlace
-            SexMenuState = 3
-        end}
         if 0AB1: @CursorClickCheck 4 box_position 130.0 398.0 box_size 64.0 12.0 // Poses button
         then
             0AB1: @FreezeCamera 0
@@ -190,7 +180,7 @@ wait 0
         if PulseButtonState == PULSED_ENTER_VEH
         then
             0AB1: @GetInt 1 @CursorControl_FlagShowCursor Dummy1
-            if Dummy1 == 1 // If cursor was hidden, then show it again, and close FPV edit mode
+            if Dummy1 == 1 // Cursor was shown? Close camera offsets menu
             then
                 if or
                 SexMenuState == 4
@@ -205,7 +195,7 @@ wait 0
                 0AB1: @RemoveFirstPersonPoint 0
                 0373: set_camera_directly_behind_player
                 02EB: restore_camera_with_jumpcut
-            else
+            else // If cursor was hidden, then show it again, and close FPV edit mode
                 0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1
                 0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 0
             end
@@ -390,13 +380,13 @@ until 0029:   32@ >= SEXFILES_MINIMUM_WAIT_TIME
 0AB1: @GenerateActors_Alt 0 ret PornActress PornActor
 0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
 0619: enable_actor $PLAYER_ACTOR collision_detection 0
-0AB1: @RelocateFreeCamCenter 0
-01B4: set_player $PLAYER_CHAR can_move 1
 
 0AB1: @GetInt 1 @SxMn_Slot Dummy1
 if not Dummy1 == 0 // A slot was selected
 then 0AB1: @RetrieveInformationFromInternalStorage 6 slot Dummy1 PornActress PornActor SexPoseInt SexPlace SpeedState
 end
+0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+01B4: set_player $PLAYER_CHAR can_move 1
 return
 
 {======================================================================
