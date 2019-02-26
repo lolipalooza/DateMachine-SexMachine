@@ -10,6 +10,8 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
+- Change Free and FPV cams functionality. Deactivate cursor control when having these cam modes actived, and back from these modes with a single click.
+- Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
 
 Short-term
 - Fix hj sofa male animation!
@@ -19,9 +21,8 @@ Short-term
 
 Long-Term
 - Separate the Save/load from the offsets menu, join actors and cameras into one offset menu
-- Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
-- Change Free and FPV cams functionality. Deactivate cursor control when having these cam modes actived, and back from these modes with a single click.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
+- Possible trick to reduce poses load time: put GenerateSexFiles routine on the buttons clicking on the Sexual Menu and enable a timer that forces the script to wait the minimum while files are copying. The idea is that time will be running while player decides to choose the poses!
 - Compatibility with classic mode.
 
 Bugs
