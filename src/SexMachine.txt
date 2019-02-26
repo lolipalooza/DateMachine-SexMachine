@@ -3,8 +3,8 @@ Custom thread - Sex Machine:
 Entry Values:   0@: Pose
                 1@: Place
                 2@: Speed
-                3@s: Actress
-                5@s: Actor
+                3@s: Gtx Actress Model
+                5@s: Gtx Actor Model
                 7@: mode (true: new mode, false(default): classic mode)
 
 Esxample of use                    
@@ -60,33 +60,31 @@ gosub @CmSexCleanUp
 {======================================================================
 ======================================================================}
 const
-    SexMenuState = 0@
-    ShowSexualStats = 1@
-    OnSexActivity = 2@
-    PornActress = 3@
-    PornActor = 4@
-    SexState = 5@
-    SexStat_Climax = 6@   // (Float) Min: 1.0 - Max 100.0
-    SexStat_Speed = 7@    // (Int) Min: 1 - Max 100
-    SexStat_Pleasure = 8@ // (Int) From 1 to unlimited
-    ClimaxState = 9@
-    PleasureState = 10@
-    SpeedState = 11@
-    Dummy1 = 12@
-    Dummy2 = 13@
-    Dummy3 = 14@
-    Dummy4 = 15@
-    DummyString = 12@s
-    Clmx_LstEvntTime = 16@
-    Clmx_CurrEvntTime = 17@
-    Plsr_LstEvntTime = 18@
-    Plsr_CurrEvntTime = 19@
-    Plsr_Gain = 20@
-    SexPoseInt = 21@
-    SexPlace = 22@
-    BodyType = 23@
-    PulseButtonState = 24@
-    Dummy5 = 25@
+    // Entries
+    SexPoseInt = 0@
+    SexPlace = 1@
+    SexStat_Speed = 2@    // (Int) Min: 1 - Max 100
+
+    // Other Variables
+    SexStat_Climax = 13@   // (Float) Min: 1.0 - Max 100.0
+    SexStat_Pleasure = 14@ // (Int) From 1 to unlimited
+    PornActress = 15@
+    PornActor = 16@
+    SexState = 17@
+    OnSexActivity = 18@
+    ClimaxState = 19@
+    PleasureState = 20@
+    SpeedState = 21@
+    Dummy1 = 22@
+    Dummy2 = 23@
+    Dummy3 = 24@
+    Dummy4 = 25@
+    Dummy5 = 26@
+    DummyString = 22@s
+    SexMenuState = 27@
+    ShowSexualStats = 28@
+    BodyType = 29@
+    PulseButtonState = 30@
     
     MoveAxisX = Dummy1
     MoveAxisY = Dummy2
@@ -216,9 +214,6 @@ end
 $ONMISSION = 1
 
 // Entry parameters
-0085: SexPoseInt = 0@ // (int)
-0085: SexPlace = 1@ // (int)
-0085: SexStat_Speed = 2@ // (int)
 0AB1: @StoreActorsInfo 4 gxt_fem 3@ 4@ gtx_male 5@ 6@
 
 OnSexActivity = false
@@ -535,10 +530,10 @@ then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_DECRE
 end
 
 // Increase Pleasure
-gosub @PleasureMachine
+0AB1: @PleasureMachine 3 SexStat_Pleasure PleasureState SexStat_Speed ret SexStat_Pleasure PleasureState
 
 // Increase Climax
-gosub @ClimaxMachine
+0AB1: @ClimaxMachine 3 SexStat_Climax ClimaxState SexStat_Speed ret SexStat_Climax ClimaxState
 
 // Change from stopped to slow or fast
 gosub @SpeedMachine
@@ -552,42 +547,70 @@ return
 
 {======================================================================
 ======================================================================}
-:PleasureMachine
-if PleasureState == 0
-then 0209: Plsr_Gain = random_int_in_ranges 1 4
+:Pleasure_LastEventTime
+hex
+00 00 00 00
 end
-if not SexStat_Speed > 13
-then return
+:Pleasure_CurrentEventTime
+hex
+00 00 00 00
 end
-0AB1: call_scm_func @IncreaseTimedVar 7 SexStat_Pleasure Plsr_Gain PleasureState 800 FLAG_NORMAL_INT Plsr_LstEvntTime Plsr_CurrEvntTime SexStat_Pleasure PleasureState Plsr_LstEvntTime Plsr_CurrEvntTime
-if PleasureState == 2
-then PleasureState=0
-end
-return
 
 {======================================================================
 ======================================================================}
-:ClimaxMachine
+:PleasureMachine // pleasure 0@ pleasure_state 1@ speed 2@
+0AB1: @GetData 1 @Pleasure_LastEventTime 20@
+0AB1: @GetData 1 @Pleasure_CurrentEventTime 21@
+0209: 10@ = random_int_in_ranges 1 4
+if not 2@ > 13
+then 0AB2: ret 2 pleasure 0@ pleasure_state 1@
+end
+0AB1: @IncreaseTimedVar 7 pleasure 0@ gain 10@ pleasure_state 1@ msecs 800 flag FLAG_NORMAL_INT last_event_time 20@ current_event_time 21@ ret pleasure 0@ pleasure_state 1@ last_event_time 20@ current_event_time 21@
+if 1@ == 2
+then 1@ = 0
+end
+0AB1: @StoreData 2 @Pleasure_LastEventTime 20@
+0AB1: @StoreData 2 @Pleasure_CurrentEventTime 21@
+0AB2: ret 2 pleasure 0@ pleasure_state 1@
+
+{======================================================================
+======================================================================}
+:Climax_LastEventTime
+hex
+00 00 00 00
+end
+:Climax_CurrentEventTime
+hex
+00 00 00 00
+end
+
+{======================================================================
+======================================================================}
+:ClimaxMachine // climax 0@ climax_state 1@ speed 2@
 // Speed: min: 13 - max: 100
 // steps: 0.3 - min: 1 - max: 250
 // steps: 0.4 - min: 1 - max: 500
 // Ecuacion de la recta: Time (ms) = -5,7356321839080459770114942528736 * Speed + 574,56321839080459770114942528736
-if SexStat_Speed > 13
+0AB1: @GetData 1 @Climax_LastEventTime 20@
+0AB1: @GetData 1 @Climax_CurrentEventTime 21@
+if 2@ > 13
 then
-    0093: Dummy1 = integer SexStat_Speed to_float
-    Dummy1 *= -5.735
-    Dummy1 += 574.563
-    0092: Dummy1 = float Dummy1 to_integer
-    Dummy2 = 0.4
+    0093: 10@ = integer 2@ to_float
+    10@ *= -5.735
+    10@ += 574.563
+    0092: 10@ = float 10@ to_integer
+    11@ = 0.4
 else
-    Dummy1 = 100
-    Dummy2 = -0.4
+    10@ = 100
+    11@ = -0.4
 end
-0AB1: call_scm_func @IncreaseTimedVar 7 SexStat_Climax Dummy2 ClimaxState Dummy1 FLAG_PERCENTAGE_FLOAT Clmx_LstEvntTime Clmx_CurrEvntTime SexStat_Climax ClimaxState Clmx_LstEvntTime Clmx_CurrEvntTime
-if ClimaxState == 2
-then ClimaxState=0
+0AB1: @IncreaseTimedVar 7 climax 0@ gain 11@ climax_state 1@ msecs 10@ percentage_flag FLAG_PERCENTAGE_FLOAT last_event_time 20@ current_event_time 21@ ret climax 0@ climax_state 1@ last_event_time 20@ current_event_time 21@
+if 1@ == 2
+then 1@ = 0
 end
-return
+0AB1: @StoreData 2 @Climax_LastEventTime 20@
+0AB1: @StoreData 2 @Climax_CurrentEventTime 21@
+0AB2: ret 2 climax 0@ climax_state 1@
 
 {======================================================================
 ======================================================================}

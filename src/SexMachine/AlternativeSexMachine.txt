@@ -4,9 +4,6 @@
 $ONMISSION = 1
 
 // Entry parameters
-0085: SexPoseInt = 0@ // (int)
-0085: SexPlace = 1@ // (int)
-0085: SexStat_Speed = 2@ // (int)
 0AB1: @StoreActorsInfo 4 gxt_fem 3@ 4@ gtx_male 5@ 6@
 
 // Initialize Machine
@@ -345,10 +342,10 @@ then
 end
 
 // Increase Pleasure
-gosub @PleasureMachine
+0AB1: @PleasureMachine 3 SexStat_Pleasure PleasureState SexStat_Speed ret SexStat_Pleasure PleasureState
 
 // Increase Climax
-gosub @ClimaxMachine
+0AB1: @ClimaxMachine 3 SexStat_Climax ClimaxState SexStat_Speed ret SexStat_Climax ClimaxState
 
 // Change from stopped to slow or fast
 if and
