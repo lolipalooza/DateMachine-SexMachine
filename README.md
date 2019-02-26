@@ -14,7 +14,6 @@ Next
 - Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
 
 Short-term
-- Fix hj sofa male animation!
 - Test all files in a new copy of SA to make sure everything is in order. This copy is already done in E:\GTA San Andreas
 
 Long-Term
