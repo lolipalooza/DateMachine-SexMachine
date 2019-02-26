@@ -130,6 +130,36 @@ end
 
 {======================================================================
 ======================================================================}
+:FreezeCamera
+0AB1: @GetInt 1 @CameraMode 30@
+if 30@ == 0 // Free Camera
+then
+    068D: get_camera_position_to 10@ 11@ 12@
+    015F: set_camera_position 10@ 11@ 12@ rotation 0.0 0.0 0.0
+    068E: get_camera_target_point_to 10@ 11@ 12@
+    0160: set_camera_point_at 10@ 11@ 12@ switchstyle 2
+end
+if 30@ == 2 // First Person View Camera
+then 0AB1: @StoreInt 2 @FPVCamMoveable 0
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:RestoreCamera
+0AB1: @GetInt 1 @CameraMode 30@
+if 30@ == 0 // Free Camera
+then //03C8: set_camera_directly_before_player//015A: restore_camera
+03C8: set_camera_directly_before_player
+02EB: restore_camera_with_jumpcut
+end
+if 30@ == 2 // First Person View Camera
+then 0AB1: @StoreInt 2 @FPVCamMoveable 1
+end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :Set6numbers
 0AB2: ret 6 0@ 1@ 2@ 3@ 4@ 5@
 
@@ -510,7 +540,10 @@ end
 hex
 00 00 00 00
 end
-
+:FPVCamMoveable
+hex
+1
+end
 {======================================================================
 ======================================================================}
 :InitFirstPersonCameraVars_Alt // pos_offset 0@ 1@ 2@ angle 3@ rotation 4@ trgt_x 5@
