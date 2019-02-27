@@ -2,6 +2,18 @@
 
 A CLEO mod for GTA San Andreas to recreate a +18 hot Date Sim.
 
+## Requirements
+
+- Copy of GTA: San Andreas v1.0 Hoodlum
+- CLEO 4: https://cleo.li/
+- Modloader: https://www.gtagarage.com/mods/show.php?id=25377
+
+## Description
+
+_DateMachine_ and _SexMachine_ is a script that will add an activity in GTA: San Andreas to recreate in it a +18 hot Date Sim. This activity will be divided in two parts: a date simulator and a sex simulator. This is somewhat like the known [Hot Coffee](https://gta.fandom.com/wiki/Hot_Coffee_Modification) feature, but expanded and with more stuff to do.
+
+This mod is barely on a developement stage and there is still a lot of stuff missing.
+
 ## Progress
 
 DateMachine: 0%
@@ -19,6 +31,4 @@ Long-Term
 - Compatibility with classic mode.
 
 Bugs
-- Perhaps cameras don't save from 'actors offsets' menu save button.
-- Looks like cameras menu doesn't save an interior's line contiguous to the other lines in same interior.
 - Climax stops from rising at some point, maybe after cameras menu.
