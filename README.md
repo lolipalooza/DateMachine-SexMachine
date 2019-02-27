@@ -10,7 +10,7 @@ A CLEO mod for GTA San Andreas to recreate a +18 hot Date Sim.
 
 ## Description
 
-_DateMachine_ and _SexMachine_ is a script that will add an activity in GTA: San Andreas to recreate in it a +18 hot Date Sim. This activity will be divided in two parts: a date simulator and a sex simulator. This is somewhat like the known [Hot Coffee](https://gta.fandom.com/wiki/Hot_Coffee_Modification) feature, but expanded and with more stuff to do.
+_DateMachine_ and _SexMachine_ is a script that will add an activity in GTA: San Andreas to recreate in it a +18 hot Date Sim. This activity will be divided in two parts: a date simulator and a sex simulator. This has the goal to be something like the known [Hot Coffee](https://gta.fandom.com/wiki/Hot_Coffee_Modification) removed feature, but expanded, with more stuff to do and more customizable.
 
 This mod is barely on a developement stage and there is still a lot of stuff missing.
 
