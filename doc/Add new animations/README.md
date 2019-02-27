@@ -1,5 +1,7 @@
 # Adding a New Pose in SCM files
 
+__Warning:__ This is outdated, wait for new readme file!
+
 #### File `CmSexMachine/ActorsAndPoses.txt`
 
 Register the speed options of the pose in `:SexPoses` hex block, replacing empty line by actual line:
