@@ -30,7 +30,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Change Free and FPV cams functionality. Deactivate cursor control when having these cam modes actived, and back from these modes with a single click.
 - Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
 
 Long-Term

@@ -783,7 +783,7 @@ end
 :CameraOffsetsMenu // 0@: SexMenuState, 1@: Porn Actress, 2@: Porn Actor, 3@: pose, 4@: place, 5@: speed state
 0AB1: @GetInt 1 @CamsOffsetsMenu_Action 30@
 
-0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+0AB1: @GetInt 1 @FPVCamEditMode 12@
 if 12@ == 0 // Not in edit FPV cam mode
 then
     10@s = 'CFSV_1' // Save
@@ -823,7 +823,6 @@ then
         end
     end
 end
-0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
 
 if 0@ == 7
 then
@@ -914,8 +913,8 @@ else
     
     
     // FPV Cam Edit
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
-    0AB1: @FirstPersonCameraControl_Alt 2 flag_edit 1 flag_moveable 12@
+    0AB1: @GetInt 1 @FPVCamEditMode 12@
+    0AB1: @FirstPersonCameraControl_Alt 0
     0AB1: @GetInt 1 @CamsOffsetsMenu_OffsetToModify 20@
     if 20@ == 1
     then
@@ -929,22 +928,23 @@ else
         then
             if 0AB1: @CursorClickCheck 4 box_position 260.0 395.0 box_size 186.0 11.0 // Move First Person View camera
             then
-                12@ = 1
+                0AB1: @StoreInt 2 @FPVCamEditMode 1
+                0AB1: @StoreInt 2 @FPVCamMoveable 1
                 0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0 // Hide cursor
             end
         else
             if 0AB1: @CursorClickCheck 5 box_position 320.0 224.0 box_size 640.0 448.0 disable_draw_box 1 // Full screen box
             then
-                12@ = 0
+                0AB1: @StoreInt 2 @FPVCamEditMode 0
+                0AB1: @StoreInt 2 @FPVCamMoveable 0
                 0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1 // Show cursor
             end
         end
     end
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
    
     
     // Fixed Cam Edit
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    0AB1: @GetInt 1 @FPVCamEditMode 12@
     0AB1: @GetInt 1 @CamsOffsetsMenu_FixedId 13@
     0085: 14@ = 13@ // (int)
     000A: 14@ += 1
@@ -983,18 +983,19 @@ else
             end
             if 0AB1: @CursorClickCheck 4 box_position 260.0 395.0 box_size 150.0 11.0 // Text
             then
-                12@ = 1
+                0AB1: @StoreInt 2 @FPVCamEditMode 1
+                0AB1: @StoreInt 2 @FPVCamMoveable 1
                 0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0 // Hide cursor
             end
         else
             if 0AB1: @CursorClickCheck 5 box_position 320.0 224.0 box_size 640.0 448.0 disable_draw_box 1 // Full screen box
             then
-                12@ = 0
+                0AB1: @StoreInt 2 @FPVCamEditMode 0
+                0AB1: @StoreInt 2 @FPVCamMoveable 0
                 0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1 // Show cursor
             end
         end
     end
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
     0AB1: @StoreInt 2 @CamsOffsetsMenu_FixedId 13@
     
     
@@ -1033,7 +1034,7 @@ else
     
     
     // Change between camera modes
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    0AB1: @GetInt 1 @FPVCamEditMode 12@
     if 12@ == 0 // Not in edit FPV cam mode
     then
         if 20@ == 0
@@ -1060,11 +1061,10 @@ else
         end
     end
     0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 20@
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
     
     
     
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    0AB1: @GetInt 1 @FPVCamEditMode 12@
     if 12@ == 0 // Not in edit FPV cam mode
     then
         10@s = 'CFG_O6' // Reset
@@ -1134,86 +1134,19 @@ end
 
 if 20@ == 1 // First Person Camera Edit
 then
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    0AB1: @GetInt 1 @FPVCamEditMode 12@
     if 12@ == 1 // In edit FPV cam mode
-    then
-        14@ = OFF_INC_STEP
-        if 0AB0:   key_pressed KEY_SHIFT // speed boost
-        then 14@ *= 5.0
-        end
-        if 0AB0:   key_pressed KEY_W // front +
-        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front 1 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_S // front -
-        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front -1 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_D // sides ->
-        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 1 front 0 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_A // sides <-
-        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides -1 front 0 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_E // up
-        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front 0 height 1 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_Q // down
-        then 0AB1: @MoveFirstPersonPoint 4 normalized_dirs sides 0 front 0 height -1 speed 14@
-        end
-        
-        // Player moved the mouse cursor?
-        0AB1: @GetData 2 @CamsOffsetsMenu_FPVJoystickOffset 0 24@
-        0AB1: @GetData 2 @CamsOffsetsMenu_FPVJoystickOffset 4 25@
-        0A4A: store_joystick_X_offset_to 22@ Y_offset_to 23@
-        if or
-        8045:   not 22@ == 24@  // (float)
-        8045:   not 23@ == 25@  // (float)
-        then 0AB1: @MoveFirstPersonPoint 3 normalized_dirs sides 0 front 0 height 0
-        end
+    then 0AB1: @FirstPersonCameraMoveable_KeysControl 2 camera 2 cam_id 0
     end
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
 end
 
 if 20@ == 2 // Fixed Camera Edit
 then
-    0AB1: @GetInt 1 @CamsOffsetsMenu_FPVCamMoveable 12@
+    0AB1: @GetInt 1 @FPVCamEditMode 12@
     0AB1: @GetInt 1 @CamsOffsetsMenu_FixedId 13@
     if 12@ == 1 // In edit FPV cam mode
-    then
-        14@ = OFF_INC_STEP
-        if 0AB0:   key_pressed KEY_SHIFT // speed boost
-        then 14@ *= 5.0
-        end
-        if 0AB0:   key_pressed KEY_W // front +
-        then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides 0 front 1 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_S // front -
-        then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides 0 front -1 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_D // sides ->
-        then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides 1 front 0 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_A // sides <-
-        then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides -1 front 0 height 0 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_E // up
-        then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides 0 front 0 height 1 speed 14@
-        end
-        if 0AB0:   key_pressed KEY_Q // down
-        then 0AB1: @MoveFixedCamPoint 5 cam_id 13@ normalized_dirs sides 0 front 0 height -1 speed 14@
-        end
-        
-        // Player moved the mouse cursor?
-        0AB1: @GetData 2 @CamsOffsetsMenu_FPVJoystickOffset 0 24@
-        0AB1: @GetData 2 @CamsOffsetsMenu_FPVJoystickOffset 4 25@
-        0A4A: store_joystick_X_offset_to 22@ Y_offset_to 23@
-        if or
-        8045:   not 22@ == 24@  // (float)
-        8045:   not 23@ == 25@  // (float)
-        then 0AB1: @MoveFixedCamPoint 4 cam_id 13@ normalized_dirs sides 0 front 0 height 0
-        end
+    then 0AB1: @FirstPersonCameraMoveable_KeysControl 2 camera 1 cam_id 13@
     end
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 12@
-    0AB1: @StoreInt 2 @CamsOffsetsMenu_FixedId 13@
 end
 0AB2: ret 1 sex_menu_state 0@
 
@@ -1346,6 +1279,11 @@ else
         10@s = 'CFG_T9' // ~b~~k~~PED_ANSWER_PHONE~~w~: Go to the desired place and press ~k~~PED_ANSWER_PHONE~ to select pose.
         0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 26.0 GXT 10@ 11@
     end
+    if 0@ == 8
+    then
+        10@s = 'CFG_I1' // ~b~~k~~PED_ANSWER_PHONE~~w~: Edit the free camera rotation point.
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 24.0 26.0 GXT 10@ 11@
+    end
 end
 
 {// Debug
@@ -1402,24 +1340,26 @@ end
 
 :SettingTexts_CameraMode
 0AB1: @GetInt 1 @CameraMode 8@
-if 8@ == 0 // Free Camera
+if not 8@ == 0 // Free Camera
 then
-    10@s = 'CFG_C4' // Free Camera
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@
-end
-if 8@ == 1 // Fixed Camera
-then
-    0AB1: @GetInt 1 @CurrentCamera 9@
-    9@+=1
-    10@s = 'CFG_C5' // Fixed Camera ~y~~1~
-    0AB1: @SetDrawTextRGB_1Number 12 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@ rgb 255 255 255 number 9@
-    10@s = 'CFG_T6' // <  >
-    0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.2 1.0 position 244.0 390.0 GXT 10@ 11@
-end
-if 8@ == 2 // First Person Camera
-then
-    10@s = 'CFG_C6' // First Person
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@
+    if 8@ == 1 // Fixed Camera
+    then
+        0AB1: @GetInt 1 @CurrentCamera 9@
+        9@+=1
+        10@s = 'CFG_C5' // Fixed Camera ~y~~1~
+        0AB1: @SetDrawTextRGB_1Number 12 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@ rgb 255 255 255 number 9@
+        10@s = 'CFG_T6' // <  >
+        0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.2 1.0 position 244.0 390.0 GXT 10@ 11@
+    end
+    if 8@ == 2 // First Person Camera
+    then
+        10@s = 'CFG_C6' // First Person
+        0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@
+    end
+    10@s = 'CFG_C7' // Free
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 300.0 390.0 GXT 10@ 11@
+    10@s = 'CFG_C8' // Edit
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 330.0 390.0 GXT 10@ 11@
 end
 return
 
@@ -1435,6 +1375,7 @@ for 12@ = 1 to 9@
     else 13@=255
     end
     14@=18.0
+    14@+=76.0
     0093: 16@ = integer 12@ to_float
     006B: 14@ *= 16@  // (float)
     15@=-18.0

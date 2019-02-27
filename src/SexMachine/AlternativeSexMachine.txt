@@ -35,6 +35,9 @@ SexStat_Speed = 0
 
 while true
 wait 0
+    // Buttons UP - DOWN - ACCEPT - CANCEL acknowledge
+    gosub @PulseButtonMachine
+
     if SexMenuState > 0             // 0 is the only state when player can move
     then 0AB1: @CursorControl 0     // so is best to activate cursor when player can't!
     end
@@ -215,6 +218,7 @@ wait 0
     if not SexMenuState == 3
     then gosub @SexualMenuMachine
     end
+    //gosub @SexualMenuMachine
 end
 
 0581: enable_radar 1
@@ -222,6 +226,10 @@ end
 03F0: enable_text_draw 0
 03E0: draw_text_behind_textures 0
 08E7: disable_entrance_markers 0
+
+repeat // Avoid the false "enter car" effect when you end the SexMachine
+wait 0
+until 80E1:   not player 0 pressed_key 15
 07CC: set_player $PLAYER_CHAR button_15 1
 return
 
@@ -235,17 +243,69 @@ then
         if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0 // Camera mode Button
         then
             0AB1: @GetInt 1 @CameraMode Dummy1
-            0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 0 max_value 2 flag FLAG_INCREASE store_into Dummy1
+            0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value 2 flag FLAG_INCREASE store_into Dummy1
             0AB1: @StoreInt 2 @CameraMode Dummy1
-            0AB1: call_scm_func @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+            0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
         end
-        if 0AB1: @CursorClickCheck 4 box_position 318.0 395.0 box_size 70.0 12.0 // Change pose animation
+        if 0AB1: @CursorClickCheck 4 box_position 310.0 395.0 box_size 26.0 11.0 // 'Free' Button
+        then
+            SexMenuState = 8
+            0AB1: @SetFreeCamera 4 free_flag 1 edit_flag 0 SexPoseInt SexPlace
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 340.0 395.0 box_size 26.0 11.0 // 'Edit' Button
+        then
+            SexMenuState = 8
+            0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 1 SexPoseInt SexPlace
+        end
+        if 0AB1: @CursorClickCheck 4 box_position 394.0 395.0 box_size 70.0 12.0 // Change pose animation   318 -> 394    76
         then
             0AB1: @GetInt 1 @CurrentAnimation Dummy1
             0AB1: call_scm_func @ReadSexPosesInfo 3 SpeedState SexPoseInt SexPlace out Dummy3 Dummy4 Dummy2
             0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value Dummy2 flag FLAG_INCREASE store_into Dummy1
             0AB1: @StoreInt 2 @CurrentAnimation Dummy1
             0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
+        end
+    end
+    if SexMenuState == 8
+    then
+        if 0AB1: @CursorClickCheck 5 box_position 320.0 224.0 box_size 640.0 448.0 disable_draw_box 1 // Full screen box
+        then
+            SexMenuState = 2
+            0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 0 SexPoseInt SexPlace
+        end
+        if PulseButtonState == PULSED_ENTER_VEH
+        then
+            SexMenuState = 2
+            0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 0 SexPoseInt SexPlace
+            PulseButtonState++
+        end
+        0AB1: @GetInt 1 @CameraMode Dummy1
+        if Dummy1 == 0 // Free Camera
+        then
+            if 00E1:   player 0 pressed_key PAD_ANSWER_PHONE
+            then
+                SexMenuState = 9
+                0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1
+                0AB1: @RemoveFirstPersonPoint 0
+                0AB1: @CreateFreeCamCenter 0
+            end
+        end
+    end
+    if SexMenuState == 9
+    then
+        if 0AB1: @FreeCamEditMode 0
+        then
+            SexMenuState = 8
+            0AB1: @RemoveFreeCamCenter 0
+            0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+            0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0
+        end
+        if PulseButtonState == PULSED_ENTER_VEH
+        then
+            SexMenuState = 8
+            0AB1: @RemoveFreeCamCenter 0
+            0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+            0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0
         end
     end
 
@@ -309,7 +369,18 @@ then
 end
 
 // Increase / Decrease Speed
+Dummy5=0
+0AB1: @GetInt 1 @CameraMode Dummy1
+0AB1: @GetInt 1 @FPVCamEditMode Dummy2
 if SexMenuState == 2
+then Dummy5 = 1
+end
+if and
+SexMenuState == 8 // state when the camera is free or when in edit mode
+Dummy2 == 0 // not in Edit Mode
+then Dummy5 = 1
+end
+if Dummy5 == 1
 then
     if 00E1:   player 0 pressed_key PAD_PREV_WEP_ZOOM_IN
     then 0AB1: call_scm_func @IncOrDecPercentageIntStat 3 SexStat_Speed 4 FLAG_INCREASE SexStat_Speed
@@ -344,15 +415,22 @@ if and
 then gosub @SpeedMachine
 end
 
-// Buttons UP - DOWN - ACCEPT - CANCEL acknowledge
-gosub @PulseButtonMachine
-
 // First Person Camera control
-0AB1: @GetInt 1 @FPVCamMoveable Dummy1
 if and
 not SexMenuState == 6
 not SexMenuState == 7
-then 0AB1: @FirstPersonCameraControl_Alt 2 flag_edit 0 flag_moveable Dummy1
+then 0AB1: @FirstPersonCameraControl_Alt 0
+end
+
+// Keys Control for Edit Mode
+0AB1: @GetInt 1 @FPVCamEditMode Dummy1
+0AB1: @GetInt 1 @CameraMode Dummy2
+0AB1: @GetInt 1 @CurrentCamera Dummy3
+if and
+Dummy1 == 1
+not SexMenuState == 6
+not SexMenuState == 7
+then 0AB1: @FirstPersonCameraMoveable_KeysControl 2 camera Dummy2 cam_id Dummy3
 end
 return
 
@@ -385,8 +463,13 @@ until 0029:   32@ >= SEXFILES_MINIMUM_WAIT_TIME
 if not Dummy1 == 0 // A slot was selected
 then 0AB1: @RetrieveInformationFromInternalStorage 6 slot Dummy1 PornActress PornActor SexPoseInt SexPlace SpeedState
 end
-0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+
+0AB1: @RelocateFreeCamCenter 0
 01B4: set_player $PLAYER_CHAR can_move 1
+
+0AB1: @StoreInt 2 @CameraMode 1 // Fixed Camera
+wait 100
+0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
 return
 
 {======================================================================
