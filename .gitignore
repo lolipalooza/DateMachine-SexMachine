@@ -1,10 +1,5 @@
-!release/modloader/. ignored/
-release/modloader/. ignored/*
-!release/modloader/. ignored/copy female file.bat
-!release/modloader/. ignored/copy male file.bat
-!release/modloader/. ignored/*.md
-!release/modloader/. ignored/models/
-release/modloader/. ignored/models/*.dff
-release/modloader/. ignored/models/*.txd
-release/modloader/. ignored/models/*.zip
-release/modloader/ignored/bdoll.bat
+release/
+src/*.txt
+src/*.s
+src/*.cs
+src/*.fxt
