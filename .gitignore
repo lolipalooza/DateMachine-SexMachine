@@ -1,5 +1,7 @@
 release/
 src/*.txt
+!src/SexMachine.txt
+!src/SexTriggerer.txt
 src/*.s
 src/*.cs
 src/*.fxt
