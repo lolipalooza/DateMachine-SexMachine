@@ -14,6 +14,13 @@ _DateMachine_ and _SexMachine_ is a script that will add an activity in GTA: San
 
 This mod is barely on a developement stage and there is still a lot of stuff missing.
 
+## Installing
+
+Once you have all the requirements, download the release and extract the files on the _GTA San Andreas_ folder. Alternatively, you can download the model files to play with SexMachine, replacing dinamically the male/female models. Just follow the _README.md_ instructions in `/modloader/.ignored` folder about how to use it.
+
+- Release: https://github.com/mumifaglalolanda/DateMachine-SexMachine/releases/download/v1.0.0/DateMachine.SexMachine.zip
+- Models: https://github.com/mumifaglalolanda/DateMachine-SexMachine/releases/download/models-1.0.0/models.zip
+
 ## Progress
 
 DateMachine: 0%
