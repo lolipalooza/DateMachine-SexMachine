@@ -1,8 +1,8 @@
-# Adding a New Pose in SCM files
-
 # Warning:
 
 This is outdated, wait for new readme file!
+
+# Adding a New Pose in SCM files
 
 #### File `CmSexMachine/ActorsAndPoses.txt`
 
