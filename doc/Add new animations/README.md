@@ -1,6 +1,6 @@
 # Adding a New Pose in SCM files
 
-#Warning:
+# Warning:
 
 This is outdated, wait for new readme file!
 
