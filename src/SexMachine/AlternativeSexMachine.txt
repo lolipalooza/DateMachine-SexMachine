@@ -257,14 +257,6 @@ then
             SexMenuState = 8
             0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 1 SexPoseInt SexPlace
         end
-        {if 0AB1: @CursorClickCheck 4 box_position 394.0 395.0 box_size 70.0 12.0 // Change pose animation   318 -> 394    76
-        then
-            0AB1: @GetInt 1 @CurrentAnimation Dummy1
-            0AB1: call_scm_func @ReadSexPosesInfo 3 SpeedState SexPoseInt SexPlace out Dummy3 Dummy4 Dummy2
-            0AB1: @IncOrDecIntVariable 4 var_to_increase Dummy1 min_value 1 max_value Dummy2 flag FLAG_INCREASE store_into Dummy1
-            0AB1: @StoreInt 2 @CurrentAnimation Dummy1
-            0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
-        end}
         0AB1: @ManageAnimationsMenu 5 SpeedState SexPoseInt SexPlace PornActress PornActor
     end
     if SexMenuState == 8

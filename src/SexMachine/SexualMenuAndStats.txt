@@ -1359,10 +1359,6 @@ then // sex menu closed/hidden
 end
 0AB2: ret 0
 
-
-:SettingTexts_CameraMode
-return
-
 {======================================================================
 ======================================================================}
 :ManageAnimationsMenu // speed 0@ pose 1@ place 2@ fem 3@ male 4@
@@ -1468,7 +1464,6 @@ end
 {======================================================================
 ======================================================================}
 :BuildTableLine // columns 0@ start_id 1@ end_id 2@ used_id 3@
-
 0AB1: @GetData 2 @TableSettings 34 9@ // Table GXT Offset
 
 // Text Position
@@ -1558,7 +1553,6 @@ for 20@ = 1@ to 2@
     if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 18@ 19@
     then
         0AB1: @GetActionData 1 line 20@ return_as action 30@ num_params 31@ params 21@ 22@ 23@ 24@ 25@ 26@ 27@ 28@
-        //0AB1: @DEBUG_LogActionTable 0
         0AB1: perform_action 30@ num_of_params 31@ parameters 21@ 22@ 23@ 24@ 25@ 26@ 27@ 28@
     end
     
@@ -1614,7 +1608,6 @@ for 30@ = 0 to 9
     005A: 21@ += 22@  // (int)
     0AB1: @GetData 2 label @TableActions offset 21@ returned_value 11@(30@,10i)
 end
-//0AD0: "params %d: anim %d fem %d male %d pose %d place %d speed %d" time 1000 {11@} 12@ 13@ 14@ 15@ 16@ 17@ 18@ {19@ 20@}
 0AB2: ret 10 action 11@ num_params 12@ parameters 13@ 14@ 15@ 16@ 17@ 18@ 19@ 20@
 
 {======================================================================
