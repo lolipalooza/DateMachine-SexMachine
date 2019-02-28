@@ -265,6 +265,7 @@ then
             0AB1: @StoreInt 2 @CurrentAnimation Dummy1
             0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
         end}
+        0AB1: @ManageAnimationsMenu 5 SpeedState SexPoseInt SexPlace PornActress PornActor
     end
     if SexMenuState == 8
     then

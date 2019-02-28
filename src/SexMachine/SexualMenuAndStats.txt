@@ -1385,37 +1385,61 @@ for 12@ = 1 to 9@
     14@ += 340.0      // x-pos = 18*index - 18*max-anims + 340
     0AB1: @SetDrawTextRGB_1Number 12 font 1 linewidth 600.0 size 0.4 1.2 position 14@ 389.0 GXT 10@ 11@ rgb 13@ 13@ 13@ number 12@
 end}
-0AB1: @ManageAnimationsMenu 3 speed 1@ pose 2@ place 3@
 return
 
 {======================================================================
 ======================================================================}
-:ManageAnimationsMenu // speed 0@ pose 1@ place 2@
-
+:ManageAnimationsMenu // speed 0@ pose 1@ place 2@ fem 3@ male 4@
 0AB1: @ReadSexPosesInfo 3 speed 0@ pose 1@ place 2@ ret gxt_entry 28@ 29@ max_anim 30@
+0AB1: @GetInt 1 @CurrentAnimation 31@
 
-if 30@ == 1
-then
+// Building actions array
+for 20@ = 0 to 11
+    0085: 21@ = 20@ // (int)
+    0012: 21@ *= 10
+    0012: 21@ *= 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value @SetAnimation offset 21@ // Action
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 6 offset 21@ // Number of params
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 31@ offset 21@ // Parameter 1: Current Animation
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 3@ offset 21@ // Parameter 2: Female
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 4@ offset 21@ // Parameter 3: Male
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 1@ offset 21@ // Parameter 4: Pose
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 2@ offset 21@ // Parameter 5: Place
+    000A: 21@ += 4
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 0@ offset 21@ // Parameter 6: Speed
 end
+
 if 30@ == 2
 then
     0AB1: @SetTableSettings_Texts 15 text_pos 365.0 402.0 text_size 0.2 1.2 offsets 0.0 23.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
     0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 409.0 box_size 24.0 21.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
-    0AB1: @BuildTableLine 4 columns 2 start_id 1 end_id 2 used_id 1
+    0AB1: @BuildTableLine 5 columns 2 start_id 1 end_id 2 used_id 31@ actions_array @ManageAnimationsMenu_Actions
 end
 if 30@ == 3
 then
     0AB1: @SetTableSettings_Texts 15 text_pos 365.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
     0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
-    0AB1: @BuildTableLine 4 columns 3 start_id 1 end_id 3 used_id 1
+    0AB1: @BuildTableLine 5 columns 3 start_id 1 end_id 3 used_id 31@ actions_array @ManageAnimationsMenu_Actions
 end
 if 30@ == 4
 then
     0AB1: @SetTableSettings_Texts 15 text_pos 360.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
     0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 363.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
-    0AB1: @BuildTableLine 4 columns 4 start_id 1 end_id 4 used_id 1
+    0AB1: @BuildTableLine 5 columns 4 start_id 1 end_id 4 used_id 31@ actions_array @ManageAnimationsMenu_Actions
 end
+0AB2: ret 0
 
+{======================================================================
+======================================================================}
+:SetAnimation // animation 0@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
+0AB1: @StoreInt 2 @CurrentAnimation 0@
+0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
 0AB2: ret 0
 
 {======================================================================
@@ -1425,6 +1449,25 @@ hex
 "INT_1" 000000  "INT_1" 000000  "INT_1" 000000  "INT_1" 000000
 "INT_1" 000000  "INT_1" 000000  "INT_1" 000000  "INT_1" 000000
 "INT_1" 000000  "INT_1" 000000  "INT_1" 000000  "INT_1" 000000
+end
+
+{======================================================================
+======================================================================}
+:ManageAnimationsMenu_Actions
+hex
+//  Action Label    Num of params   Parameters (8 max)
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
+    00000000        00000000        00000000 00000000 00000000 00000000     00000000 00000000 00000000 00000000
 end
 
 {======================================================================
@@ -1482,7 +1525,7 @@ end
 
 {======================================================================
 ======================================================================}
-:BuildTableLine // columns 0@ start_id 1@ end_id 2@ used_id 3@
+:BuildTableLine // columns 0@ start_id 1@ end_id 2@ used_id 3@ actions_array 4@
 
 0AB1: @GetData 2 @TableSettings 34 9@ // Table GXT Offset
 
@@ -1537,6 +1580,9 @@ then
     0AB1: @GetData 2 @TableSettings 18 12@
     0AB1: @GetData 2 @TableSettings 22 13@
 
+    0087: 14@ = 10@ // (float)
+    0087: 15@ = 11@ // (float)
+    
     for 20@ = 1@ to 2@
         // Box Size
         0AB1: @GetData 2 @TableSettings 46 21@
@@ -1554,15 +1600,44 @@ then
             0AB1: @GetInt 2 @TableSettings 60 25@
             0AB1: @GetInt 2 @TableSettings 61 26@
         end
-        038E: draw_box_position 10@ 11@ size 21@ 22@ RGBA 23@ 24@ 25@ 26@
+        038E: draw_box_position 14@ 15@ size 21@ 22@ RGBA 23@ 24@ 25@ 26@
     
-        005B: 10@ += 12@  // (float)
-        005B: 11@ += 13@  // (float)
+        005B: 14@ += 12@  // (float)
+        005B: 15@ += 13@  // (float)
     end
+end
+
+0087: 14@ = 10@ // (float)
+0087: 15@ = 11@ // (float)
+for 20@ = 1@ to 2@
+    // Action
+    0085: 21@ = 20@ // (int)
+    000E: 21@ -= 1
+    0085: 22@ = 21@ // (int)
+    0085: 23@ = 22@ // (int)
+    0012: 23@ *= 10
+    0012: 23@ *= 4
+    0AB1: @GetData 2 label 4@ offset 23@ returned_value 30@ // Action
+    000A: 23@ += 4
+    0AB1: @GetData 2 label 4@ offset 23@ returned_value 31@ // Number of parameters
+    for 16@ = 2 to 9
+        0085: 18@ = 16@ // (int)
+        000E: 18@ -= 2
+        0085: 19@ = 16@ // (int)
+        0012: 19@ *= 4
+        0AB1: @GetData 2 label 4@ offset 23@ returned_value 21@(18@,8i)
+    end
+    
+    // Box Size
+    0AB1: @GetData 2 @TableSettings 46 18@
+    0AB1: @GetData 2 @TableSettings 50 19@
+    
+    if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 18@ 19@
+    then 0AB1: action 30@ num_of_params 31@ parameters 21@ 22@ 23@ 24@ 25@ 26@ 27@ 28@ // 8 parameters max
+    end
+    
+    005B: 14@ += 12@  // (float)
+    005B: 15@ += 13@  // (float)
 end
 0AB2: ret 0
 
-{======================================================================
-======================================================================}
-:BuildTableLine_Actions // box_pos 0@ 1@ box_size 6@ 7@
-0AB2: ret 0
