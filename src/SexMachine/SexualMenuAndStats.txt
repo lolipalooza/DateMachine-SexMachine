@@ -467,6 +467,92 @@ end
 
 {======================================================================
 ======================================================================}
+:SaveLoadMenu // sex_menu_state 0@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
+0AB1: @GetInt 1 @ActorsOffsetsMenu_Action 30@
+
+10@s = 'CFSV_1' // Save
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 414.0 GXT 10@ 11@
+10@s = 'CFSV_2' // Load
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 48.0 414.0 GXT 10@ 11@
+10@s = 'CFSV_3' // Delete
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 83.0 414.0 GXT 10@ 11@
+
+10@s = 'CFSV_7' // Back
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
+
+if 0AB1: @CursorClickCheck 4 box_position 23.0 421.0 box_size 35.0 12.0 // Save
+then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 0 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
+end
+if 0AB1: @CursorClickCheck 4 box_position 60.0 421.0 box_size 35.0 12.0 // Load
+then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 1 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
+end
+if 0AB1: @CursorClickCheck 4 box_position 100.0 421.0 box_size 41.0 12.0 // Delete
+then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 2 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
+end
+if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
+then 0@ = 2 // Close Menu
+end
+
+// Save/Load: Highlight selected option
+0093: 26@ = integer 30@ to_float // x = x0 + i*offset   ->  x = 23.0 + i*37.0
+26@ *= 37.0
+26@ += 23.0
+if 30@ == 2
+then 0AB1: @SetNumbers 4 pos   100.0 421.0   size  41.0 12.0   ret  26@ 27@ 28@ 29@  dummies 9@ 9@ 9@ 9@ 9@ 9@
+else 0AB1: @SetNumbers 4 pos     26@ 421.0   size  35.0 12.0   ret  26@ 27@ 28@ 29@  dummies 9@ 9@ 9@ 9@ 9@ 9@
+end
+038E: draw_box_position 26@ 27@ size 28@ 29@ RGBA 25 25 255 180 // highlight selected
+    
+16@ = 0
+for 13@ = 332.0 to 388.0 step 28.0
+    for 12@ = 11.0 to 131.0 step 40.0
+        16@++
+        0AB1: @ReadLineFromIntStorage 1 slot_to_read 16@ returned_values interior 6@ 7@ 8@ 9@ pose 10@ place 10@ center_xyz 10@ 10@ 10@ fem_xyza 10@ 10@ 10@ 10@ male_xyza 10@ 10@ 10@ 10@ slot 10@ in_use 10@
+            
+        10@s = 'CFSV_4' // Slot ~1~
+        0AB1: @SetDrawTextRGB_1Number 12 font 1 linewidth 600.0 size 0.2 1.2 position 12@ 13@ GXT 10@ 11@ rgb 255 255 255 integer 16@
+            
+        if not 6@v == ""
+        then
+            0087: 15@ = 13@ // (float)
+            000B: 15@ += 8.0
+    		10@s = 'CFSV_5' // Data!
+            0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 12@ 15@ GXT 10@ 11@
+        end
+            
+        0087: 14@ = 12@ // (float)
+        000B: 14@ += 14.0
+        0087: 15@ = 13@ // (float)
+        000B: 15@ += 10.0
+        if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
+        then
+            if 30@ == 0 // Save
+            then
+                0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
+                0AB1: @SaveData 2 pose 3@ place 4@
+            end
+            if 30@ == 1 // Load
+            then
+                0AB1: @RetrieveInformationFromInternalStorage 6 slot 16@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
+                0AB1: @RelocateFreeCamCenter 0
+                0AB1: @StoreInt 2 @CameraMode 1 // Fixed Camera
+                0AB1: @ToggleSexualCamera_Alt 2 pose 3@ place 4@
+            end
+            if 30@ == 2 // Delete
+            then
+                0AB1: @ClearStorageLine 1 line 16@
+                0AB1: @ClearTempStorage 0
+                0AB1: @SaveData 2 pose 3@ place 4@
+                0ACE: show_formatted_text_box "Deleted!"
+            end
+        end
+    end
+end
+0AB1: @StoreInt 2 @ActorsOffsetsMenu_Action 30@
+0AB2: ret 1 sex_menu_state 0@
+
+{======================================================================
+======================================================================}
 :ActorsOffsetsMenu // 0@: SexMenuState, 1@: Porn Actress, 2@: Porn Actor, 3@: pose, 4@: place, 5@: speed state
 const
     OFF_INC_STEP = 0.01
@@ -499,7 +585,7 @@ then
     0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
 end
 
-10@s = 'CFSV_1' // Save
+{10@s = 'CFSV_1' // Save
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 414.0 GXT 10@ 11@
 10@s = 'CFSV_2' // Load
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 48.0 414.0 GXT 10@ 11@
@@ -507,7 +593,7 @@ end
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 83.0 414.0 GXT 10@ 11@
 if not 0@ == 4
 then
-end
+end}
 
 if 0@ == 4
 then 10@s = 'CFSV_7' // Back
@@ -515,7 +601,7 @@ else 10@s = 'S_OPT6' // Close
 end
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
 
-if 0AB1: @CursorClickCheck 4 box_position 23.0 421.0 box_size 35.0 12.0 // Save
+{if 0AB1: @CursorClickCheck 4 box_position 23.0 421.0 box_size 35.0 12.0 // Save
 then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 0 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
 end
 if 0AB1: @CursorClickCheck 4 box_position 60.0 421.0 box_size 35.0 12.0 // Load
@@ -523,12 +609,12 @@ then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 1 r
 end
 if 0AB1: @CursorClickCheck 4 box_position 100.0 421.0 box_size 41.0 12.0 // Delete
 then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 2 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
-end
+end}
 if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
 then
-    if 0@ == 4
+    {if 0@ == 4
     then 0@ = 3 // Back to previous
-    else
+    else}
         0@ = 0 // Close (Reset SexMenuState)
         0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
         0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
@@ -536,10 +622,10 @@ then
         0AB1: @RelocateFreeCamCenter 0
         0373: set_camera_directly_behind_player
         02EB: restore_camera_with_jumpcut
-    end
+    {end}
 end
 
-if 0@ == 4
+{if 0@ == 4
 then
     // Save/Load: Highlight selected option
     0093: 26@ = integer 30@ to_float // x = x0 + i*offset   ->  x = 23.0 + i*37.0
@@ -591,7 +677,7 @@ then
     end
     0AB1: @StoreInt 2 @ActorsOffsetsMenu_Action 30@
     0AB2: ret 1 sex_menu_state 0@
-else
+else}
     10@s = 'CFG_O6' // Reset
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
     if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
@@ -629,7 +715,7 @@ else
     if 0AB1: @CursorClickCheck 4 box_position 132.0 406.0 box_size 19.0 12.0 // >
     then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_INCREASE return_in 20@
     end
-end
+{end}
 
 0AB1: @GetIncreaseSteps 0 returned_values w_s_steps 12@ 13@ a_d_steps 14@ 15@ offsets_for_x_and_y 18@ 19@
 
@@ -1352,8 +1438,8 @@ then // sex menu closed/hidden
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 129.0 391.0 GXT 10@ 11@
     10@s = 'CFG_M2' // Offsets
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 119.0 404.0 GXT 10@ 11@
-    10@s = 'CFG_M3' // Cameras
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 118.0 417.0 GXT 10@ 11@
+    10@s = 'CFG_M4' // Save/Load
+    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 108.0 417.0 GXT 10@ 11@
     10@s = 'CFSV_7' // Back
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 135.0 430.0 GXT 10@ 11@
 end
