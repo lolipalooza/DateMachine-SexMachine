@@ -380,6 +380,37 @@ end
 
 {======================================================================
 ======================================================================}
+:IncDecActorOffset_Alt // actor 0@ gender_flag 1@ normalized_dirs sides 2@ front 3@ pos_z 4@ speed 5@
+008F: 2@ = integer 2@ to_float
+006B: 2@ *= 5@  // (float)
+008F: 3@ = integer 3@ to_float
+006B: 3@ *= 5@  // (float)
+008F: 4@ = integer 4@ to_float
+006B: 4@ *= 5@  // (float)
+000B: 4@ += -1.0
+    
+04C4: store_coords_to 11@ 12@ 13@ from_actor 0@ with_offset 2@ 3@ 4@
+
+0AB1: @GetData 2 @PlayerPosX 0 20@
+0AB1: @GetData 2 @PlayerPosY 0 21@
+0AB1: @GetData 2 @PlayerPosZ 0 22@
+
+0063: 11@ -= 20@  // (float)
+0063: 12@ -= 21@  // (float)
+0063: 13@ -= 22@  // (float)
+
+if 1@ == 0 // Female by default
+then 30@ = @FemaleOffset
+else 30@ = @MaleOffset
+end
+
+0AB1: @StoreData 3 label 30@ value 11@ offset 0
+0AB1: @StoreData 3 label 30@ value 12@ offset 4
+0AB1: @StoreData 3 label 30@ value 13@ offset 8
+0AB2: ret 1 true
+
+{======================================================================
+======================================================================}
 :IncDecActorOffset // 0@: gender flag, 1@: increase or decrease, 2@: position offset
 if 0@ == 0 // female
 then
@@ -563,7 +594,7 @@ end
 0AB1: @GetInt 1 @ActorsOffsetsMenu_Action 30@
 
 // Set fixed camera
-0AB1: @ActorsOffsets_SetFixedCamera 1 1@
+//0AB1: @ActorsOffsets_SetFixedCamera 1 1@
 
 // Change angle of view
 10@s = 'CFG_D7' // <
@@ -585,168 +616,94 @@ then
     0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
 end
 
-{10@s = 'CFSV_1' // Save
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 414.0 GXT 10@ 11@
-10@s = 'CFSV_2' // Load
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 48.0 414.0 GXT 10@ 11@
-10@s = 'CFSV_3' // Delete
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 83.0 414.0 GXT 10@ 11@
-if not 0@ == 4
-then
-end}
-
-if 0@ == 4
-then 10@s = 'CFSV_7' // Back
-else 10@s = 'S_OPT6' // Close
-end
+10@s = 'S_OPT6' // Close
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
 
-{if 0AB1: @CursorClickCheck 4 box_position 23.0 421.0 box_size 35.0 12.0 // Save
-then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 0 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
-end
-if 0AB1: @CursorClickCheck 4 box_position 60.0 421.0 box_size 35.0 12.0 // Load
-then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 1 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
-end
-if 0AB1: @CursorClickCheck 4 box_position 100.0 421.0 box_size 41.0 12.0 // Delete
-then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 2 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
-end}
 if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
 then
-    {if 0@ == 4
-    then 0@ = 3 // Back to previous
-    else}
-        0@ = 0 // Close (Reset SexMenuState)
-        0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
-        0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
-        0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
-        0AB1: @RelocateFreeCamCenter 0
-        0373: set_camera_directly_behind_player
-        02EB: restore_camera_with_jumpcut
-    {end}
+    0@ = 0 // Close (Reset SexMenuState)
+    0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
+    0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
+    0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+    0AB1: @RelocateFreeCamCenter 0
+    0373: set_camera_directly_behind_player
+    02EB: restore_camera_with_jumpcut
 end
 
-{if 0@ == 4
+10@s = 'CFG_O6' // Reset
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
 then
-    // Save/Load: Highlight selected option
-    0093: 26@ = integer 30@ to_float // x = x0 + i*offset   ->  x = 23.0 + i*37.0
-    26@ *= 37.0
-    26@ += 23.0
-    if 30@ == 2
-    then 0AB1: @SetNumbers 4 pos   100.0 421.0   size  41.0 12.0   ret  26@ 27@ 28@ 29@  dummies 9@ 9@ 9@ 9@ 9@ 9@
-    else 0AB1: @SetNumbers 4 pos     26@ 421.0   size  35.0 12.0   ret  26@ 27@ 28@ 29@  dummies 9@ 9@ 9@ 9@ 9@ 9@
-    end
-    038E: draw_box_position 26@ 27@ size 28@ 29@ RGBA 25 25 255 180 // highlight selected
+    0AB1: @StoreData 3 @MaleOffset 0.0 0
+    0AB1: @StoreData 3 @MaleOffset 0.0 4
+    0AB1: @StoreData 3 @MaleOffset 0.0 8
+    0AB1: @StoreData 3 @MaleOffset 0.0 12
+    0AB1: @StoreData 3 @FemaleOffset 0.0 0
+    0AB1: @StoreData 3 @FemaleOffset 0.0 4
+    0AB1: @StoreData 3 @FemaleOffset 0.0 8
+    0AB1: @StoreData 3 @FemaleOffset 0.0 12
+    21@ = 1
+end
     
-    16@ = 0
-    for 13@ = 332.0 to 388.0 step 28.0
-        for 12@ = 11.0 to 131.0 step 40.0
-            16@++
-            0AB1: @ReadLineFromIntStorage 1 slot_to_read 16@ returned_values interior 6@ 7@ 8@ 9@ pose 10@ place 10@ center_xyz 10@ 10@ 10@ fem_xyza 10@ 10@ 10@ 10@ male_xyza 10@ 10@ 10@ 10@ slot 10@ in_use 10@
-            
-            10@s = 'CFSV_4' // Slot ~1~
-            0AB1: @SetDrawTextRGB_1Number 12 font 1 linewidth 600.0 size 0.2 1.2 position 12@ 13@ GXT 10@ 11@ rgb 255 255 255 integer 16@
-            
-            if not 6@v == ""
-            then
-                0087: 15@ = 13@ // (float)
-                000B: 15@ += 8.0
-    			10@s = 'CFSV_5' // Data!
-                0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 12@ 15@ GXT 10@ 11@
-            end
-            
-            0087: 14@ = 12@ // (float)
-            000B: 14@ += 14.0
-            0087: 15@ = 13@ // (float)
-            000B: 15@ += 10.0
-            if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 38.0 26.0
-            then
-                if 30@ == 0 // Save
-                then 0AB1: @StoreInformationInInternalStorage 3 slot 16@ pose 3@ place 4@
-                end
-                if 30@ == 1 // Load
-                then 0AB1: @RetrieveInformationFromInternalStorage 6 slot 16@ fem 1@ male 2@ pose 3@ place 4@ speed 5@
-                end
-                if 30@ == 2 // Delete
-                then
-                    0AB1: @ClearStorageLine 1 line 16@
-                    0AB1: @ClearTempStorage 0
-                    0ACE: show_formatted_text_box "Deleted!"
-                end
-            end
-        end
-    end
-    0AB1: @StoreInt 2 @ActorsOffsetsMenu_Action 30@
-    0AB2: ret 1 sex_menu_state 0@
-else}
-    10@s = 'CFG_O6' // Reset
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 128.0 414.0 GXT 10@ 11@
-    if 0AB1: @CursorClickCheck 4 box_position 142.0 421.0 box_size 39.0 12.0 // Reset
-    then
-        0AB1: @StoreData 3 @MaleOffset 0.0 0
-        0AB1: @StoreData 3 @MaleOffset 0.0 4
-        0AB1: @StoreData 3 @MaleOffset 0.0 8
-        0AB1: @StoreData 3 @MaleOffset 0.0 12
-        0AB1: @StoreData 3 @FemaleOffset 0.0 0
-        0AB1: @StoreData 3 @FemaleOffset 0.0 4
-        0AB1: @StoreData 3 @FemaleOffset 0.0 8
-        0AB1: @StoreData 3 @FemaleOffset 0.0 12
-        21@ = 1
-    end
+if 20@ == 0
+then 10@s = 'CFG_O2' // Female offset
+end
+if 20@ == 1
+then 10@s = 'CFG_O1' // Male offset
+end
+if 20@ == 2
+then 10@s = 'CFG_O9' // Both offset
+end
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 45.0 399.0 GXT 10@ 11@
     
-    if 20@ == 0
-    then 10@s = 'CFG_O2' // Female offset
-    end
-    if 20@ == 1
-    then 10@s = 'CFG_O1' // Male offset
-    end
-    if 20@ == 2
-    then 10@s = 'CFG_O9' // Both offset
-    end
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 45.0 399.0 GXT 10@ 11@
+10@s = 'CFG_D7' // <
+0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 20.0 400.0 GXT 10@ 11@
+10@s = 'CFG_D8' // >
+0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 127.0 400.0 GXT 10@ 11@
     
-    10@s = 'CFG_D7' // <
-    0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 20.0 400.0 GXT 10@ 11@
-    10@s = 'CFG_D8' // >
-    0AB1: @SetDrawText 8 font 1 linewidth 600.0 size 0.4 1.2 position 127.0 400.0 GXT 10@ 11@
-    
-    if 0AB1: @CursorClickCheck 4 box_position 25.0 406.0 box_size 19.0 12.0 // <
-    then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_DECREASE return_in 20@
-    end
-    if 0AB1: @CursorClickCheck 4 box_position 132.0 406.0 box_size 19.0 12.0 // >
-    then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_INCREASE return_in 20@
-    end
-{end}
+if 0AB1: @CursorClickCheck 4 box_position 25.0 406.0 box_size 19.0 12.0 // <
+then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_DECREASE return_in 20@
+end
+if 0AB1: @CursorClickCheck 4 box_position 132.0 406.0 box_size 19.0 12.0 // >
+then 0AB1: @IncOrDecIntVariable 4 variable 20@ min_value 0 max_value 2 flag FLAG_INCREASE return_in 20@
+end
 
 0AB1: @GetIncreaseSteps 0 returned_values w_s_steps 12@ 13@ a_d_steps 14@ 15@ offsets_for_x_and_y 18@ 19@
 
 0AB1: @SetNumbers 2 OFF_INC_STEP OFF_DEC_STEP ret 16@ 17@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@    
+14@ = OFF_INC_STEP
 if 0AB0:   key_pressed KEY_SHIFT // speed boost
-then
-    12@ *= 5.0
+then 14@ *= 5.0
+    {12@ *= 5.0
     13@ *= 5.0
     14@ *= 5.0
     15@ *= 5.0
     16@ *= 5.0
-    17@ *= 5.0
+    17@ *= 5.0}
+end
+
+if 20@ == 0 // Female by default
+then 0085: 31@ = 1@ // (int)
+else 0085: 31@ = 2@ // (int)
 end
 
 if 0AB0:   key_pressed KEY_W // front +
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 12@ pos_offset 18@ ret 21@
+then 0AB1: @IncDecActorOffset_Alt 6 actor 31@ gender_flag 20@ normalized_dirs sides 0 front 1 pos_z 0 speed 14@ ret 21@ //3 gender_flag 20@ inc_step 12@ pos_offset 18@ ret 21@
 end
 if 0AB0:   key_pressed KEY_S // front -
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 13@ pos_offset 18@ ret 21@
+then 0AB1: @IncDecActorOffset_Alt 6 actor 31@ gender_flag 20@ normalized_dirs sides 0 front -1 pos_z 0 speed 14@ ret 21@
 end
 if 0AB0:   key_pressed KEY_D // sides ->
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 14@ pos_offset 19@ ret 21@
+then 0AB1: @IncDecActorOffset_Alt 6 actor 31@ gender_flag 20@ normalized_dirs sides 1 front 0 pos_z 0 speed 14@ ret 21@
 end
 if 0AB0:   key_pressed KEY_A // sides <-
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 15@ pos_offset 19@ ret 21@
+then 0AB1: @IncDecActorOffset_Alt 6 actor 31@ gender_flag 20@ normalized_dirs sides -1 front 0 pos_z 0 speed 14@ ret 21@
 end
 if 0AB0:   key_pressed KEY_E // up
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 16@ pos_offset 8 ret 21@
+then 0AB1: @IncDecActorOffset_Alt 6 actor 31@ gender_flag 20@ normalized_dirs sides 0 front 0 pos_z 1 speed 14@ ret 21@
 end
 if 0AB0:   key_pressed KEY_Q // down
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 17@ pos_offset 8 ret 21@
+then 0AB1: @IncDecActorOffset_Alt 6 actor 31@ gender_flag 20@ normalized_dirs sides 0 front 0 pos_z -1 speed 14@ ret 21@
 end
 if 0AB0:   key_pressed 37 // left
 then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step -10.0 pos_offset 12 ret 21@

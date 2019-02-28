@@ -141,16 +141,9 @@ wait 0
         if 0AB1: @CursorClickCheck 4 box_position 130.0 411.0 box_size 64.0 12.0 // Offsets button
         then
             0AB1: @LoadData 2 SexPoseInt SexPlace
+            02EB: restore_camera_with_jumpcut
             SexMenuState = 3
         end
-        {if 0AB1: @CursorClickCheck 4 box_position 130.0 424.0 box_size 64.0 12.0 // Cameras button
-        then
-            0AB1: @LoadData 2 SexPoseInt SexPlace
-            0AB1: @StoreInt 2 @CamsOffsetsMenu_OffsetToModify 0 // Set free cam
-            0AB1: @StoreInt 2 @CameraMode 0
-            0AB1: @CreateFreeCamCenter 0
-            SexMenuState = 6
-        end}
         if 0AB1: @CursorClickCheck 4 box_position 130.0 424.0 box_size 64.0 12.0 // Save/Load button
         then
             0AB1: @LoadData 2 SexPoseInt SexPlace
@@ -169,52 +162,22 @@ wait 0
             SexMenuState=0
         end
     end
-    if //or
-    SexMenuState == 3
-    {SexMenuState == 4
-    SexMenuState == 6
-    SexMenuState == 7}
+    if SexMenuState == 3
     then
-        {if or
-        SexMenuState == 3
-        SexMenuState == 4
-        then 0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
-        end
-        if or
-        SexMenuState == 6
-        SexMenuState == 7
-        then 0AB1: @CameraOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
-        end}
         0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
         if PulseButtonState == PULSED_ENTER_VEH
         then
-            {0AB1: @GetInt 1 @CursorControl_FlagShowCursor Dummy1
-            if Dummy1 == 1 // Cursor was shown? Close camera offsets menu
-            then
-                if or
-                SexMenuState == 4
-                SexMenuState == 7
-                then SexMenuState = 3
-                else SexMenuState = 2
-                end}
-                SexMenuState = 2
-                PulseButtonState++
-                0AB1: @RemoveFreeCamCenter 0
-                0AB1: @StoreInt 2 @CameraMode 0
-                0AB1: @RelocateFreeCamCenter 0
-                0AB1: @RemoveFirstPersonPoint 0
-                0373: set_camera_directly_behind_player
-                02EB: restore_camera_with_jumpcut
-            {else // If cursor was hidden, then show it again, and close FPV edit mode
-                0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1
-                0AB1: @StoreInt 2 @CamsOffsetsMenu_FPVCamMoveable 0
-            end}
+            SexMenuState = 2
+            PulseButtonState++
+            0AB1: @RemoveFreeCamCenter 0
+            0AB1: @StoreInt 2 @CameraMode 0
+            0AB1: @RelocateFreeCamCenter 0
+            0AB1: @RemoveFirstPersonPoint 0
+            0373: set_camera_directly_behind_player
+            02EB: restore_camera_with_jumpcut
         end
         if SexMenuState == 0
         then SexMenuState = 2
-        end
-        if SexMenuState == 2
-        then //0AB1: @SaveData 2 SexPoseInt SexPlace
         end
     end
     if SexMenuState == 4
@@ -424,9 +387,10 @@ then gosub @SpeedMachine
 end
 
 // First Person Camera control
-if and
+if {and
 not SexMenuState == 6
-not SexMenuState == 7
+not SexMenuState == 7}
+not SexMenuState == 3
 then 0AB1: @FirstPersonCameraControl_Alt 0
 end
 
@@ -436,8 +400,9 @@ end
 0AB1: @GetInt 1 @CurrentCamera Dummy3
 if and
 Dummy1 == 1
-not SexMenuState == 6
-not SexMenuState == 7
+{not SexMenuState == 6
+not SexMenuState == 7}
+not SexMenuState == 3
 then 0AB1: @FirstPersonCameraMoveable_KeysControl 2 camera Dummy2 cam_id Dummy3
 end
 return
