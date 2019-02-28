@@ -1366,10 +1366,8 @@ end
 0AB1: @GetInt 1 @CurrentAnimation 31@
 
 // Building actions array
-for 20@ = 0 to 11
-    0085: 22@ = 20@ // (int)
-    000A: 22@ += 1
-    0AB1: @StoreActionData 9 line 22@ action @SetAnimation num_params 6 parameters anim 22@ fem 3@ male 4@ pose 1@ place 2@ speed 0@
+for 20@ = 1 to 12
+0AB1: @StoreActionData 9 line 20@ action @SetAnimation num_params 6 parameters anim 20@ fem 3@ male 4@ pose 1@ place 2@ speed 0@
 end
 
 if 30@ == 2
