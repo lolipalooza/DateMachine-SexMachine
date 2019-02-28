@@ -30,7 +30,6 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Better "change animations" system (replace the clickable in only one block 1 2 3 animations by separated buttons).
 
 Long-Term
 - Separate the Save/load from the offsets menu, join actors and cameras into one offset menu
@@ -38,4 +37,5 @@ Long-Term
 - Compatibility with classic mode.
 
 Bugs
+- Don't call GenSexFiles on the initialization routine, but instead when plater press TAB to choose pose at first!
 - Climax stops from rising at some point, maybe after cameras menu.

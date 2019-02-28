@@ -1398,11 +1398,13 @@ for 20@ = 0 to 11
     0085: 21@ = 20@ // (int)
     0012: 21@ *= 10
     0012: 21@ *= 4
+    0085: 22@ = 20@ // (int)
+    000A: 22@ += 1
     0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value @SetAnimation offset 21@ // Action
     000A: 21@ += 4
     0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 6 offset 21@ // Number of params
     000A: 21@ += 4
-    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 31@ offset 21@ // Parameter 1: Current Animation
+    0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 22@ offset 21@ // Parameter 1: Animation corresponding to index
     000A: 21@ += 4
     0AB1: @StoreData 3 label @ManageAnimationsMenu_Actions value 3@ offset 21@ // Parameter 2: Female
     000A: 21@ += 4
@@ -1610,34 +1612,46 @@ end
 0087: 14@ = 10@ // (float)
 0087: 15@ = 11@ // (float)
 for 20@ = 1@ to 2@
-    // Action
-    0085: 21@ = 20@ // (int)
-    000E: 21@ -= 1
-    0085: 22@ = 21@ // (int)
-    0085: 23@ = 22@ // (int)
-    0012: 23@ *= 10
-    0012: 23@ *= 4
-    0AB1: @GetData 2 label 4@ offset 23@ returned_value 30@ // Action
-    000A: 23@ += 4
-    0AB1: @GetData 2 label 4@ offset 23@ returned_value 31@ // Number of parameters
-    for 16@ = 2 to 9
-        0085: 18@ = 16@ // (int)
-        000E: 18@ -= 2
-        0085: 19@ = 16@ // (int)
-        0012: 19@ *= 4
-        0AB1: @GetData 2 label 4@ offset 23@ returned_value 21@(18@,8i)
-    end
-    
     // Box Size
     0AB1: @GetData 2 @TableSettings 46 18@
     0AB1: @GetData 2 @TableSettings 50 19@
-    
+        
     if 0AB1: @CursorClickCheck 4 box_position 14@ 15@ box_size 18@ 19@
-    then 0AB1: action 30@ num_of_params 31@ parameters 21@ 22@ 23@ 24@ 25@ 26@ 27@ 28@ // 8 parameters max
+    then
+        0AB1: @GetActionData 1 line 20@ return_as action 30@ num_params 31@ params 21@ 22@ 23@ 24@ 25@ 26@ 27@ 28@
+        0AB1: perform_action 30@ num_of_params 31@ parameters 21@ 22@ 23@ 24@ 25@ 26@ 27@ 28@
     end
     
     005B: 14@ += 12@  // (float)
     005B: 15@ += 13@  // (float)
 end
+0AB2: ret 0
+
+:GetActionData // line 0@
+for 30@ = 0 to 9
+    0085: 22@ = 0@ // (int)
+    000E: 22@ -= 1
+    0012: 22@ *= 10
+    0012: 22@ *= 4
+    0085: 21@ = 30@ // (int)
+    0012: 21@ *= 4
+    005A: 21@ += 22@  // (int)
+    0AB1: @GetData 2 label @ManageAnimationsMenu_Actions offset 21@ returned_value 11@(30@,10i)
+end
+//0AD0: "params %d: anim %d fem %d male %d pose %d place %d speed %d" time 1000 {11@} 12@ 13@ 14@ 15@ 16@ 17@ 18@ {19@ 20@}
+0AB2: ret 10 action 11@ num_params 12@ parameters 13@ 14@ 15@ 16@ 17@ 18@ 19@ 20@
+
+:DEBUG_LogActionTable
+30@ = File.Open(LOG_FILE, "wb+")
+11@ = 12
+11@ *= 10
+11@ -= 1
+for 10@ = 0 to 11@
+    0085: 12@ = 10@ // (int)
+    0012: 12@ *= 4
+    0AB1: @GetData 2 label @ManageAnimationsMenu_Actions offset 12@ returned_value 13@
+    0AD9: write_formatted_text "%d " in_file 30@ 13@
+end
+File.Close(30@)
 0AB2: ret 0
 
