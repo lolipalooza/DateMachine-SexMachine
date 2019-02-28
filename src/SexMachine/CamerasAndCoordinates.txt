@@ -515,7 +515,10 @@ end
 005B: 12@ += 22@  // (float)
 
 00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
-0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+//0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+30@s = 'VOID'
+0AB1: @ChangeSkin 2 short_string 30@ 31@
+
 0AB2: ret 0
 
 {======================================================================

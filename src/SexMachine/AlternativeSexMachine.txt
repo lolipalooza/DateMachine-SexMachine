@@ -13,6 +13,7 @@ $ONMISSION = 1
     03E0: draw_text_behind_textures 1
     08E7: disable_entrance_markers 1
 
+    GenderFlag = 1 // Gender of the player
     BodyType = BT_NORMAL
     0AB1: @StoreInt 2 @SxMn_Slot 0
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
@@ -32,6 +33,8 @@ SexStat_Speed = 0
 0AB1: @StoreData 3 @PlayerPosX 0.0 4
 0AB1: @StoreData 3 @PlayerPosY 0.0 4
 0AB1: @StoreData 3 @PlayerPosZ 0.0 4
+
+0AB1: @ChangeGenderSkin 1 GenderFlag
 
 while true
 wait 0
@@ -153,12 +156,14 @@ wait 0
         then
             0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
             gosub @RemovePosesAndActors
+            0AB1: @ChangeGenderSkin 1 GenderFlag
             SexMenuState=0
         end
         if PulseButtonState == PULSED_ENTER_VEH
         then
             0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
             gosub @RemovePosesAndActors
+            0AB1: @ChangeGenderSkin 1 GenderFlag
             SexMenuState=0
         end
     end
@@ -204,6 +209,8 @@ end
 03F0: enable_text_draw 0
 03E0: draw_text_behind_textures 0
 08E7: disable_entrance_markers 0
+
+0AB1: @ChangeGenderSkin 1 GenderFlag
 
 repeat // Avoid the false "enter car" effect when you end the SexMachine
 wait 0
@@ -441,8 +448,11 @@ end
 01B4: set_player $PLAYER_CHAR can_move 1
 
 0AB1: @StoreInt 2 @CameraMode 1 // Fixed Camera
-wait 100
 0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
+wait 100
+0337: set_actor PornActress visibility 1
+0337: set_actor PornActor visibility 1
+0AB1: @PlayerDissapear 0
 return
 
 {======================================================================

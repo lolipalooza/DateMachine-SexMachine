@@ -64,6 +64,9 @@ const
     SexPoseInt = 0@
     SexPlace = 1@
     SexStat_Speed = 2@    // (Int) Min: 1 - Max 100
+    // 3@-4@, 5@-6@: female & male skin names
+    // 7@: flag - classic mode or new mode (this is provisional)
+    GenderFlag = 8@
 
     // Other Variables
     SexStat_Climax = 13@   // (Float) Min: 1.0 - Max 100.0
