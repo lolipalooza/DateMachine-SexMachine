@@ -176,7 +176,7 @@ end
 
 {======================================================================
 ======================================================================}
-:ReadSexPosesInfo // 0@: speed, 1@: pose, 2@: place
+:ReadSexPosesInfo // speed 0@ pose 1@ place 2@
 0A9A: 30@ = openfile ANIMATIONS_FILE mode "rb"  // IF and SET
 for 4@ = 0 to 3
     0ADA: 31@ = scan_file 30@ format "%s %s" 10@v 14@v //IF and SET     // Dummy words
