@@ -1,14 +1,14 @@
 {======================================================================
 ======================================================================}
 :ChangeSkin // short_string 0@ 1@
-023C: load_special_actor 0@s as 1 // models 290-299
+023C: load_special_actor 0@s as 4 // models 290-299
 038B: load_requested_models
 repeat
 wait 0
 //0AD0: show_formatted_text_lowpriority "Loading model... Wait." time 0
-until 0248:   model #SPECIAL01 available
-09C7: change_player $PLAYER_CHAR model_to #SPECIAL01
-0296: unload_special_actor 1
+until 0248:   model #SPECIAL04 available
+09C7: change_player $PLAYER_CHAR model_to #SPECIAL04
+0296: unload_special_actor 4
 0AB2: ret 0
 
 {======================================================================
