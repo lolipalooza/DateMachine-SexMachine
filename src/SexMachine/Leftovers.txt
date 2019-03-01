@@ -2496,3 +2496,47 @@ hex
 00 00 00 00
 end
 
+{======================================================================
+======================================================================}
+{ 0     (W/S) y = y -/+ step        (A/D) x = x -/+ step        ystep = - step*cos(a) + step*sin(a)
+ 90     (A/D) y = y -/+ step        (W/S) x = x +/- step        xstep = - step*cos(a) - step*sin(a)
+180     (W/S) y = y +/- step        (A/D) x = x +/- step
+270     (A/D) y = y +/- step        (W/S) x = x -/+ step                                          }
+
+:GetXSteps // 0@: angle, 1@: step
+02F7: 10@ = cosine 0@ // (float)
+006B: 10@ *= 1@  // (float)
+0013: 10@ *= -1.0
+02F6: 11@ = sine 0@ // (float)
+006B: 11@ *= 1@  // (float)
+0013: 11@ *= -1.0
+0087: 30@ = 10@ // (float)
+005B: 30@ += 11@  // (float)
+0087: 31@ = 30@ // (float)
+0013: 31@ *= -1.0
+0AB2: ret 2 30@ 31@
+
+:GetYSteps // 0@: angle, 1@: step
+02F7: 10@ = cosine 0@ // (float)
+006B: 10@ *= 1@  // (float)
+0013: 10@ *= -1.0
+02F6: 11@ = sine 0@ // (float)
+006B: 11@ *= 1@  // (float)
+0087: 30@ = 10@ // (float)
+005B: 30@ += 11@  // (float)
+0087: 31@ = 30@ // (float)
+0013: 31@ *= -1.0
+0AB2: ret 2 30@ 31@
+
+:GetIncreaseSteps // entries: none
+0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 0@
+0AB1: @GetXSteps 2 angle 0@ step OFF_INC_STEP store_in 10@ 11@
+0AB1: @GetYSteps 2 angle 0@ step OFF_INC_STEP store_in 12@ 13@
+0092: 1@ = float 0@ to_integer
+0B14: 1@ = 1@ MOD 180
+if 1@ == 0
+then 0AB1: @SetNumbers 6 12@ 13@ 10@ 11@ 4 0 ret 20@ 21@ 22@ 23@ 24@ 25@ dummies 9@ 9@ 9@ 9@
+else 0AB1: @SetNumbers 6 11@ 10@ 13@ 12@ 0 4 ret 20@ 21@ 22@ 23@ 24@ 25@ dummies 9@ 9@ 9@ 9@
+end
+0AB2: ret 6 w_s_steps 20@ 21@ a_d_steps 22@ 23@ offsets_for_x_and_y 24@ 25@
+

@@ -995,6 +995,79 @@ end
 
 {======================================================================
 ======================================================================}
+:CreateFreeCamCenter // entries: none
+0AB1: @GetData 2 @CamsOffsetsMenu_FreeCamCenterObject 0 30@
+if 83CA:   not object 30@ exists
+then
+    0@ = #info // #info, #diamond_3
+    0247: load_model 0@
+    038B: load_requested_models
+    repeat
+    wait 0
+    until 0248:   model 0@ available
+    0AB1: @GetData 2 @PlayerPosX 0 10@
+    0AB1: @GetData 2 @PlayerPosY 0 11@
+    0AB1: @GetData 2 @PlayerPosZ 0 12@
+    0AB1: @GetData 2 @PlayerPosX 4 20@
+    0AB1: @GetData 2 @PlayerPosY 4 21@
+    0AB1: @GetData 2 @PlayerPosZ 4 22@
+    005B: 10@ += 20@  // (float)
+    005B: 11@ += 21@  // (float)
+    005B: 12@ += 22@  // (float)
+    12@ += 1.0 // Correct a ghost offset in PlayerPosZ
+    029B: 30@ = init_object 0@ at 10@ 11@ 12@
+    //0107: 30@ = create_object 0@ at 10@ 11@ 12@
+    0249: release_model 0@
+end
+0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:RemoveFreeCamCenter // entries: none
+0AB1: @GetData 2 @CamsOffsetsMenu_FreeCamCenterObject 0 30@
+if 03CA:   object 30@ exists
+then 0108: destroy_object 30@
+end
+0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:MoveFreeCamCenter // step_x 0@ step_y 1@ step_z 2@
+0AB1: @GetData 2 @CamsOffsetsMenu_FreeCamCenterObject 0 30@
+
+// Position
+0AB1: @GetData 2 @PlayerPosX 0 10@
+0AB1: @GetData 2 @PlayerPosY 0 11@
+0AB1: @GetData 2 @PlayerPosZ 0 12@
+
+// Offset
+0AB1: @GetData 2 @PlayerPosX 4 20@
+0AB1: @GetData 2 @PlayerPosY 4 21@
+0AB1: @GetData 2 @PlayerPosZ 4 22@
+
+005B: 20@ += 0@  // (float)
+005B: 21@ += 1@  // (float)
+005B: 22@ += 2@  // (float)
+
+005B: 10@ += 20@  // (float)
+005B: 11@ += 21@  // (float)
+005B: 12@ += 22@  // (float)
+
+12@ += 1.0 // Correct a ghost offset in PlayerPosZ
+
+01BC: put_object 30@ at 10@ 11@ 12@
+0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
+0AB1: @ActorsOffsets_SetFixedCamera 1 30@
+
+0AB1: @StoreData 3 @PlayerPosX 20@ 4
+0AB1: @StoreData 3 @PlayerPosY 21@ 4
+0AB1: @StoreData 3 @PlayerPosZ 22@ 4
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
 :MoveFreeCamCenter_Alt // normalized_dirs sides 0@ front 1@ pos_z 2@ speed 3@
 0AB1: @GetData 2 @CamsOffsetsMenu_FreeCamCenterObject 0 30@
 
