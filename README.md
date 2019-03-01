@@ -30,10 +30,12 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
-- Reset Center point in Offsets menu.
 - Cheat to make all peds dissapear/reappear.
 
 Long-Term
+- Enhance the actors/center offset movement.
+- Add more lines to animations buttons.
+- Enhance the saved offset selection in sexual menu.
 - Make GenSexFiles to read the source directory of the files from a .dat or .ini file.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 - Compatibility with classic mode.

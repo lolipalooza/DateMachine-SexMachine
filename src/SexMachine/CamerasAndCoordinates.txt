@@ -1068,9 +1068,16 @@ end
 
 {======================================================================
 ======================================================================}
-:MoveFreeCamCenter_Alt // normalized_dirs sides 0@ front 1@ pos_z 2@ speed 3@
+:SetFreeCamCenter // position 0@ 1@ 2@
 0AB1: @GetData 2 @CamsOffsetsMenu_FreeCamCenterObject 0 30@
+000B: 2@ += 1.0 // Correct a ghost offset in PosZ
+01BC: put_object 30@ at 0@ 1@ 2@
+0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
+0AB2: ret 0
 
+{======================================================================
+======================================================================}
+:MoveFreeCamCenter_Alt // normalized_dirs sides 0@ front 1@ pos_z 2@ speed 3@
 008F: 0@ = integer 0@ to_float
 006B: 0@ *= 3@  // (float)
 008F: 1@ = integer 1@ to_float
@@ -1080,10 +1087,7 @@ end
 000B: 2@ += -1.0
     
 04C4: store_coords_to 11@ 12@ 13@ from_actor $PLAYER_ACTOR with_offset 0@ 1@ 2@
-0087: 14@ = 13@ // (float)
-000B: 14@ += 1.0 // Correct a ghost offset in PosZ
-01BC: put_object 30@ at 11@ 12@ 14@
-0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
+0AB1: @SetFreeCamCenter 3 position 11@ 12@ 13@
 
 // Position
 0AB1: @GetData 2 @PlayerPosX 0 20@
