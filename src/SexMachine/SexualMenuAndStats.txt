@@ -801,6 +801,7 @@ then
     0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
     0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
     0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+    0AB1: @RemoveFreeCamCenter 0
     0AB1: @RelocateFreeCamCenter 0
     //0373: set_camera_directly_behind_player
     //02EB: restore_camera_with_jumpcut
@@ -822,69 +823,87 @@ then
 end
     
 10@s = 'CF_OF1' // Female
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 124.0 404.0 GXT 10@ 11@
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 124.0 391.0 GXT 10@ 11@
 10@s = 'CF_OF2' // Male
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 134.0 417.0 GXT 10@ 11@
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 134.0 404.0 GXT 10@ 11@
 10@s = 'CF_OF3' // Both
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 134.0 430.0 GXT 10@ 11@
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 134.0 417.0 GXT 10@ 11@
+10@s = 'CF_OF5' // Center
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 125.0 430.0 GXT 10@ 11@
 if 20@ == 0 // Female
-then 038E: draw_box_position 130.0 410.0 size 64.0 12.0 RGBA 0 0 160 120 // highlight female
+then 038E: draw_box_position 130.0 397.0 size 64.0 12.0 RGBA 0 0 160 120 // highlight female
 end
 if 20@ == 1 // Male
-then 038E: draw_box_position 130.0 423.0 size 64.0 12.0 RGBA 0 0 160 120 // highlight male
+then 038E: draw_box_position 130.0 410.0 size 64.0 12.0 RGBA 0 0 160 120 // highlight male
 end
 if 20@ == 2 // Both
+then 038E: draw_box_position 130.0 423.0 size 64.0 12.0 RGBA 0 0 160 120 // highlight both
+end
+if 20@ == 3 // Center
 then 038E: draw_box_position 130.0 436.0 size 64.0 12.0 RGBA 0 0 160 120 // highlight both
 end
-if 0AB1: @CursorClickCheck 4 box_position 130.0 410.0 box_size 64.0 12.0 // Female
+if 0AB1: @CursorClickCheck 4 box_position 130.0 397.0 box_size 64.0 12.0 // Female
 then 20@ = 0
+    0AB1: @RemoveFreeCamCenter 0
 end
-if 0AB1: @CursorClickCheck 4 box_position 130.0 423.0 box_size 64.0 12.0 // Male
+if 0AB1: @CursorClickCheck 4 box_position 130.0 410.0 box_size 64.0 12.0 // Male
 then 20@ = 1
+    0AB1: @RemoveFreeCamCenter 0
 end
-if 0AB1: @CursorClickCheck 4 box_position 130.0 436.0 box_size 64.0 12.0 // Both
+if 0AB1: @CursorClickCheck 4 box_position 130.0 423.0 box_size 64.0 12.0 // Both
 then 20@ = 2
+    0AB1: @RemoveFreeCamCenter 0
 end
-
-// Keys control
-0AB1: @GetIncreaseSteps 0 returned_values w_s_steps 12@ 13@ a_d_steps 14@ 15@ offsets_for_x_and_y 18@ 19@
-
-0AB1: @SetNumbers 2 OFF_INC_STEP OFF_DEC_STEP ret 16@ 17@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@    
-14@ = OFF_INC_STEP
-if 0AB0:   key_pressed KEY_SHIFT // speed boost
-then 14@ *= 5.0
-end
-
-if 0AB0:   key_pressed KEY_W // front +
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front 1 pos_z 0 speed 14@ ret 21@
-end
-if 0AB0:   key_pressed KEY_S // front -
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front -1 pos_z 0 speed 14@ ret 21@
-end
-if 0AB0:   key_pressed KEY_D // sides ->
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 1 front 0 pos_z 0 speed 14@ ret 21@
-end
-if 0AB0:   key_pressed KEY_A // sides <-
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides -1 front 0 pos_z 0 speed 14@ ret 21@
-end
-if 0AB0:   key_pressed KEY_E // up
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front 0 pos_z 1 speed 14@ ret 21@
-end
-if 0AB0:   key_pressed KEY_Q // down
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front 0 pos_z -1 speed 14@ ret 21@
-end
-if 0AB0:   key_pressed 37 // left
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step -10.0 pos_offset 12 ret 21@
-end
-if 0AB0:   key_pressed 39 // right
-then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 10.0 pos_offset 12 ret 21@
-end
-
-if 21@ == true
+if 0AB1: @CursorClickCheck 4 box_position 130.0 436.0 box_size 64.0 12.0 // Center
 then
-    0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 0
-    0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 0
-    0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+    0AB1: @CreateFreeCamCenter 0
+    20@ = 3
+end
+
+if 20@ <= 2
+then
+    // Keys control
+    0AB1: @SetNumbers 2 OFF_INC_STEP OFF_DEC_STEP ret 16@ 17@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@    
+    14@ = OFF_INC_STEP
+    if 0AB0:   key_pressed KEY_SHIFT // speed boost
+    then 14@ *= 5.0
+    end
+    
+    if 0AB0:   key_pressed KEY_W // front +
+    then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front 1 pos_z 0 speed 14@ ret 21@
+    end
+    if 0AB0:   key_pressed KEY_S // front -
+    then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front -1 pos_z 0 speed 14@ ret 21@
+    end
+    if 0AB0:   key_pressed KEY_D // sides ->
+    then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 1 front 0 pos_z 0 speed 14@ ret 21@
+    end
+    if 0AB0:   key_pressed KEY_A // sides <-
+    then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides -1 front 0 pos_z 0 speed 14@ ret 21@
+    end
+    if 0AB0:   key_pressed KEY_E // up
+    then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front 0 pos_z 1 speed 14@ ret 21@
+    end
+    if 0AB0:   key_pressed KEY_Q // down
+    then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 20@ normalized_dirs sides 0 front 0 pos_z -1 speed 14@ ret 21@
+    end
+    if 0AB0:   key_pressed 37 // left
+    then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step -10.0 pos_offset 12 ret 21@
+    end
+    if 0AB0:   key_pressed 39 // right
+    then 0AB1: @IncDecActorOffset 3 gender_flag 20@ inc_step 10.0 pos_offset 12 ret 21@
+    end
+    
+    if 21@ == true
+    then
+        0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 0
+        0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 0
+        0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
+    end
+end
+
+if 20@ == 3
+then 0AB1: @FreeCamEditMode_Controls 0
 end
 
 0AB1: @StoreInt 2 @ActorsOffsetsMenu_OffsetToModify 20@
@@ -1388,7 +1407,6 @@ then
     0249: release_model 0@
 end
 0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
-0AB1: @ActorsOffsets_SetFixedCamera 1 30@
 0AB2: ret 0
 
 {======================================================================

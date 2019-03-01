@@ -176,6 +176,7 @@ wait 0
         then
             SexMenuState = 2
             PulseButtonState++
+            0AB1: @RemoveFreeCamCenter 0
             0AB1: @RelocateFreeCamCenter 0
             0687: clear_actor $PLAYER_ACTOR task
         end

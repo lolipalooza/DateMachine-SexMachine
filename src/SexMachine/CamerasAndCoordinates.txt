@@ -942,13 +942,7 @@ end
 
 {======================================================================
 ======================================================================}
-:FreeCamEditMode
-0AB1: @GetFrontLookAngle 1 speed_factor 0.313 ret 31@
-0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
-0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
-
-0AB1: @AttachPlayerTo 1 objective_flag 3 // Object
-
+:FreeCamEditMode_Controls
 14@ = 0.01
 if 0AB0:   key_pressed KEY_SHIFT // speed boost
 then 14@ *= 5.0
@@ -971,6 +965,18 @@ end
 if 0AB0:   key_pressed KEY_Q // down
 then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides 0 front 0 pos_z -1 speed 14@
 end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:FreeCamEditMode
+0AB1: @GetFrontLookAngle 1 speed_factor 0.313 ret 31@
+0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
+0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
+
+0AB1: @AttachPlayerTo 1 objective_flag 3 // Object
+
+0AB1: @FreeCamEditMode_Controls 0
 
 10@s = 'CFSV_7' // Back
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 330.0 390.0 GXT 10@ 11@
