@@ -30,6 +30,7 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
+- Cheat to make all peds dissapear/reappear.
 
 Long-Term
 - Separate the Save/load from the offsets menu, join actors and cameras into one offset menu
