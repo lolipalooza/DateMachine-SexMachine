@@ -33,7 +33,6 @@ Next
 - Cheat to make all peds dissapear/reappear.
 
 Long-Term
-- Separate the Save/load from the offsets menu, join actors and cameras into one offset menu
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 - Compatibility with classic mode.
 
