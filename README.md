@@ -31,7 +31,6 @@ SexMachine: (A lot but still missing)%
 
 Next
 - Separate the Keys Control part in Actors Offsets menu.
-- Clean commented parts (IncDecActorsOffset/ActorsOffsetsMenu).
 - Change 'IncDecActorsOffset' name to 'MoveActors' or something...
 - Cheat to make all peds dissapear/reappear.
 

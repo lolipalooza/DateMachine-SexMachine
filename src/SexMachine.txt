@@ -13,34 +13,6 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
-//0ACE: show_formatted_text_box "Testing save data routine..."
-
-{0A9A: 30@ = openfile "modloader/date&sex/cleo/SexMachine.log" mode "wb+"  // IF and SET
-0A9A: 1@ = openfile "modloader/date&sex/cleo/SexMachine.sav" mode "rb"  // IF and SET
-0AB1: @ReadLineFromFile 1 1@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
-0AD9: write_formatted_text "Reading from file: interior %s pose %d place %d center_xyz %f %f %f " in_file 30@ interior 2@v pose 6@ place 7@ center_xyz 8@ 9@ 10@
-0AD9: write_formatted_text "fem_xyza %f %f %f %f " in_file 30@ fem_xyza 11@ 12@ 13@ 14@
-0AD9: write_formatted_text "male_xyza %f %f %f %f slot %d in_use %d%c%c" in_file 30@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@ 0xd 0xa
-0A9B: closefile 1@
-0A9B: closefile 30@}
-
-{1@v = "EXTERIOR"
-00A0: store_actor $PLAYER_ACTOR position_to 7@ 8@ 9@
-0AB1: call_scm_func @WriteLineInIntStorage 20 slot_to_use 6 interior 1@ 2@ 3@ 4@ pose 0 place 2 center_xyz 7@ 8@ 9@ fem_xyza 0.0 0.0 0.0 90.0 male_xyza 10.0 0.0 -4.7 270.0 slot 6 in_use 1
-0AB1: call_scm_func @SaveData 0}
-
-{0A9A: 0@ = openfile "modloader/date&sex/cleo/SexMachine.sav" mode "rb"  // IF and SET
-for 30@ = 0 to 10
-    if 0AB1: @ReadLineFromFile 1 0@ returned_values interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
-    then 0AD0: show_formatted_text_lowpriority "Good read %d (%s, %f %f %f)" time 2000 30@ 2@v 8@ 9@ 10@ //0AD0: show_formatted_text_lowpriority "interior %s pose %d place %d center_xyz %f %f %f fem_xyza %f %f %f %f male_xyza %f %f %f %f slot %d in_use %d" time 2000 interior 2@ 3@ 4@ 5@ pose 6@ place 7@ center_xyz 8@ 9@ 10@ fem_xyza 11@ 12@ 13@ 14@ male_xyza 15@ 16@ 17@ 18@ slot 19@ in_use 20@
-    else
-        0AD0: show_formatted_text_lowpriority "Bad read %d (%s, %f %f %f)" time 2000 30@ 2@v 8@ 9@ 10@
-        0ADA: 1@ = scan_file 0@ format "%d" 2@ //IF and SET
-    end
-    wait 2000
-end
-0A9B: closefile 0@}
-
 //0A93: end_custom_thread
 
 {gosub @CmSexStart

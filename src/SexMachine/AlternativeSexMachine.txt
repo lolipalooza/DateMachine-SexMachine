@@ -399,22 +399,14 @@ then gosub @SpeedMachine
 end
 
 // First Person Camera control
-if {and
-not SexMenuState == 6
-not SexMenuState == 7}
-not SexMenuState == 3
+if not SexMenuState == 3
 then 0AB1: @FirstPersonCameraControl_Alt 0
 end
 
 // Keys Control for Edit Mode
-0AB1: @GetInt 1 @FPVCamEditMode Dummy1
 0AB1: @GetInt 1 @CameraMode Dummy2
 0AB1: @GetInt 1 @CurrentCamera Dummy3
-if and
-Dummy1 == 1
-{not SexMenuState == 6
-not SexMenuState == 7}
-not SexMenuState == 3
+if not SexMenuState == 3
 then 0AB1: @FirstPersonCameraMoveable_KeysControl 2 camera Dummy2 cam_id Dummy3
 end
 return

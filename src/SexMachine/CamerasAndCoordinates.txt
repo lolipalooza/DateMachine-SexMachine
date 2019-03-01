@@ -906,6 +906,11 @@ end
 {======================================================================
 ======================================================================}
 :FirstPersonCameraMoveable_KeysControl // camera 0@ cam_id 1@
+0AB1: @GetInt 1 @FPVCamEditMode 30@
+if 30@ == 0 // not in Edit Mode
+then 0AB2: ret 0
+end
+
 14@ = 0.01
 if 0AB0:   key_pressed KEY_SHIFT // speed boost
 then 14@ *= 5.0

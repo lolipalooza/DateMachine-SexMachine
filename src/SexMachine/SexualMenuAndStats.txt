@@ -397,17 +397,6 @@ end
 006B: 5@ *= 6@  // (float)
 000B: 5@ += -1.0
     
-{if 2@ == 2 // Both
-then
-    //04C4: store_coords_to 11@ 12@ 13@ from_actor 0@ with_offset 3@ 4@ 5@
-    04C4: store_coords_to 14@ 15@ 16@ from_actor 1@ with_offset 3@ 4@ 5@
-else
-    if 2@ == 0 // Female by default
-    then 0085: 30@ = 0@ // (int)
-    else 0085: 30@ = 1@ // (int)
-    end
-    04C4: store_coords_to 11@ 12@ 13@ from_actor 30@ with_offset 3@ 4@ 5@
-end}
 if 2@ == 2 // Both
 then
     00A0: store_actor $PLAYER_ACTOR position_to 7@ 8@ 9@
@@ -656,10 +645,8 @@ end
 :GetFrontLookAngle // speed_factor 0@
 0A4A: store_joystick_X_offset_to 4@ Y_offset_to 5@
 006B: 4@ *= 0@  // (float)
-//0172: 9@ = actor $PLAYER_ACTOR Z_angle
 0AB1: @GetData 1 @FrontLookAngle 9@
 0063: 9@ -= 4@ // (float)
-//0173: set_actor $PLAYER_ACTOR Z_angle_to 9@
 
 if 9@ < 0.0
 then 9@ += 360.0
@@ -803,8 +790,6 @@ then
     0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
     0AB1: @RemoveFreeCamCenter 0
     0AB1: @RelocateFreeCamCenter 0
-    //0373: set_camera_directly_behind_player
-    //02EB: restore_camera_with_jumpcut
 end
 
 10@s = 'CFG_O6' // Reset
