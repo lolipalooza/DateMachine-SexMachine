@@ -31,6 +31,7 @@ SexMachine: (A lot but still missing)%
 
 Next
 - Change 'IncDecActorsOffset' name to 'MoveActors' or something...
+- Reset Center point in Offsets menu.
 - Cheat to make all peds dissapear/reappear.
 
 Long-Term
