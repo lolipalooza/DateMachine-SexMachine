@@ -144,7 +144,10 @@ wait 0
         if 0AB1: @CursorClickCheck 4 box_position 130.0 411.0 box_size 64.0 12.0 // Offsets button
         then
             0AB1: @LoadData 2 SexPoseInt SexPlace
+            0373: set_camera_directly_behind_player
             02EB: restore_camera_with_jumpcut
+            0605: actor $PLAYER_ACTOR perform_animation "IDLE_stance" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+            //0AB1: @ChangeGenderSkin 1 GenderFlag
             SexMenuState = 3
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 424.0 box_size 64.0 12.0 // Save/Load button
@@ -174,12 +177,8 @@ wait 0
         then
             SexMenuState = 2
             PulseButtonState++
-            0AB1: @RemoveFreeCamCenter 0
-            0AB1: @StoreInt 2 @CameraMode 0
             0AB1: @RelocateFreeCamCenter 0
-            0AB1: @RemoveFirstPersonPoint 0
-            0373: set_camera_directly_behind_player
-            02EB: restore_camera_with_jumpcut
+            0687: clear_actor $PLAYER_ACTOR task
         end
         if SexMenuState == 0
         then SexMenuState = 2
@@ -448,8 +447,8 @@ end
 01B4: set_player $PLAYER_CHAR can_move 1
 
 0AB1: @StoreInt 2 @CameraMode 1 // Fixed Camera
-0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
 wait 100
+0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
 0337: set_actor PornActress visibility 1
 0337: set_actor PornActor visibility 1
 0AB1: @PlayerDissapear 0

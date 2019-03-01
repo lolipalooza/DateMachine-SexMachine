@@ -138,9 +138,7 @@ end
 if and
 1@ == 0 // female
 4@ == true
-then
-    00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
-    0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
+then 00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
 end
 0AB2: ret 0
 

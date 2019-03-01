@@ -516,8 +516,6 @@ end
 
 00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
 //0605: actor $PLAYER_ACTOR perform_animation "sex_pose" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
-30@s = 'VOID'
-0AB1: @ChangeSkin 2 short_string 30@ 31@
 
 0AB2: ret 0
 
@@ -1033,4 +1031,72 @@ end
 005A: 10@ += 2@  // (int)
 0A8C: write_memory 10@ size 4 value 1@ virtual_protect 0
 0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:ARC_SIN // 0@
+if 0@ == 1.0
+then 31@ = 90.0
+end
+if 0@ == -1.0
+then 31@ = -90.0
+end
+if and
+0@ > -1.0
+1.0 > 0@
+then
+    1@ = 51.0 // The greater this number, the better (i guess)
+    31@ = 0.0
+    for 10@ = 1.0 to 1@ step 2.0
+        2@ = 1.0
+        for 3@ = 1.0 to 10@ step 2.0
+            006B: 2@ *= 3@  // (float)
+        end
+        
+        4@ = 1.0
+        0087: 5@ = 10@ // (float)
+        5@ += 1.0
+        for 3@ = 2.0 to 5@ step 2.0
+            006B: 4@ *= 3@  // (float)
+        end
+        
+        0087: 30@ = 0@ // (float)
+        0AEE: 30@ = 30@ exp 10@ //all floats
+        0073: 30@ /= 10@ // (float)
+        006B: 30@ *= 2@  // (float)
+        0073: 30@ /= 4@ // (float)
+        
+        005B: 31@ += 30@  // (float)
+    end
+    const
+        NUM_PI = 3.14159265359
+    end
+    31@ *= 180.0
+    31@ /= NUM_PI
+else 31@ = 0.0 // ??
+end
+0AB2: ret 1 31@
+
+{======================================================================
+======================================================================}
+:ARC_TAN // value 0@
+1@ = 10 // This number is supposed to be as big as possible
+31@ = 0.0
+for 2@ = 0 to 1@
+    0093: 3@ = integer 1@ to_float
+    
+    4@ = -1.0
+    0AEE: 4@ = 4@ exp 3@ //all floats
+    
+    0087: 5@ = 3@ // (float)
+    5@ *= 2.0
+    5@ += 1.0
+    
+    0AEE: 30@ = 0@ exp 5@ //all floats
+    006B: 30@ *= 4@  // (float)
+    0073: 30@ /= 5@ // (float)
+    
+    005B: 31@ += 30@  // (float)
+end
+0AB2: ret 1 result 31@
 
