@@ -30,9 +30,13 @@ SexMachine: (A lot but still missing)%
 ## To do
 
 Next
+- Separate the Keys Control part in Actors Offsets menu.
+- Clean commented parts (IncDecActorsOffset/ActorsOffsetsMenu).
+- Change 'IncDecActorsOffset' name to 'MoveActors' or something...
 - Cheat to make all peds dissapear/reappear.
 
 Long-Term
+- Make GenSexFiles to read the source directory of the files from a .dat or .ini file.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 - Compatibility with classic mode.
 
