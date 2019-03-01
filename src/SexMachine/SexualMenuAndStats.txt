@@ -1535,12 +1535,6 @@ else          // Custom mode for SexMachine
 end
 if 5@ == 1
 then // sex menu closed/hidden
-    {10@s = 'CFG_T7' // Change position
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 430.0 GXT 10@ 11@
-    
-    10@s = 'CFG_T8' // Actors offsets
-    0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 10.0 410.0 GXT 10@ 11@}
-    
     10@s = 'CFG_M1' // Poses
     0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 129.0 391.0 GXT 10@ 11@
     10@s = 'CFG_M2' // Offsets
