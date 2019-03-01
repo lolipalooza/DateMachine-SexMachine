@@ -264,6 +264,7 @@ then
                 0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 1
                 0AB1: @RemoveFirstPersonPoint 0
                 0AB1: @CreateFreeCamCenter 0
+                0AB1: @InitFrontLookAngle 0
             end
         end
     end
@@ -275,6 +276,7 @@ then
             0AB1: @RemoveFreeCamCenter 0
             0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
             0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0
+            0687: clear_actor $PLAYER_ACTOR task
         end
         if PulseButtonState == PULSED_ENTER_VEH
         then
@@ -282,6 +284,7 @@ then
             0AB1: @RemoveFreeCamCenter 0
             0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
             0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0
+            0687: clear_actor $PLAYER_ACTOR task
         end
     end
 

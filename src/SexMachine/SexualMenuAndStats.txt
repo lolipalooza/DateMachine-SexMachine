@@ -715,7 +715,7 @@ end
 
 {======================================================================
 ======================================================================}
-:AttachPlayerToActor // gender_flag 0@ (0: fem, 1: male, 2: both, -1: none)
+:AttachPlayerTo // gender_flag 0@ (0: fem, 1: male, 2: both, 3: free cam center, -1: none)
 0AB1: @GetData 2 @PlayerPosX 0 10@
 0AB1: @GetData 2 @PlayerPosY 0 11@
 0AB1: @GetData 2 @PlayerPosZ 0 12@
@@ -733,6 +733,12 @@ then
     0AB1: @GetData 2 @MaleOffset 0 20@
     0AB1: @GetData 2 @MaleOffset 4 21@
     0AB1: @GetData 2 @MaleOffset 8 22@
+end
+if 0@ == 3
+then
+    0AB1: @GetData 2 @PlayerPosX 4 20@
+    0AB1: @GetData 2 @PlayerPosY 4 21@
+    0AB1: @GetData 2 @PlayerPosZ 4 22@
 end
 
 005B: 10@ += 20@  // (float)
@@ -774,13 +780,11 @@ end
 0AB1: @GetInt 1 @ActorsOffsetsMenu_OffsetToModify 20@
 0AB1: @GetInt 1 @ActorsOffsetsMenu_Action 30@
 
-// Set fixed camera
-//0AB1: @ActorsOffsets_SetFixedCamera 1 1@
 0AB1: @GetFrontLookAngle 1 speed_factor 0.313 ret 31@
 0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
 0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
 
-0AB1: @AttachPlayerToActor 1 gender_flag 20@
+0AB1: @AttachPlayerTo 1 objective_flag 20@
 
 10@s = 'DEBUG1' // Reset move angle
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@
@@ -849,12 +853,6 @@ end
 14@ = OFF_INC_STEP
 if 0AB0:   key_pressed KEY_SHIFT // speed boost
 then 14@ *= 5.0
-    {12@ *= 5.0
-    13@ *= 5.0
-    14@ *= 5.0
-    15@ *= 5.0
-    16@ *= 5.0
-    17@ *= 5.0}
 end
 
 if 0AB0:   key_pressed KEY_W // front +

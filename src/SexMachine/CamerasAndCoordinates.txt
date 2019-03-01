@@ -943,58 +943,33 @@ end
 {======================================================================
 ======================================================================}
 :FreeCamEditMode
+0AB1: @GetFrontLookAngle 1 speed_factor 0.313 ret 31@
+0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
+0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
 
-// Change angle of view
-10@s = 'CFG_D7' // <
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 170.0 389.0 GXT 10@ 11@
-10@s = 'CFG_E3' // Change Angle of View
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 183.0 390.0 GXT 10@ 11@
-10@s = 'CFG_D8' // >
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.2 position 286.0 389.0 GXT 10@ 11@
-if 0AB1: @CursorClickCheck 4 box_position 175.0 395.0 box_size 16.0 10.0 // <
-then
-    0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 12@
-    12@ += 90.0
-    0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
-    0AB1: @CamsOffsets_SetFixedCamera 0
-end
-if 0AB1: @CursorClickCheck 4 box_position 289.0 395.0 box_size 16.0 10.0 // >
-then
-    0AB1: @GetData 2 @ActorsOffsetsMenu_AngleOfView 0 12@
-    12@ -= 90.0
-    0AB1: @StoreData 3 @ActorsOffsetsMenu_AngleOfView 12@ 0
-    0AB1: @CamsOffsets_SetFixedCamera 0
-end
+0AB1: @AttachPlayerTo 1 objective_flag 3 // Object
 
-// Keys control
-0AB1: @GetIncreaseSteps_Cam 1 0.01 returned_values steps 12@ 13@ negative_steps 14@ 15@
-0AB1: @SetNumbers 2 0.01 -0.01 ret 16@ 17@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@    
+14@ = 0.01
 if 0AB0:   key_pressed KEY_SHIFT // speed boost
-then
-    12@ *= 5.0
-    13@ *= 5.0
-    14@ *= 5.0
-    15@ *= 5.0
-    16@ *= 5.0
-    17@ *= 5.0
+then 14@ *= 5.0
 end
 if 0AB0:   key_pressed KEY_W // front +
-then 0AB1: @MoveFreeCamCenter 3 step_x 12@ step_y 13@ step_z 0.0
+then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides 0 front 1 pos_z 0 speed 14@
 end
 if 0AB0:   key_pressed KEY_S // front -
-then 0AB1: @MoveFreeCamCenter 3 step_x 14@ step_y 15@ step_z 0.0
+then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides 0 front -1 pos_z 0 speed 14@
 end
 if 0AB0:   key_pressed KEY_D // sides ->
-then 0AB1: @MoveFreeCamCenter 3 step_x 13@ step_y 14@ step_z 0.0
+then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides 1 front 0 pos_z 0 speed 14@
 end
 if 0AB0:   key_pressed KEY_A // sides <-
-then 0AB1: @MoveFreeCamCenter 3 step_x 15@ step_y 12@ step_z 0.0
+then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides -1 front 0 pos_z 0 speed 14@
 end
 if 0AB0:   key_pressed KEY_E // up
-then 0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z 16@
+then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides 0 front 0 pos_z 1 speed 14@
 end
 if 0AB0:   key_pressed KEY_Q // down
-then 0AB1: @MoveFreeCamCenter 3 step_x 0.0 step_y 0.0 step_z 17@
+then 0AB1: @MoveFreeCamCenter_Alt 4 normalized_dirs sides 0 front 0 pos_z -1 speed 14@
 end
 
 10@s = 'CFSV_7' // Back
@@ -1005,6 +980,39 @@ then
     0AB2: ret 0
 end
 059A:  return_false
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:MoveFreeCamCenter_Alt // normalized_dirs sides 0@ front 1@ pos_z 2@ speed 3@
+0AB1: @GetData 2 @CamsOffsetsMenu_FreeCamCenterObject 0 30@
+
+008F: 0@ = integer 0@ to_float
+006B: 0@ *= 3@  // (float)
+008F: 1@ = integer 1@ to_float
+006B: 1@ *= 3@  // (float)
+008F: 2@ = integer 2@ to_float
+006B: 2@ *= 3@  // (float)
+000B: 2@ += -1.0
+    
+04C4: store_coords_to 11@ 12@ 13@ from_actor $PLAYER_ACTOR with_offset 0@ 1@ 2@
+0087: 14@ = 13@ // (float)
+000B: 14@ += 1.0 // Correct a ghost offset in PosZ
+01BC: put_object 30@ at 11@ 12@ 14@
+0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
+
+// Position
+0AB1: @GetData 2 @PlayerPosX 0 20@
+0AB1: @GetData 2 @PlayerPosY 0 21@
+0AB1: @GetData 2 @PlayerPosZ 0 22@
+
+0063: 11@ -= 20@  // (float)
+0063: 12@ -= 21@  // (float)
+0063: 13@ -= 22@  // (float)
+
+0AB1: @StoreData 3 @PlayerPosX 11@ 4
+0AB1: @StoreData 3 @PlayerPosY 12@ 4
+0AB1: @StoreData 3 @PlayerPosZ 13@ 4
 0AB2: ret 0
 
 {======================================================================
