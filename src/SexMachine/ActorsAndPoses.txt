@@ -1,23 +1,27 @@
 {======================================================================
 ======================================================================}
-:ChangeSkin // short_string 0@ 1@
-023C: load_special_actor 0@s as 4 // models 290-299
+:ChangeSkin // short_string 0@ 1@ slot 2@
+0085: 3@ = 2@ // (int)
+000A: 3@ += 289
+023C: load_special_actor 0@s as 2@ // models 290-299
 038B: load_requested_models
 repeat
 wait 0
 //0AD0: show_formatted_text_lowpriority "Loading model... Wait." time 0
-until 0248:   model #SPECIAL04 available
-09C7: change_player $PLAYER_CHAR model_to #SPECIAL04
-0296: unload_special_actor 4
+until 0248:   model 3@ available
+09C7: change_player $PLAYER_CHAR model_to 3@
+0296: unload_special_actor 2@
 0AB2: ret 0
 
 {======================================================================
 ======================================================================}
 :ChangeGenderSkin // gender_flag 0@
 0AB1: @GetActorsInfo 0 gxt_fem 2@ 3@ gtx_male 4@ 5@
+0085: 3@ = 0@ // (int)
+000A: 3@ += 1
 if 0@ == 0 // Female by default
-then 0AB1: @ChangeSkin 2 short_string 2@ 3@
-else 0AB1: @ChangeSkin 2 short_string 4@ 5@
+then 0AB1: @ChangeSkin 3 short_string 2@ 3@ slot 3@
+else 0AB1: @ChangeSkin 3 short_string 4@ 5@ slot 3@
 end
 0AB2: ret 0
 
@@ -25,7 +29,7 @@ end
 ======================================================================}
 :PlayerDissapear // entries: none
 2@s = 'VOID'
-0AB1: @ChangeSkin 2 short_string 2@ 3@
+0AB1: @ChangeSkin 3 short_string 2@ 3@ slot 10
 0AB2: ret 0
 
 {======================================================================
