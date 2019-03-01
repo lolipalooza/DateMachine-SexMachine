@@ -380,9 +380,9 @@ end
 
 {======================================================================
 ======================================================================}
-:IncDecActorOffset_Alt // fem 0@ male 1@ gender_flag 2@ normalized_dirs sides 3@ front 4@ pos_z 5@ speed 6@
+:ModifyActorsOffset // fem 0@ male 1@ gender_flag 2@ normalized_dirs sides 3@ front 4@ pos_z 5@ speed 6@
 if 2@ == -1 // None
-then 0AB2: ret 1 false
+then 0AB2: ret 1 move_actors_flag 0
 end
 
 0AB1: @GetFrontLookAngle 1 speed_factor 0.42 ret 31@
@@ -439,33 +439,28 @@ else
     0AB1: @StoreData 3 label 30@ value 12@ offset 4
     0AB1: @StoreData 3 label 30@ value 13@ offset 8
 end
-0AB2: ret 1 true
+0AB2: ret 1 move_actors_flag 1
 
 {======================================================================
 ======================================================================}
 :IncDecActorOffset // 0@: gender flag, 1@: increase or decrease, 2@: position offset
-if 0@ == 0 // female
+if or
+0@ == 0 // female
+0@ == 2 // both
 then
     0AB1: @GetData 2 @FemaleOffset 2@ out 30@
     005B: 30@ += 1@  // (float)
     0AB1: @StoreData 3 @FemaleOffset 30@ 2@
 end
-if 0@ == 1 // male
+if or
+0@ == 1 // male
+0@ == 2 // both
 then
     0AB1: @GetData 2 @MaleOffset 2@ out 30@
     005B: 30@ += 1@  // (float)
     0AB1: @StoreData 3 @MaleOffset 30@ 2@
 end
-if 0@ == 2 // both
-then
-    0AB1: @GetData 2 @MaleOffset 2@ out 30@
-    005B: 30@ += 1@  // (float)
-    0AB1: @StoreData 3 @MaleOffset 30@ 2@
-    0AB1: @GetData 2 @FemaleOffset 2@ out 30@
-    005B: 30@ += 1@  // (float)
-    0AB1: @StoreData 3 @FemaleOffset 30@ 2@
-end
-0AB2: ret 1 true
+0AB2: ret 1 move_actors_flag 1
 
 {======================================================================
 ======================================================================}
@@ -866,22 +861,22 @@ then 14@ *= 5.0
 end
     
 if 0AB0:   key_pressed KEY_W // front +
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front 1 pos_z 0 speed 14@ ret move_actors_flag 6@
+then 0AB1: @ModifyActorsOffset 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front 1 pos_z 0 speed 14@ ret move_actors_flag 6@
 end
 if 0AB0:   key_pressed KEY_S // front -
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front -1 pos_z 0 speed 14@ ret move_actors_flag 6@
+then 0AB1: @ModifyActorsOffset 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front -1 pos_z 0 speed 14@ ret move_actors_flag 6@
 end
 if 0AB0:   key_pressed KEY_D // sides ->
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 1 front 0 pos_z 0 speed 14@ ret move_actors_flag 6@
+then 0AB1: @ModifyActorsOffset 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 1 front 0 pos_z 0 speed 14@ ret move_actors_flag 6@
 end
 if 0AB0:   key_pressed KEY_A // sides <-
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides -1 front 0 pos_z 0 speed 14@ ret move_actors_flag 6@
+then 0AB1: @ModifyActorsOffset 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides -1 front 0 pos_z 0 speed 14@ ret move_actors_flag 6@
 end
 if 0AB0:   key_pressed KEY_E // up
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front 0 pos_z 1 speed 14@ ret move_actors_flag 6@
+then 0AB1: @ModifyActorsOffset 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front 0 pos_z 1 speed 14@ ret move_actors_flag 6@
 end
 if 0AB0:   key_pressed KEY_Q // down
-then 0AB1: @IncDecActorOffset_Alt 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front 0 pos_z -1 speed 14@ ret move_actors_flag 6@
+then 0AB1: @ModifyActorsOffset 7 actors 1@ 2@ gender_flag 0@ normalized_dirs sides 0 front 0 pos_z -1 speed 14@ ret move_actors_flag 6@
 end
 if 0AB0:   key_pressed 37 // left
 then 0AB1: @IncDecActorOffset 3 gender_flag 0@ inc_step -10.0 pos_offset 12 ret move_actors_flag 6@
@@ -891,7 +886,7 @@ then 0AB1: @IncDecActorOffset 3 gender_flag 0@ inc_step 10.0 pos_offset 12 ret m
 end
 
 // Should actors be move?    
-if 6@ == true
+if 6@ == 1
 then
     0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 0
     0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 0
