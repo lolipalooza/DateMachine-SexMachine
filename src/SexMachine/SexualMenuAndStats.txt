@@ -548,7 +548,7 @@ if 0AB1: @CursorClickCheck 4 box_position 100.0 421.0 box_size 41.0 12.0 // Dele
 then 0AB1: @SetNumbers 2 sex_menu_state 4 action_to_execute_for_next_submenu 2 ret 0@ 30@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@
 end
 if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
-then 0@ = 2 // Close Menu
+then 0@ = 0 // Close Menu
 end
 
 // Save/Load: Highlight selected option
@@ -773,18 +773,6 @@ end
 if 0AB1: @CursorClickCheck 4 box_position 203.0 395.0 box_size 72.0 11.0
 then 0373: set_camera_directly_behind_player
 end
-
-10@s = 'S_OPT6' // Close
-0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 10.0 430.0 GXT 10@ 11@
-if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
-then
-    0@ = 0 // Close (Reset SexMenuState)
-    0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
-    0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
-    0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
-    0AB1: @RemoveFreeCamCenter 0
-    0AB1: @RelocateFreeCamCenter 0
-end
     
 10@s = 'CF_OF1' // Female
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 124.0 391.0 GXT 10@ 11@
@@ -861,6 +849,12 @@ then 0AB1: @FreeCamEditMode_Controls 0
 end
 
 0AB1: @StoreInt 2 @ActorsOffsetsMenu_OffsetToModify 20@
+
+10@s = 'S_OPT6' // Close
+0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 10.0 430.0 GXT 10@ 11@
+if 0AB1: @CursorClickCheck 4 box_position 52.0 436.0 box_size 93.0 12.0 // Close or Back
+then 0@ = 0 // Close (Reset SexMenuState)
+end
 0AB2: ret 1 sex_menu_state 0@
 
 {======================================================================
@@ -901,8 +895,8 @@ end
 // Should actors be move?    
 if 6@ == 1
 then
-    0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 0
-    0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 0
+    0AB1: @RelocateActor_Alt 4 actor 1@ gender 0 pose 3@ place 4@
+    0AB1: @RelocateActor_Alt 4 actor 2@ gender 1 pose 3@ place 4@
     0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
 end
 0AB2: ret 0

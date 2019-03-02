@@ -129,7 +129,7 @@ end
 
 {======================================================================
 ======================================================================}
-:RelocateActor_Alt // 0@: Actor, 1@: Actor Gender Flag, 2@: Pose, 3@: Place, 4@: flag (move player)
+:RelocateActor_Alt // 0@: Actor, 1@: Actor Gender Flag, 2@: Pose, 3@: Place
 0AB1: @GetData 2 @PlayerPosX 0 10@
 0AB1: @GetData 2 @PlayerPosY 0 11@
 0AB1: @GetData 2 @PlayerPosZ 0 12@
@@ -138,12 +138,6 @@ end
 0AB1: @AddOffsetTo3DCoord 5 3dcoord 10@ 11@ 12@ 13@ gender 1@ store_in 10@ 11@ 12@ 13@
 00A1: put_actor 0@ at 10@ 11@ 12@
 0173: set_actor 0@ Z_angle_to 13@
-
-if and
-1@ == 0 // female
-4@ == true
-then 00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
-end
 0AB2: ret 0
 
 {======================================================================

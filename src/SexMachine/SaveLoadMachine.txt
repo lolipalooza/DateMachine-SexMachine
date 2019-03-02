@@ -66,8 +66,8 @@ end
 0AB1: @StoreData 3 @MaleOffset 27@ 4
 0AB1: @StoreData 3 @MaleOffset 28@ 8
 0AB1: @StoreData 3 @MaleOffset 29@ 12
-0AB1: @RelocateActor_Alt 5 actor 1@ gender 0 pose 3@ place 4@ move_player 1
-0AB1: @RelocateActor_Alt 5 actor 2@ gender 1 pose 3@ place 4@ move_player 1
+0AB1: @RelocateActor_Alt 4 actor 1@ gender 0 pose 3@ place 4@
+0AB1: @RelocateActor_Alt 4 actor 2@ gender 1 pose 3@ place 4@
 0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
 0AB1: @ClearAllInUseFlagsFromIntStorage 0
 0AB1: @SetUseFlag 2 slot 0@ value 1

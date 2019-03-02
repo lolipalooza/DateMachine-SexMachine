@@ -156,13 +156,12 @@ wait 0
             SexMenuState = 4
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 437.0 box_size 64.0 12.0 // Back button
-        then
-            0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
-            gosub @RemovePosesAndActors
-            0AB1: @ChangeGenderSkin 1 GenderFlag
-            SexMenuState=0
+        then Dummy1 = 1
+        else Dummy1 = 0
         end
-        if PulseButtonState == PULSED_ENTER_VEH
+        if or
+        Dummy1 == 1 // Clicked on back button
+        PulseButtonState == PULSED_ENTER_VEH
         then
             0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
             gosub @RemovePosesAndActors
@@ -173,24 +172,32 @@ wait 0
     if SexMenuState == 3
     then
         0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
-        if PulseButtonState == PULSED_ENTER_VEH
+        if or
+        SexMenuState == 0
+        PulseButtonState == PULSED_ENTER_VEH
         then
             SexMenuState = 2
-            PulseButtonState++
+            if PulseButtonState == PULSED_ENTER_VEH
+            then PulseButtonState++
+            end
+            0AB1: @RelocateActor_Alt 4 PornActress gender 0 SexPoseInt SexPlace
+            0AB1: @RelocateActor_Alt 4 PornActor gender 1 SexPoseInt SexPlace
+            0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
             0AB1: @RemoveFreeCamCenter 0
             0AB1: @RelocateFreeCamCenter 0
             0687: clear_actor $PLAYER_ACTOR task
-        end
-        if SexMenuState == 0
-        then SexMenuState = 2
         end
     end
     if SexMenuState == 4
     then
         0AB1: @SaveLoadMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
-        if PulseButtonState == PULSED_ENTER_VEH
+        if or
+        SexMenuState == 0 // Clicked on back (from @SaveLoadMenu)
+        PulseButtonState == PULSED_ENTER_VEH
         then
-            PulseButtonState++
+            if PulseButtonState == PULSED_ENTER_VEH
+            then PulseButtonState++
+            end
             SexMenuState = 2
         end
     end
@@ -247,15 +254,18 @@ then
     if SexMenuState == 8
     then
         if 0AB1: @CursorClickCheck 5 box_position 320.0 224.0 box_size 640.0 448.0 disable_draw_box 1 // Full screen box
-        then
-            SexMenuState = 2
-            0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 0 SexPoseInt SexPlace
+        then Dummy1 = 1
+        else Dummy1 = 0
         end
-        if PulseButtonState == PULSED_ENTER_VEH
+        if or
+        Dummy1 == 1 // Clicked on Full screen box
+        PulseButtonState == PULSED_ENTER_VEH
         then
             SexMenuState = 2
             0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 0 SexPoseInt SexPlace
-            PulseButtonState++
+            if PulseButtonState == PULSED_ENTER_VEH
+            then PulseButtonState++
+            end
         end
         0AB1: @GetInt 1 @CameraMode Dummy1
         if Dummy1 == 0 // Free Camera
@@ -273,14 +283,12 @@ then
     if SexMenuState == 9
     then
         if 0AB1: @FreeCamEditMode 0
-        then
-            SexMenuState = 8
-            0AB1: @RemoveFreeCamCenter 0
-            0AB1: @ToggleSexualCamera_Alt 2 SexPoseInt SexPlace
-            0AB1: @StoreInt 2 @CursorControl_FlagShowCursor 0
-            0687: clear_actor $PLAYER_ACTOR task
+        then Dummy1 = 1
+        else Dummy1 = 0
         end
-        if PulseButtonState == PULSED_ENTER_VEH
+        if or
+        Dummy1 == 1 // @FreeCamEditMode ended (clicked on back)
+        PulseButtonState == PULSED_ENTER_VEH
         then
             SexMenuState = 8
             0AB1: @RemoveFreeCamCenter 0
