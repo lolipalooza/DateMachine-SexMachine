@@ -31,6 +31,8 @@ SexMachine: (A lot but still missing)%
 
 Short-Term
 - Cheat to make all peds dissapear/reappear.
+- All those states that have two conditions to change: a rectangle click and a F press. Join the actions into only one block when leaving the state.
+- Make the F keypress work in actors offsets menu!
 - Update the documentation about how to use .ignored folder (the main readme says "read documentation in .ignored" and that documentation was moved to /docs).
 - Update the documentation about how to add new poses.
 
