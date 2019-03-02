@@ -979,7 +979,7 @@ end
 0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
 0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
 
-0AB1: @AttachPlayerTo 1 objective_flag 3 // Object
+0AB1: @AttachActorTo 2 objective_flag 3 actor $PLAYER_ACTOR // Object
 
 0AB1: @FreeCamEditMode_Controls 0
 
@@ -1018,8 +1018,8 @@ then
     029B: 30@ = init_object 0@ at 10@ 11@ 12@
     //0107: 30@ = create_object 0@ at 10@ 11@ 12@
     0249: release_model 0@
+    0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
 end
-0AB1: @StoreData 2 @CamsOffsetsMenu_FreeCamCenterObject 30@
 0AB2: ret 0
 
 {======================================================================

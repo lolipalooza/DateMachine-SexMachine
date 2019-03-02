@@ -385,10 +385,6 @@ if 2@ == -1 // None
 then 0AB2: ret 1 move_actors_flag 0
 end
 
-0AB1: @GetFrontLookAngle 1 speed_factor 0.42 ret 31@
-0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
-0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
-
 008F: 3@ = integer 3@ to_float
 006B: 3@ *= 6@  // (float)
 008F: 4@ = integer 4@ to_float
@@ -697,7 +693,7 @@ end
 
 {======================================================================
 ======================================================================}
-:AttachPlayerTo // gender_flag 0@ (0: fem, 1: male, 2: both, 3: free cam center, -1: none)
+:AttachActorTo // gender_flag 0@ (0: fem, 1: male, 2: both, 3: free cam center, -1: none) actor 1@
 0AB1: @GetData 2 @PlayerPosX 0 10@
 0AB1: @GetData 2 @PlayerPosY 0 11@
 0AB1: @GetData 2 @PlayerPosZ 0 12@
@@ -726,7 +722,7 @@ end
 005B: 10@ += 20@  // (float)
 005B: 11@ += 21@  // (float)
 005B: 12@ += 22@  // (float)
-00A1: put_actor $PLAYER_ACTOR at 10@ 11@ 12@
+00A1: put_actor 1@ at 10@ 11@ 12@
 
 0AB2: ret 0
 
@@ -766,7 +762,7 @@ end
 0AB1: @RoundAngle 1 angle 31@ ret rounded_angle 31@
 0173: set_actor $PLAYER_ACTOR Z_angle_to 31@
 
-0AB1: @AttachPlayerTo 1 objective_flag 20@
+0AB1: @AttachActorTo 2 objective_flag 20@ actor $PLAYER_ACTOR // Object
 
 10@s = 'DEBUG1' // Reset move angle
 0AB1: @SetDrawText 8 font 2 linewidth 600.0 size 0.2 1.0 position 169.0 390.0 GXT 10@ 11@
@@ -861,7 +857,6 @@ end
 ======================================================================}
 :ActorsOffsets_KeysControl // gender_flag 0@ actors 1@ 2@ pose 3@ place 4@ speed 5@ move_actors_flag 6@
 // Keys control
-//0AB1: @SetNumbers 2 OFF_INC_STEP OFF_DEC_STEP ret 16@ 17@ dummies 31@ 31@ 31@ 31@ 31@ 31@ 31@ 31@    
 14@ = OFF_INC_STEP
 if 0AB0:   key_pressed KEY_SHIFT // speed boost
 then 14@ *= 5.0
@@ -897,7 +892,6 @@ if 6@ == 1
 then
     0AB1: @RelocateActor_Alt 4 actor 1@ gender 0 pose 3@ place 4@
     0AB1: @RelocateActor_Alt 4 actor 2@ gender 1 pose 3@ place 4@
-    0AB1: @LoadSexualPose 5 fem 1@ male 2@ pose 3@ place 4@ speed 5@
 end
 0AB2: ret 0
 

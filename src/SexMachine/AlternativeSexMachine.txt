@@ -147,7 +147,6 @@ wait 0
             0AB1: @InitFrontLookAngle 0
             //0AB1: @ChangeGenderSkin 1 GenderFlag
             0AB1: @StoreInt 2 @ActorsOffsetsMenu_OffsetToModify 0 // Edit Female
-            0605: actor $PLAYER_ACTOR perform_animation "IDLE_stance" IFP "ped" framedelta 4.0 loop 1 lockX 0 lockY 0 lockF 0 time -1
             SexMenuState = 3
         end
         if 0AB1: @CursorClickCheck 4 box_position 130.0 424.0 box_size 64.0 12.0 // Save/Load button
@@ -185,7 +184,6 @@ wait 0
             0AB1: @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SpeedState
             0AB1: @RemoveFreeCamCenter 0
             0AB1: @RelocateFreeCamCenter 0
-            0687: clear_actor $PLAYER_ACTOR task
         end
     end
     if SexMenuState == 4
