@@ -47,4 +47,3 @@ Long-Term
 Bugs
 - Don't call GenSexFiles on the initialization routine, but instead when plater press TAB to choose pose at first!
 - Climax stops from rising at some point, maybe after cameras menu.
-- Crash trying to edit female offset.
