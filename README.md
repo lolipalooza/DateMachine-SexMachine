@@ -29,8 +29,10 @@ SexMachine: (A lot but still missing)%
 
 ## To do
 
-Next
+Short-Term
 - Cheat to make all peds dissapear/reappear.
+- Update the documentation about how to use .ignored folder (the main readme says "read documentation in .ignored" and that documentation was moved to /docs).
+- Update the documentation about how to add new poses.
 
 Long-Term
 - Enhance the actors/center offset movement.
@@ -43,3 +45,4 @@ Long-Term
 Bugs
 - Don't call GenSexFiles on the initialization routine, but instead when plater press TAB to choose pose at first!
 - Climax stops from rising at some point, maybe after cameras menu.
+- Crash trying to edit female offset.
