@@ -173,7 +173,7 @@ wait 0
     then
         0AB1: @ActorsOffsetsMenu 6 SexMenuState PornActress PornActor SexPoseInt SexPlace SpeedState returned SexMenuState
         if or
-        SexMenuState == 0
+        SexMenuState == 0 // Clicked on back button from @ActorsOffsetsMenu
         PulseButtonState == PULSED_ENTER_VEH
         then
             SexMenuState = 2
@@ -206,9 +206,7 @@ wait 0
         0AB1: @ShowSexualStats 3 SexStat_Climax SexStat_Speed SexStat_Pleasure
         0AB1: @ShowSettingTexts 5 SexMenuState SpeedState SexPoseInt SexPlace true
     end
-    if not SexMenuState == 3
-    then gosub @SexualMenuMachine
-    end
+    gosub @SexualMenuMachine
 end
 
 0581: enable_radar 1
