@@ -41,6 +41,7 @@ Long-Term
 - Put all general purpose methods into common files.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 - Compatibility with classic mode.
+- HJ foot: male fast has inadequate offset from normal. Fix fast
 
 Bugs
 - Don't call GenSexFiles on the initialization routine, but instead when plater press TAB to choose pose at first!
