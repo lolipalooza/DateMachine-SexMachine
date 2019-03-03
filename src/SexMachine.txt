@@ -13,6 +13,43 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
+{0ACE: show_formatted_text_box "Start!"
+30@ = File.Open("modloader\Date&Sex\data\SexFiles.dat","rb")
+
+repeat
+wait 0
+    if 0@ == 0
+    then
+        0ADA: 1@ = scan_file 30@ format "%s" 10@v //IF and SET
+        0AD0: show_formatted_text_lowpriority "%d %s" time 1500 1@ 10@v
+        0@ = 1
+        32@ = 0
+        //if 10@v == "source:"
+        //then
+        //  0A9D: readfile 30@ size 1 to 2@
+        //  0AD0: show_formatted_text_lowpriority "0x%X" time 1500 2@
+        //  break
+        //end
+        0A9D: readfile 30@ size 1 to 2@
+        if 2@ == 0xd
+        then 0ACE: show_formatted_text_box "EOF found!"
+        end
+    end
+    if 32@ > 1700
+    then 0@ = 0
+    end
+    if 0ADC:   test_cheat "END"
+    then break
+    end
+until false
+
+
+0ACE: show_formatted_text_box "Done!"
+File.Close(30@)
+
+
+0A93: end_custom_thread}
+
 //0A93: end_custom_thread
 
 {gosub @CmSexStart
@@ -123,6 +160,7 @@ const
     COORDINATES_FILE = "data/SexCoordinates.dat"
     SAVE_FILE = "modloader/date&sex/savedata/SexMachine.sav"
     TEMP_FILE = "modloader/date&sex/savedata/SexMachine~"
+    SEXFILES_FILE = "data/SexFiles.dat"
     
     // Generate sex files
     SEXFILES_MINIMUM_WAIT_TIME = 1200
