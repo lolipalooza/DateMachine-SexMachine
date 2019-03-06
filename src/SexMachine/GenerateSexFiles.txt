@@ -181,79 +181,125 @@ end
 
 {======================================================================
 ======================================================================}
-:GenSexFiles_GetDataFromFile
+:GenSexFiles_GetDataFromFile // 0@: pose, 1@: place
 30@ = File.Open(SEXFILES_FILE, "rb")
 
-0@ = 0
+10@ = 0
 repeat
-wait 0
-    if 0@ == 0
+    if 10@ == 0 // Search the "SexFiles" line into file
     then
-        0ADA: 1@ = scan_file 30@ format "%s" 10@v //IF and SET
-        if 10@v == "SexFiles"
-        then 0@ = 1
+        0ADA: 11@ = scan_file 30@ format "#%s" 20@v //IF and SET
+        if 20@v == "SexFiles"
+        then 10@ = 1
+        else
+            0ADA: 11@ = scan_file 30@ format ";%s" 20@v //IF and SET
+            if 20@v == "SexFiles"
+            then 10@ = 1
+            else
+                0ADA: 11@ = scan_file 30@ format "%s" 20@v //IF and SET
+                if 20@v == "SexFiles"
+                then 10@ = 1
+                end
+            end
         end
     end
-    if 0@ == 1
+    if 10@ == 1 // Search the "source:" part into file
     then
-        0ADA: 1@ = scan_file 30@ format "%s" 10@v //IF and SET
-        if 10@v == "source:"
-        then 0@ = 2
+        0ADA: 11@ = scan_file 30@ format "%s" 20@v //IF and SET
+        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if 20@v == "source:"
+        then 10@ = 2
         end
     end
-    if 0@ == 2
+    if 10@ == 2 // Read the white space between "source:" and the source dir
     then
-        0A9D: readfile 30@ size 1 to 1@
-        if 1@ == 0xa
-        then 0@ = 4
+        0A9D: readfile 30@ size 1 to 11@
+        if 11@ == 0xa
+        then 10@ = 4
         end
         if and
-        not 1@ == 0x9   // Tab
-        not 1@ == 0x20  // Space
+        not 11@ == 0x9   // Tab
+        not 11@ == 0x20  // Space
         then
-            2@ = 0
-            0@ = 3
+            12@ = 0
+            10@ = 3
         end
     end
-    if 0@ == 3
+    if 10@ == 3 // Read and store the source dir
     then
-        0A9D: readfile 30@ size 1 to 1@
-        if 1@ == 0xa
-        then 0@ = 4
+        0A9D: readfile 30@ size 1 to 11@
+        if 11@ == 0xa
+        then 10@ = 4
         else
-            0AB1: @StoreData 3 label @GenSexFiles_OrigDir value 1@ offset 2@
-            2@ += 1
+            0AB1: @StoreData 3 label @GenSexFiles_OrigDir value 11@ offset 12@
+            12@ += 1
         end
     end
-    if 0@ == 4
+    if 10@ == 4 // Search the "destiny:" part into file
     then
-        0ADA: 1@ = scan_file 30@ format "%s" 10@v //IF and SET
-        if 10@v == "destiny:"
-        then 0@ = 5
+        0ADA: 11@ = scan_file 30@ format "%s" 20@v //IF and SET
+        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if 20@v == "destiny:"
+        then 10@ = 5
         end
     end
-    if 0@ == 5
+    if 10@ == 5 // Read the white space between "destiny:" and the dest dir
     then
-        0A9D: readfile 30@ size 1 to 1@
-        if 1@ == 0xa
-        then 0@ = 7
+        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if 11@ == 0xa
+        then 10@ = 7
         end
         if and
-        not 1@ == 0x9   // Tab
-        not 1@ == 0x20  // Space
+        not 11@ == 0x9   // Tab
+        not 11@ == 0x20  // Space
         then
-            2@ = 0
-            0@ = 6
+            12@ = 0
+            10@ = 6
         end
     end
-    if 0@ == 6
+    if 10@ == 6 // Read and store the dest dir
     then
-        0A9D: readfile 30@ size 1 to 1@
-        if 1@ == 0xa
-        then 0@ = 7
+        0A9D: readfile 30@ size 1 to 11@
+        if 11@ == 0xa
+        then
+            10@ = 7
+            4@ = 0 // current place
+            5@ = 0 // current pose
         else
-            0AB1: @StoreData 3 label @GenSexFiles_DestDir value 1@ offset 2@
-            2@ += 1
+            0AB1: @StoreData 3 label @GenSexFiles_DestDir value 11@ offset 12@
+            12@ += 1
+        end
+    end
+    if 10@ == 7
+    then
+        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if or
+        11@ == 0x9   // Tab
+        11@ == 0x20  // Space
+        then 10@ = 8
+        end
+    end
+    if 10@ == 8
+    then
+        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if and
+        not 11@ == 0x9   // Tab
+        not 11@ == 0x20  // Space
+        then
+            12@ = 0
+            10@ = 9
+        end
+    end
+    if 10@ == 9
+    then
+        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if or
+        11@ == 0x9   // Tab
+        11@ == 0x20  // Space
+        then 10@ = 10
+        else
+            0AB1: @StoreData 3 label @GenSexFiles_FolderName value 11@ offset 12@
+            12@ += 1
         end
     end
 until false
@@ -261,3 +307,83 @@ until false
 File.Close(30@)
 0AB2: ret 0
 
+{======================================================================
+======================================================================}
+:GotoNextLine // file 0@
+repeat
+0A9D: readfile 0@ size 1 to 1@
+until 0039:   1@ == 0xa
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:GetCharacterFromFile // file 0@ ignore_comments 1@
+059A:  return_false
+0A9D: readfile 0@ size 1 to 2@
+if 1@ == 1
+then
+    if or
+    2@ == 0x23 // "#"
+    2@ == 0x3B // ";"
+    then
+        0AB1: @GotoNextLine 1 file 0@
+        0485:  return_true
+    end
+end
+0AB2: ret 1 value 2@
+
+{======================================================================
+======================================================================}
+:InitializeCheckWordMachine // word_to_detect 0@ 1@ 2@ 3@
+0AB1: @StoreInt 2 label @CheckWord_Stat value 0
+0AB1: @StoreData 3 label @CheckWord_Data value 0@ offset 0
+0AB1: @StoreData 3 label @CheckWord_Data value 1@ offset 4
+0AB1: @StoreData 3 label @CheckWord_Data value 2@ offset 8
+0AB1: @StoreData 3 label @CheckWord_Data value 3@ offset 12
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:CheckWordMachine //  character_to_check 0@
+0AB1: @GetInt 1 @CheckWord_Stat 10@
+if 10@ < 16
+then
+    0085: 11@ = 10@ // (int)
+    000A: 11@ += 1
+    0AB1: @GetInt 2 label @CheckWord_Data offset 10@ ret 20@
+    0AB1: @GetInt 2 label @CheckWord_Data offset 11@ ret 21@
+    if 003B:   0@ == 20@  // (int)
+    then
+        10@ += 1
+        if 21@ == 0
+        then 10@ = 16
+        end
+    else 10@ = 0
+    end
+end
+0AB1: @StoreInt 2 @CheckWord_Stat 10@
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:CheckWord_Stat
+hex
+0
+end
+
+{======================================================================
+======================================================================}
+:CheckWord_Data
+hex
+00000000 00000000 00000000 00000000
+end
+
+{======================================================================
+======================================================================}
+:WordIsChecked
+0AB1: @GetInt 1 @CheckWord_Stat 10@
+if 10@ == 16
+then 0485:  return_true
+else 059A:  return_false
+end
+0AB2: ret 0

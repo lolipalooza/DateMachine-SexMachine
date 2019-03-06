@@ -13,6 +13,120 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
+30@ = File.Open("modloader\Date&Sex\data\SexFiles.dat","rb")
+
+20@v = "SexFiles"
+0AB1: @InitializeCheckWordMachine 4 word_to_detect 20@ 21@ 22@ 23@
+repeat
+    if 10@ == 0 // Search the "SexFiles" line into file
+    then
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
+        0AB1: @CheckWordMachine 1 character_to_check 11@
+        if 0AB1: @WordIsChecked 0
+        then
+            10@ = 1
+            20@v = "source:"
+            0AB1: @InitializeCheckWordMachine 4 word_to_detect 20@ 21@ 22@ 23@
+        end
+    end
+    if 10@ == 1 // Search the "source:" part into file
+    then
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            0AB1: @CheckWordMachine 1 character_to_check 11@
+            if 0AB1: @WordIsChecked 0
+            then 10@ = 2
+            end
+        end
+    end
+    if 10@ == 2 // Read the white space between "source:" and the source dir
+    then
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
+        if and
+        not 11@ == 0x9   // Tab
+        not 11@ == 0x20  // Space
+        then
+            12@ = 0
+            0AB1: @StoreData 3 label @GenSexFiles_OrigDir value 11@ offset 12@
+            12@ += 1
+            10@ = 3
+        end
+    end
+    if 10@ == 3 // Read and store the source dir
+    then
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then break
+        else
+            if or
+            11@ == 0xd
+            11@ == 0xa
+            then
+                10@ = 4
+                20@v = "destiny:"
+                0AB1: @InitializeCheckWordMachine 4 word_to_detect 20@ 21@ 22@ 23@
+            else
+                0AB1: @StoreInt 3 label @GenSexFiles_OrigDir value 11@ offset 12@
+                12@ += 1
+            end
+        end
+    end
+    if 10@ == 4 // Search the "destiny:" part into file
+    then
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            0AB1: @CheckWordMachine 1 character_to_check 11@
+            if 0AB1: @WordIsChecked 0
+            then 10@ = 5
+            end
+        end
+    end
+    if 10@ == 5 // Read the white space between "destiny:" and the dest dir
+    then
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
+        if and
+        not 11@ == 0x9   // Tab
+        not 11@ == 0x20  // Space
+        then
+            12@ = 0
+            0AB1: @StoreData 3 label @GenSexFiles_DestDir value 11@ offset 12@
+            12@ += 1
+            10@ = 6
+        end
+    end
+    if 10@ == 6 // Read and store the dest dir
+    then
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then break
+        else
+            if or
+            11@ == 0xd
+            11@ == 0xa
+            then
+                10@ = 7
+                4@ = 0 // current place
+                5@ = 0 // current pose
+            else
+                0AB1: @StoreInt 3 label @GenSexFiles_DestDir value 11@ offset 12@
+                12@ += 1
+            end
+        end
+    end
+    if 10@ == 7
+    then
+    end
+until 0AD6:   end_of_file 30@ reached
+File.Close(30@)
+
+0ACE: show_formatted_text_box "end"
+{if 12@ == 1
+then 0ACE: show_formatted_text_box "Done!"
+else 0ACE: show_formatted_text_box "Error, nothing found!"
+end}
+
+0A93: end_custom_thread
+
 {0ACE: show_formatted_text_box "Start!"
 30@ = File.Open("modloader\Date&Sex\data\SexFiles.dat","rb")
 
@@ -46,8 +160,6 @@ until false
 
 0ACE: show_formatted_text_box "Done!"
 File.Close(30@)
-
-
 0A93: end_custom_thread}
 
 //0A93: end_custom_thread
