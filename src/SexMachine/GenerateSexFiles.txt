@@ -182,128 +182,196 @@ end
 {======================================================================
 ======================================================================}
 :GenSexFiles_GetDataFromFile // 0@: pose, 1@: place
+                31@ = File.Open("modloader\Date&Sex\cleo\test.log","wb+")
 30@ = File.Open(SEXFILES_FILE, "rb")
-
-10@ = 0
+20@v = "SexFiles"
+0AB1: @InitializeCheckWordMachine 4 word_to_detect 20@ 21@ 22@ 23@
 repeat
     if 10@ == 0 // Search the "SexFiles" line into file
     then
-        0ADA: 11@ = scan_file 30@ format "#%s" 20@v //IF and SET
-        if 20@v == "SexFiles"
-        then 10@ = 1
-        else
-            0ADA: 11@ = scan_file 30@ format ";%s" 20@v //IF and SET
-            if 20@v == "SexFiles"
-            then 10@ = 1
-            else
-                0ADA: 11@ = scan_file 30@ format "%s" 20@v //IF and SET
-                if 20@v == "SexFiles"
-                then 10@ = 1
-                end
-            end
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
+        0AB1: @CheckWordMachine 1 character_to_check 11@
+        if 0AB1: @WordIsChecked 0
+        then
+            10@ = 1
+            20@v = "source:"
+            0AB1: @InitializeCheckWordMachine 4 word_to_detect 20@ 21@ 22@ 23@
         end
     end
     if 10@ == 1 // Search the "source:" part into file
     then
-        0ADA: 11@ = scan_file 30@ format "%s" 20@v //IF and SET
-        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
-        if 20@v == "source:"
-        then 10@ = 2
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            0AB1: @CheckWordMachine 1 character_to_check 11@
+            if 0AB1: @WordIsChecked 0
+            then 10@ = 2
+            end
         end
     end
     if 10@ == 2 // Read the white space between "source:" and the source dir
     then
-        0A9D: readfile 30@ size 1 to 11@
-        if 11@ == 0xa
-        then 10@ = 4
-        end
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
         if and
         not 11@ == 0x9   // Tab
         not 11@ == 0x20  // Space
         then
             12@ = 0
+            0AB1: @StoreData 3 label @GenSexFiles_OrigDir value 11@ offset 12@
+            12@ += 1
             10@ = 3
         end
     end
     if 10@ == 3 // Read and store the source dir
     then
-        0A9D: readfile 30@ size 1 to 11@
-        if 11@ == 0xa
-        then 10@ = 4
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then break
         else
-            0AB1: @StoreData 3 label @GenSexFiles_OrigDir value 11@ offset 12@
-            12@ += 1
+            if or
+            11@ == 0xd
+            11@ == 0xa
+            then
+                10@ = 4
+                20@v = "destiny:"
+                0AB1: @InitializeCheckWordMachine 4 word_to_detect 20@ 21@ 22@ 23@
+            else
+                0AB1: @StoreInt 3 label @GenSexFiles_OrigDir value 11@ offset 12@
+                12@ += 1
+            end
         end
     end
     if 10@ == 4 // Search the "destiny:" part into file
     then
-        0ADA: 11@ = scan_file 30@ format "%s" 20@v //IF and SET
-        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
-        if 20@v == "destiny:"
-        then 10@ = 5
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            0AB1: @CheckWordMachine 1 character_to_check 11@
+            if 0AB1: @WordIsChecked 0
+            then 10@ = 5
+            end
         end
     end
     if 10@ == 5 // Read the white space between "destiny:" and the dest dir
     then
-        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
-        if 11@ == 0xa
-        then 10@ = 7
-        end
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
         if and
         not 11@ == 0x9   // Tab
         not 11@ == 0x20  // Space
         then
             12@ = 0
+            0AB1: @StoreData 3 label @GenSexFiles_DestDir value 11@ offset 12@
+            12@ += 1
             10@ = 6
         end
     end
     if 10@ == 6 // Read and store the dest dir
     then
-        0A9D: readfile 30@ size 1 to 11@
-        if 11@ == 0xa
-        then
-            10@ = 7
-            4@ = 0 // current place
-            5@ = 0 // current pose
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then break
         else
-            0AB1: @StoreData 3 label @GenSexFiles_DestDir value 11@ offset 12@
-            12@ += 1
+            if or
+            11@ == 0xd
+            11@ == 0xa
+            then
+                10@ = 7
+                4@ = 0 // current place
+                5@ = 0 // current pose
+                14@ = 0 // filename of interest found flag
+            else
+                0AB1: @StoreInt 3 label @GenSexFiles_DestDir value 11@ offset 12@
+                12@ += 1
+            end
         end
     end
-    if 10@ == 7
+    if 10@ == 7 // Beggining of line: Get next dummy word (discard all white spaces, comments and line-breaks)
     then
-        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
-        if or
-        11@ == 0x9   // Tab
-        11@ == 0x20  // Space
-        then 10@ = 8
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            if and
+            not 11@ == 0x9   // Tab
+            not 11@ == 0x20  // Space
+            not 11@ == 0xd   // line-break
+            not 11@ == 0xa   // line-break
+            then 10@ = 8
+            end
         end
     end
-    if 10@ == 8
+    if 10@ == 8 // Read dummy word
     then
-        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            if or
+            11@ == 0x9   // Tab
+            11@ == 0x20  // Space
+            then
+                10@ = 9
+            end
+        end
+    end
+    if 10@ == 9 // Read next white space until the next word begins
+    then
+        if 0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 1 ret value 11@
+        then // Do nothing
+        else
+            if and
+            not 11@ == 0x9   // Tab
+            not 11@ == 0x20  // Space
+            then
+                12@ = 0
+                0AB1: @StoreInt 3 label @GenSexFiles_FolderName value 11@ offset 12@
+                12@ += 1
+                10@ = 10
+            end
+        end
+    end
+    if 10@ == 10 // Get file name
+    then
+        0AB1: @GetCharacterFromFile 2 file 30@ ignore_comments 0 ret value 11@
         if and
         not 11@ == 0x9   // Tab
         not 11@ == 0x20  // Space
         then
-            12@ = 0
-            10@ = 9
-        end
-    end
-    if 10@ == 9
-    then
-        //0AB1: @ReadFileIgnoreComments 1 file 30@ ret value 11@ flag_ignore 3@
-        if or
-        11@ == 0x9   // Tab
-        11@ == 0x20  // Space
-        then 10@ = 10
+            if and
+            003B:   5@ == 0@  // (int)   // pose
+            003B:   4@ == 1@  // (int)   // place
+            then
+                if 11@ == 0x5F // Replace the "_" character by space (0x20)
+                then 11@ = 0x20
+                end
+                0AB1: @StoreInt 3 label @GenSexFiles_FolderName value 11@ offset 12@
+                12@ += 1
+                14@ = 1 // filename of interest found
+            end
         else
-            0AB1: @StoreData 3 label @GenSexFiles_FolderName value 11@ offset 12@
-            12@ += 1
+            if 14@ == 1
+            then break
+            else
+                10@ = 8
+                5@ += 1 // Increase pose (column)
+            end
         end
     end
-until false
+    if or
+    //10@ == 8  // Read dummy word
+    10@ == 9  // Read next white space until the next word begins
+    10@ == 10 // Get file name
+    then
+        // If line-break detected
+        if or
+        11@ == 0xd
+        11@ == 0xa
+        then
+            4@ += 1 // Increase place (line)
+            5@ = 0  // Reset pose
+            10@ = 7
+        end
+    end
+//0AD9: write_formatted_text "%d %c%c%c" in_file 31@ 10@ 11@ 0xd 0xa
+until 0AD6:   end_of_file 30@ reached
 
+                File.Close(31@)
 File.Close(30@)
 0AB2: ret 0
 
@@ -386,4 +454,40 @@ if 10@ == 16
 then 0485:  return_true
 else 059A:  return_false
 end
+0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:DEBUG_ShowSexFilesData
+31@ = File.Open("modloader\Date&Sex\cleo\test.log","wb+")
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset  0 ret value 20@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset  4 ret value 21@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset  8 ret value 22@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset 12 ret value 23@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset 16 ret value 24@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset 20 ret value 25@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset 24 ret value 26@
+0AB1: @GetData 2 label @GenSexFiles_OrigDir offset 28 ret value 27@
+0AD9: write_formatted_text "Origin Folder: %s%s%c%c" in_file 31@ 20@v 24@v 0xd 0xa
+
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset  0 ret value 20@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset  4 ret value 21@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset  8 ret value 22@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset 12 ret value 23@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset 16 ret value 24@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset 20 ret value 25@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset 24 ret value 26@
+0AB1: @GetData 2 label @GenSexFiles_DestDir offset 28 ret value 27@
+0AD9: write_formatted_text "Destiny Folder: %s%s%c%c" in_file 31@ 20@v 24@v 0xd 0xa
+
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset  0 ret value 20@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset  4 ret value 21@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset  8 ret value 22@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset 12 ret value 23@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset 16 ret value 24@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset 20 ret value 25@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset 24 ret value 26@
+0AB1: @GetData 2 label @GenSexFiles_FolderName offset 28 ret value 27@
+0AD9: write_formatted_text "Folder: %s%s%c%c" in_file 31@ 20@v 24@v 0xd 0xa
+File.Close(31@)
 0AB2: ret 0
