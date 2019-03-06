@@ -14,12 +14,12 @@ $ONMISSION = 1
     08E7: disable_entrance_markers 1
 
     GenderFlag = 1 // Gender of the player
-    BodyType = BT_NORMAL
+    SexBodyType = BT_NORMAL
     0AB1: @StoreInt 2 @SxMn_Slot 0
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
     0AB1: @LoadData 2 SexPoseInt SexPlace
-    0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
+    0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace SexBodyType
 
     0AB1: @StoreInt 2 @CameraMode 0 // Free Camera
 0AB1: @InitCursorControl 0
@@ -67,7 +67,7 @@ wait 0
             0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
             0085: SexPoseInt = Dummy1 // (int)
             0085: SexPlace = Dummy2 // (int)
-            0085: BodyType = Dummy5 // (int)
+            0085: SexBodyType = Dummy5 // (int)
             gosub @ChangePoseAndPlace_Alt
             SexMenuState = 2
         end
@@ -93,15 +93,15 @@ wait 0
             if or
             803B:   not Dummy1 == SexPoseInt  // (int)
             803B:   not Dummy2 == SexPlace  // (int)
-            803B:   not Dummy5 == BodyType  // (int)
+            803B:   not Dummy5 == SexBodyType  // (int)
             then
                 fade 0 750
                 wait 750
                 0085: SexPoseInt = Dummy1 // (int)
                 0085: SexPlace = Dummy2 // (int)
-                0085: BodyType = Dummy5 // (int)
+                0085: SexBodyType = Dummy5 // (int)
                 gosub @RemovePosesAndActors
-                0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
+                0AB1: @GenerateSexFiles 3 SexPoseInt SexPlace SexBodyType
                 gosub @ChangePoseAndPlace_Alt
                 SexMenuState = 2
                 wait 250

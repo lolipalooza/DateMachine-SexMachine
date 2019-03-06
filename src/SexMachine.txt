@@ -13,18 +13,7 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
-{0AB1: @GenSexFiles_ClearMemory 0
-0AB1: @GenSexFiles_GetDataFromFile 2 pose 7 place 1
-0AB1: @InitDeleteInstruction 0
-0AB1: @InitCopyInstruction 0
-
-0AB1: @DEBUG_ShowSexFilesData 0
-//0AB1: @DEBUG_ShowInstructions 0
-0ACE: "Done!"
-0A93: end_custom_thread}
-
 //0A93: end_custom_thread
-
 
 {gosub @CmSexStart
 if wasted_or_busted 
@@ -69,7 +58,7 @@ const
     DummyString = 22@s
     SexMenuState = 27@
     ShowSexualStats = 28@
-    BodyType = 29@
+    SexBodyType = 29@
     PulseButtonState = 30@
     
     MoveAxisX = Dummy1
@@ -221,11 +210,11 @@ wait 0
             if or
             803B:   not Dummy1 == SexPoseInt  // (int)
             803B:   not Dummy2 == SexPlace  // (int)
-            803B:   not Dummy5 == BodyType  // (int)
+            803B:   not Dummy5 == SexBodyType  // (int)
             then
                 0085: SexPoseInt = Dummy1 // (int)
                 0085: SexPlace = Dummy2 // (int)
-                0085: BodyType = Dummy5 // (int)
+                0085: SexBodyType = Dummy5 // (int)
                 gosub @ChangePoseAndPlace
                 SexMenuState = 0 // Close Sexual Menu
             end
@@ -360,7 +349,7 @@ then
     end
     //SexPoseInt = SEX_FUCKING
     //SexPlace = PL_TABLE
-    BodyType = BT_NORMAL
+    SexBodyType = BT_NORMAL
     0AB1: @StoreInt 2 @SxMn_Pose SexPoseInt
     0AB1: @StoreInt 2 @SxMn_Place SexPlace
     //0209: SexPoseInt = random_int_in_ranges ? ?
@@ -730,7 +719,7 @@ wait 800 ms
 009B: destroy_actor PornActress
 009B: destroy_actor PornActor
 0AB1: call_scm_func @GenerateActors 2 SexPoseInt SexPlace ret PornActress PornActor
-0AB1: call_scm_func @GenerateSexFiles 3 SexPoseInt SexPlace BodyType
+0AB1: call_scm_func @GenerateSexFiles 3 SexPoseInt SexPlace SexBodyType
 0AB1: call_scm_func @PutPlayerIntoScene 2 SexPoseInt SexPlace
 0AB1: call_scm_func @LoadSexualPose 5 PornActress PornActor SexPoseInt SexPlace SPD_SLOW
 0AB1: call_scm_func @ToggleSexualCamera 2 SexPoseInt SexPlace

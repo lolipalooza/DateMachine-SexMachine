@@ -1,6 +1,6 @@
 {======================================================================
 ======================================================================}
-:GenerateSexFiles_Alt // 0@: pose, 1@: place
+:GenerateSexFiles_Alt // pose 0@ place 1@ bodytype 2@
 const
     DEST_DIR = "modloader/date&sex/sex"
 end
@@ -127,10 +127,10 @@ end
 
 {======================================================================
 ======================================================================}
-:GenerateSexFiles // pose 0@ place 1@
+:GenerateSexFiles // pose 0@ place 1@ bodytype 2@
 
 0AB1: @GenSexFiles_ClearMemory 0
-0AB1: @GenSexFiles_GetDataFromFile 2 pose 0@ place 1@
+0AB1: @GenSexFiles_GetDataFromFile 3 pose 0@ place 1@ bodytype 2@
 0AB1: @InitDeleteInstruction 0
 0AB1: @InitCopyInstruction 0
 
@@ -216,7 +216,7 @@ end
 
 {======================================================================
 ======================================================================}
-:GenSexFiles_GetDataFromFile // 0@: pose, 1@: place
+:GenSexFiles_GetDataFromFile // pose 0@ place 1@ bodytype 2@
 //31@ = File.Open("modloader\Date&Sex\cleo\test2.log","wb+")
 30@ = File.Open(SEXFILES_FILE, "rb")
 20@v = "SexFiles"
@@ -383,7 +383,11 @@ repeat
             end
         else
             if 14@ == 1
-            then break
+            then
+                if 2@ == BT_LOLI // bodytype
+                then 0AB1: @CopyArray 4 orig_label @Bodytype_Loli dest_label @GenSexFiles_FolderName orig_offset 0 dest_offset 12@ ret 13@
+                end
+                break
             else
                 10@ = 9
                 5@ += 1 // Increase pose (column)
@@ -410,6 +414,13 @@ until 0AD6:   end_of_file 30@ reached
 //File.Close(31@)
 File.Close(30@)
 0AB2: ret 0
+
+{======================================================================
+======================================================================}
+:Bodytype_Loli
+hex
+" (loli)" 00
+end
 
 {======================================================================
 ======================================================================}
@@ -683,3 +694,4 @@ end
 0AD9: write_formatted_text "end" in_file 31@
 File.Close(31@)
 0AB2: ret 0
+
