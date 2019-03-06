@@ -13,14 +13,17 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
+0AB1: @GenSexFiles_ClearMemory 0
 0AB1: @GenSexFiles_GetDataFromFile 2 pose 3 place 6
-0ACE: show_formatted_text_box "end"
+0AB1: @InitDeleteInstruction 0
+0AB1: @InitCopyInstruction 0
 
-0AB1: @DEBUG_ShowSexFilesData 0
-
+0AB1: @DEBUG_ShowInstructions 0
+0ACE: "Done!"
 0A93: end_custom_thread
 
 //0A93: end_custom_thread
+
 
 {gosub @CmSexStart
 if wasted_or_busted 

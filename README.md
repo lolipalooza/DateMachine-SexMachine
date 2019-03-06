@@ -37,7 +37,6 @@ Short-Term
 Long-Term
 - Add more lines to animations buttons.
 - Enhance the visuals for saved offset selection in sexual menu.
-- Make GenSexFiles to read the source directory of the files from a .dat or .ini file.
 - Put all general purpose methods into common files.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 - Compatibility with classic mode.
