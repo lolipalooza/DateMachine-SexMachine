@@ -193,7 +193,6 @@ for 11@ = 1 to 3
             0006: 31@ = 0
             0006: 29@ = 0
             0AB1: @SxMn_GetGXTPose 2 place 30@ offset 31@ ret gxt_entry 12@ 13@
-            //0AB1: @GetPoseFromString 2 gxt_entry 12@ 13@ ret pose 28@ body_type 27@
             0AB1: @GetPlaceOrPoseFromString 3 pose_flag 1 gxt_entry 12@ 13@ ret pose 28@ bodytype 27@
             if 2@ == 1
             then 0AB1: @GenerateSexFiles 3 pose 28@ place 30@ body_type 27@
@@ -218,7 +217,6 @@ for 11@ = 1 to 5
                 0085: 31@ = 20@ // (int)
                 0006: 29@ = 0
                 0AB1: @SxMn_GetGXTPose 2 place 30@ offset 31@ ret gxt_entry 12@ 13@
-                //0AB1: @GetPoseFromString 2 gxt_entry 12@ 13@ ret pose 28@ body_type 27@
                 0AB1: @GetPlaceOrPoseFromString 3 pose_flag 1 gxt_entry 12@ 13@ ret pose 28@ bodytype 27@
                 if 2@ == 1
                 then 0AB1: @GenerateSexFiles 3 pose 28@ place 30@ body_type 27@

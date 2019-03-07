@@ -13,12 +13,6 @@ Esxample of use
 {$CLEO .s}
 thread 'SexMachine'
 
-{10@s = 'S_CN_1'
-0AB1: @GetPlaceOrPoseFromString 3 pose_flag 1 gxt_entry 10@ 11@ ret pose 12@ bodytype 13@
-
-0ACE: show_formatted_text_box "%d %d" 12@ 13@
-0A93: end_custom_thread}
-
 //0A93: end_custom_thread
 
 {gosub @CmSexStart

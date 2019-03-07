@@ -2540,3 +2540,192 @@ else 0AB1: @SetNumbers 6 11@ 10@ 13@ 12@ 0 4 ret 20@ 21@ 22@ 23@ 24@ 25@ dummies
 end
 0AB2: ret 6 w_s_steps 20@ 21@ a_d_steps 22@ 23@ offsets_for_x_and_y 24@ 25@
 
+{======================================================================
+======================================================================}
+:GetPlaceFromString
+if 0@s == 'S_PL_1' // Bed
+then 0AB2: ret 1 PL_BED
+end
+if 0@s == 'S_PL_2' // Sofa
+then 0AB2: ret 1 PL_SOFA
+end
+if 0@s == 'S_PL_3' // Table
+then 0AB2: ret 1 PL_TABLE
+end
+if 0@s == 'S_PL_4' // Chair
+then 0AB2: ret 1 PL_CHAIR
+end
+if 0@s == 'S_PL_5' // Floor
+then 0AB2: ret 1 PL_FLOOR
+end
+if 0@s == 'S_PL_6' // Bath
+then 0AB2: ret 1 PL_BATH
+end
+if 0@s == 'S_PL_7' // Kitchen
+then 0AB2: ret 1 PL_KITCHEN
+end
+if 0@s == 'S_PL_8' // Wall
+then 0AB2: ret 1 PL_WALL
+end
+if 0@s == 'S_PL_9' // On foot
+then 0AB2: ret 1 PL_FOOT
+end
+0AB2: ret 1 404
+
+:GetPoseFromString // gxt_entry 0@ 1@
+if 0@s == 'S_BJ_1'
+then 0AB2: ret 1 SEX_BJ
+end
+if 0@s == 'S_HJ_1'
+then 0AB2: ret 1 SEX_HJ
+end
+if 0@s == 'S_CN_1'
+then 0AB2: ret 1 SEX_CUNNI
+end
+if 0@s == 'S_FK_1'
+then 0AB2: ret 1 SEX_FUCKING
+end
+if 0@s == 'S_AN_1'
+then 0AB2: ret 1 SEX_ANAL
+end
+if 0@s == 'S_69_1'
+then 0AB2: ret 1 SEX_69
+end
+if 0@s == 'S_TJ_1'
+then 0AB2: ret 1 SEX_TJ
+end
+if 0@s == 'S_FJ_1'
+then 0AB2: ret 1 SEX_FJ
+end
+if 0@s == 'S_BL_1'
+then 0AB2: ret 2 pose SEX_BJ body_type BT_LOLI
+end
+0AB2: ret 2 pose 404 body_type 0
+
+{======================================================================
+======================================================================}
+:GenerateSexFiles // pose 0@ place 1@ bodytype 2@
+const
+    DEST_DIR = "modloader/date&sex/sex"
+end
+
+0B01: delete_directory DEST_DIR include_subdirs 1
+
+if 0@ == SEX_FUCKING
+then
+    if 1@ == PL_BED
+    then 0B05: copy_directory "models\files\sex\Sex Bed" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Sex Sofa" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_TABLE
+    then 0B05: copy_directory "models\files\sex\Sex Table" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_CHAIR
+    then
+    end
+    if 1@ == PL_FLOOR
+    then 0B05: copy_directory "models\files\sex\Sex on Floor" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_BATH
+    then
+    end
+    if 1@ == PL_KITCHEN
+    then 0B05: copy_directory "models\files\sex\Sex Kitchen" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_WALL
+    then 0B05: copy_directory "models\files\sex\Sex on Foot" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_FOOT
+    then
+    end
+end
+if 0@ == SEX_ANAL
+then
+    if 1@ == PL_BED
+    then 0B05: copy_directory "models\files\sex\Reverse on Bed" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Reverse on Sofa" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_TABLE
+    then 0B05: copy_directory "models\files\sex\Reverse Table" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_FLOOR
+    then 0B05: copy_directory "models\files\sex\Reverse on Floor" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_BATH
+    then 0B05: copy_directory "models\files\sex\Reverse on Knees" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_WALL
+    then 0B05: copy_directory "models\files\sex\Reverse on Foot" to DEST_DIR //IF and SET
+    end
+end
+if 0@ == SEX_HJ
+then
+    if 1@ == PL_BED
+    then 0B05: copy_directory "models\files\sex\Handjob on Bed" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Handjob Sit down" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_FOOT
+    then 0B05: copy_directory "models\files\sex\Handjob on Foot" to DEST_DIR //IF and SET
+    end
+end
+if 0@ == SEX_BJ
+then
+    if 1@ == PL_BED
+    then 0B05: copy_directory "models\files\sex\Blowjob on Bed" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Blowjob Sofa" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_CHAIR
+    then 0B05: copy_directory "models\files\sex\Blowjob Sit down" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_FLOOR
+    then 0B05: copy_directory "models\files\sex\Blowjob on Knees" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_KITCHEN
+    then 0B05: copy_directory "models\files\sex\Blowjob Kitchen" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_FOOT
+    then
+        if 2@ == BT_LOLI
+        then 0B05: copy_directory "models\files\sex\Blowjob on Foot (loli)" to DEST_DIR //IF and SET
+        else 0B05: copy_directory "models\files\sex\Blowjob on Foot" to DEST_DIR //IF and SET
+        end
+    end
+end
+if 0@ == SEX_CUNNI
+then
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Cunnilingus Sofa" to DEST_DIR //IF and SET
+    end
+    if 1@ == PL_FLOOR
+    then 0B05: copy_directory "models\files\sex\Cunnilingus Floor" to DEST_DIR //IF and SET
+    end
+end
+if 0@ == SEX_69
+then
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Oral69 Sofa" to DEST_DIR //IF and SET
+    end
+end
+if 0@ == SEX_TJ
+then
+    if 1@ == PL_BED
+    then 0B05: copy_directory "models\files\sex\Titjob on Bed 2" to DEST_DIR //IF and SET
+    end
+end
+if 0@ == SEX_FJ
+then
+    if 1@ == PL_SOFA
+    then 0B05: copy_directory "models\files\sex\Footjob on Sofa" to DEST_DIR //IF and SET
+    end
+end
+32@ = 0
+0AB2: ret 0
+
