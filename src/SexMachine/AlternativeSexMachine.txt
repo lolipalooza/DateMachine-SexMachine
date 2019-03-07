@@ -64,7 +64,8 @@ wait 0
             0AB1: @GetInt 1 @SxMn_Pose Dummy1
             0AB1: @GetInt 1 @SxMn_Place Dummy2
             0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret gxt_entry Dummy3 Dummy4
-            0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
+            //0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
+            0AB1: @GetPlaceOrPoseFromString 3 pose_flag 1 gxt_entry Dummy3 Dummy4 ret pose Dummy1 bodytype Dummy5
             0085: SexPoseInt = Dummy1 // (int)
             0085: SexPlace = Dummy2 // (int)
             0085: SexBodyType = Dummy5 // (int)
@@ -89,7 +90,8 @@ wait 0
             0AB1: @GetInt 1 @SxMn_Pose Dummy1
             0AB1: @GetInt 1 @SxMn_Place Dummy2
             0AB1: @SxMn_GetGXTPose 2 place Dummy2 offset Dummy1 ret gxt_entry Dummy3 Dummy4
-            0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
+            //0AB1: @GetPoseFromString 2 gxt_entry Dummy3 Dummy4 ret pose Dummy1 body_type Dummy5
+            0AB1: @GetPlaceOrPoseFromString 3 pose_flag 1 gxt_entry Dummy3 Dummy4 ret pose Dummy1 bodytype Dummy5
             if or
             803B:   not Dummy1 == SexPoseInt  // (int)
             803B:   not Dummy2 == SexPlace  // (int)
