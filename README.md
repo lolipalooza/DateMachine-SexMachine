@@ -29,18 +29,20 @@ SexMachine: (A lot but still missing)%
 
 ## To do
 
-Short-Term
+High Priority
+- Force player to always be unarmed when in sex.
 - Cheat to make all peds dissapear/reappear.
 - Update the documentation about how to use .ignored folder (the main readme says "read documentation in .ignored" and that documentation was moved to /docs).
 - Update the documentation about how to add new poses.
 
-Long-Term
+Low Priority
 - Add more lines to animations buttons.
 - Enhance the visuals for saved offset selection in sexual menu.
 - Put all general purpose methods into common files.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.
 - Compatibility with classic mode.
 - HJ foot: male fast has inadequate offset from normal. Fix fast
+- CN Floor: fix female anim loop
 
 Bugs
 - Don't call GenSexFiles on the initialization routine, but instead when plater press TAB to choose pose at first!
