@@ -37,7 +37,6 @@ High Priority
 
 Low Priority
 - When you load pose from a slot, and then you go to save/load, it should highlight the slot currently loaded!
-- Add more lines to animations buttons.
 - Enhance the visuals for saved offset selection in sexual menu.
 - Put all general purpose methods into common files.
 - Make a very simple functionality in SexTriggerer that change player to male skin and spawns the female character that will follow him everywhere, then initiate the SexMachine when they get close enough.

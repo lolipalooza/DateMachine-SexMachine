@@ -1452,6 +1452,110 @@ then
     0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 363.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
     0AB1: @BuildTableLine 4 columns 4 start_id 1 end_id 4 used_id 31@
 end
+if 30@ == 5
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 365.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 1 end_id 3 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 391.0 402.0 text_size 0.2 1.2 offsets 0.0 23.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 394.0 409.0 box_size 24.0 21.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 2 start_id 4 end_id 5 used_id 31@
+end
+if 30@ == 6
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 365.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 1 end_id 3 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 391.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 394.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 4 end_id 6 used_id 31@
+end
+if 30@ == 7
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 365.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 1 end_id 3 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 391.0 402.0 text_size 0.2 1.2 offsets 0.0 23.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 394.0 409.0 box_size 24.0 21.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 2 start_id 4 end_id 5 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 417.0 402.0 text_size 0.2 1.2 offsets 0.0 23.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 420.0 409.0 box_size 24.0 21.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 2 start_id 6 end_id 7 used_id 31@
+end
+if 30@ == 8
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 365.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 1 end_id 3 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 391.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 394.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 4 end_id 6 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 417.0 402.0 text_size 0.2 1.2 offsets 0.0 23.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 420.0 409.0 box_size 24.0 21.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 2 start_id 7 end_id 8 used_id 31@
+end
+if 30@ == 9
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 365.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 368.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 1 end_id 3 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 391.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 394.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 4 end_id 6 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 417.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 420.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 7 end_id 9 used_id 31@
+end
+if 30@ == 10
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 360.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 363.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 4 start_id 1 end_id 4 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 381.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 384.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 5 end_id 7 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 407.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 410.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 8 end_id 10 used_id 31@
+end
+if 30@ == 11
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 360.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 363.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 4 start_id 1 end_id 4 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 376.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 379.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 4 start_id 5 end_id 8 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 397.0 399.0 text_size 0.2 1.2 offsets 0.0 14.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 400.0 405.0 box_size 24.0 13.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 3 start_id 9 end_id 11 used_id 31@
+end
+if 30@ == 12
+then
+    0AB1: @SetTableSettings_Texts 15 text_pos 360.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 363.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 4 start_id 1 end_id 4 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 376.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 379.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 4 start_id 5 end_id 8 used_id 31@
+
+    0AB1: @SetTableSettings_Texts 15 text_pos 392.0 397.0 text_size 0.2 1.2 offsets 0.0 12.0 text_rgba 255 255 255 255 text_selected_rgba 244 189 230 255 table_gxt_label @generic_numbers_gxt_table
+    0AB1: @SetTableSettings_Boxes 13 flag_decorative_boxes 1 box_pos 395.0 404.0 box_size 14.0 10.0 box_rgba 105 25 90 150 selected_rgba 46 20 46 150
+    0AB1: @BuildTableLine 4 columns 4 start_id 9 end_id 12 used_id 31@
+end
 0AB2: ret 0
 
 {======================================================================

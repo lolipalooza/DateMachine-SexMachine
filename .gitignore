@@ -6,3 +6,8 @@ src/*.s
 src/*.cs
 src/*.fxt
 src/*.zip
+src/*.png
+src/*.jpg
+src/*.jpeg
+src/*.gif
+src/*.bmp
