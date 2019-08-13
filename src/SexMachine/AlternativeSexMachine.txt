@@ -245,7 +245,11 @@ then
             SexMenuState = 8
             0AB1: @SetFreeCamera 4 free_flag 0 edit_flag 1 SexPoseInt SexPlace
         end
-        0AB1: @ManageAnimationsMenu 5 SpeedState SexPoseInt SexPlace PornActress PornActor
+    end
+    if or
+    SexMenuState == 2 // Regular sex mode
+    SexMenuState == 3 // Offsets mode
+    then 0AB1: @ManageAnimationsMenu 5 SpeedState SexPoseInt SexPlace PornActress PornActor
     end
     if SexMenuState == 8
     then
