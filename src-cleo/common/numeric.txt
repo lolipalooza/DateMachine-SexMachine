@@ -1,0 +1,16 @@
+{======================================================================
+======================================================================}
+:IncreaseInteger // int_variable 0@ amount 1@ min_val 2@ max_val 3@
+005A: 0@ += 1@  // (int)
+if or
+not 2@ == 0
+not 3@ == 0
+then
+    if 001D:   0@ > 3@  // (int)
+    then 0085: 0@ = 2@ // (int)
+    end
+    if 001D:   2@ > 0@  // (int)
+    then 0085: 0@ = 3@ // (int)
+    end
+end
+0AB2: ret 1 modified_variable 0@

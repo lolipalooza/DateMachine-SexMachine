@@ -21,10 +21,10 @@ wait 0
     for 30@ = 2 to 14
         0AB1: @GetInterior 1 30@ ret pos_xyz 1@ 2@ 3@ angle 4@ cheat_string 10@ 11@ 12@ 13@
         if 0ADC:   test_cheat 10@v // "INXX" where XX is 30@
-        then
-            00A1: put_actor $PLAYER_ACTOR at 1@ 2@ 3@
+        then 0AB1: @TeleportTo 6 actor $PLAYER_ACTOR position 1@ 2@ 3@ angle 4@ interior 0
+            {00A1: put_actor $PLAYER_ACTOR at 1@ 2@ 3@
             0173: set_actor $PLAYER_ACTOR Z_angle_to 4@
-            0373: set_camera_directly_behind_player
+            0373: set_camera_directly_behind_player}
         end
     end
     
@@ -37,6 +37,12 @@ wait 0
             10@s = 'female'
             20@s = 'male'
             0A92: create_custom_thread "SexMachine.s" pose 0 place 2 speed 40 fem_gxt 10@ 11@ male_gxt 20@ 21@ mode true
+        end
+        
+        if 0ADC:   test_cheat "POSE"
+        then
+            10@s = 'female'
+            0A92: create_custom_thread "PoseMachine.s" fem_gxt 10@ 11@
         end
         
         if 00FE:   actor $PLAYER_ACTOR sphere 0 in_sphere 2368.5999 -1134.7006 1050.875 radius 50.0 50.0 50.0
@@ -138,3 +144,19 @@ end
 
 :SetCoordinates // 0@ 1@ 2@ 3@
 0AB2: ret 4 pos_xyz 0@ 1@ 2@ angle 3@
+
+{=================================================================================================
+===================================================================================================}    
+:TeleportTo // actor 0@ position 1@ 2@ 3@ angle 4@ interior 5@
+//3@ -= 1.0
+0860: link_actor 0@ to_interior 5@
+04BB: select_interior 5@
+04FA: reset_sky_colors_with_fade 1 // 04F9: set_sky_color 1 fade 0
+04E4: refresh_game_renderer_at 1@ 2@
+//084D: unknown_flag_house_occupants 1
+00A1: put_actor 0@ at 1@ 2@ 3@
+0173: set_actor 0@ Z_angle_to 4@
+03CB: set_rendering_origin_at 1@ 2@ 3@
+0373: set_camera_directly_behind_player
+//02EB: restore_camera_with_jumpcut
+0AB2: ret 0

@@ -162,3 +162,5 @@ CFSV_7	Back
 CFSV_8	Current Position
 
 DEBUG1	Reset move angle
+
+POSE_X	Load Pose ~1~
