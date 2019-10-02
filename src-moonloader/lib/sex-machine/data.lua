@@ -2,7 +2,11 @@ local module = {}
 
 --[[===============================================================
 ===================================================================]]
-module.files = {
+module.files = {}
+
+module.files.orig_path = "modloader/.date&sex/sex" -- "models/files/sex"
+module.files.dest_path = "modloader/date&sex/sex"
+module.files.subfolders = {
 	-- 				Sex					Blowjob				ReverseSex			Handjob					Cunnilingus				Oral 69				Titjob					Footjob
 	--[[Bed]]		{"Sex Bed",			"Blowjob on Bed",	"Reverse on Bed",	"Handjob on Bed",		"",						"",					"Titjob on Bed 2",		""},
 	--[[Sofa]]		{"Sex Sofa",		"Blowjob Sofa",		"Reverse on Sofa",	"Handjob Sit down",		"Cunnilingus Sofa",		"Oral69 Sofa",		"",						"Footjob on Sofa"},

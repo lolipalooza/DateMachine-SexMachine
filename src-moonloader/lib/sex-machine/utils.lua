@@ -118,9 +118,9 @@ local sexfiles = {}
 sexfiles.generate = function (pose, place, bodytype)
 	local BT_LOLI = require "lib.sex-machine.sex".bodyTypes.BT_LOLI
 	local scm = require "lib.sex-machine.scm"
-	local sex_anims = require "lib.sex-machine.data".files
-	local orig_path = string.format("models/files/sex/%s%s", sex_anims[place][pose], bodytype == BT_LOLI and " (loli)" or "")
-	local dest_path = "modloader/date&sex/sex"
+	local files = require "lib.sex-machine.data".files
+	local orig_path = string.format("%s/%s%s", files.orig_path, files.subfolders[place][pose], bodytype == BT_LOLI and " (loli)" or "")
+	local dest_path = files.dest_path
 	scm.deleteDirectory(dest_path)
 	wait (0)
 	scm.copyDirectory(orig_path, dest_path)
