@@ -8,7 +8,6 @@ local sex = require "lib.sex-machine.sex"
 local mission = require "lib.sex-machine.mission"
 
 function main()
-	local female, male = nil, nil
 	printHelpString(string.format("Running %s~s~.", "~r~Sex~y~Machine~s~.~b~lua" ))
 	
 	while true do
@@ -16,7 +15,7 @@ function main()
 	
 		if not mission.onMission() then
 			if testCheat("ero") then
-				sex.run(sex.poses.SEX_BJ, sex.places.PL_CHAIR, 40, 'female', 'male')
+				sex.run(sex.poses.SEX_FUCKING, sex.places.PL_TABLE, 40, 'female', 'male')
 			end
 		end
 		

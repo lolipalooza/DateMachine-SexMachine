@@ -64,18 +64,18 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 	local speed		= require("lib.sex-machine.machines").speed
 	
 	mission.setOnMission(1)
-
+	
 	-- Initialize Machine
 	displayRadar(false)
 	displayHud(false)
 	useRenderCommands(true) -- 03F0: enable_text_draw 1
 	setTextDrawBeforeFade(true) -- 03E0: draw_text_behind_textures 1
 	disableAllEntryExits(true)
-
+	
 	sex.pose, sex.place, sex.bodytype = pose, place, sex.bodyTypes.BT_NORMAL
 	
 	-- Menu init
-	menu.slot, menu.pose, menu.place = 0, menu.getMenuPose(pose, place), place
+	menu.slot, menu.pose, menu.place = 0, require("lib.sex-machine.data").getMenuPose(pose, place), place
     
 	file.data.Load(sex.pose, sex.place)
     sexfiles.generate(sex.pose, sex.place, sex.bodytype)
@@ -84,7 +84,7 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 	cam.mode = cam.modes.FREE_CAM
 	sex.showSexualStats = true
 	sex.stat = 0
-	sex.menuState = 0
+	menu.stat = 0
 	
 	speed.value, speed.stat = 0, 0
 	climax.value, climax.stat = 0, 0
@@ -107,66 +107,64 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 		-- Buttons UP - DOWN - ACCEPT - CANCEL acknowledge
 		pulsed.run()
 		
-		if sex.menuState > 0 then	-- 0 is the only state when player can move
+		if menu.stat > 0 then	-- 0 is the only state when player can move
 			cursor.control()		-- so is best to activate cursor when player can't!
 		end
 		
 		sex.machine()
 		
-		if sex.menuState == 0 then
+		if menu.stat == 0 then
 			if pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
 				break -- End Sex Activity
 			end
 			if isButtonPressed(playerchar, pad.ANSWERPHONE_FIREWEAPONALT) then -- TAB
-				sex.menuState = 1
+				menu.stat = 1
 				setPlayerControl(playerchar, false)
 			end
 		end
 		
-		if sex.menuState == 1 then
+		if menu.stat == 1 then
 			local highlightedPose, highlightedPlace = menu.showSexualMenu(sex.pose, sex.place, true)
 			if cursor.clickCheck(542.0, 416.0, 162.0, 48.0) then -- Change Button Click
 				local gxt_entry = require("lib.sex-machine.data").places[highlightedPlace][highlightedPose]
-				local newPose, newBodyType = menu.GetPoseFromGXT(gxt_entry)
+				local newPose, newBodyType = require("lib.sex-machine.data").GetPoseFromGXT(gxt_entry)
 				sex.pose = newPose
 				sex.place = highlightedPlace
 				sex.bodytype = newBodyType
 				speed.value = 40
 				sex.female, sex.male = actors.ChangePoseAndPlace(female_gxt, male_gxt, sex.female, sex.male, sex.pose, sex.place, speed.stat, menu.slot, SEXFILES_MINIMUM_WAIT_TIME)
-				sex.menuState = 2
+				menu.stat = 2
 			end
 			if cursor.clickCheck(76.0, 436.0, 143.0, 13.0) then -- Cancel Button
 				cursor.waitUntilReleaseClickButton()
-				sex.menuState = 0
+				menu.stat = 0
 				setPlayerControl(playerchar, true)
 			end
 			if pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
 				setPlayerControl(playerchar, true)
 			end
 		end
-		if sex.menuState == 5 then
+		if menu.stat == 5 then
 			local highlightedPose, highlightedPlace = menu.showSexualMenu(sex.pose, sex.place, false)
 			if cursor.clickCheck(542.0, 416.0, 162.0, 48.0) then -- Change Button Click
 				local gxt_entry = require "lib.sex-machine.data".places[highlightedPlace][highlightedPose]
-				local newPose, newBodyType = menu.GetPoseFromGXT(gxt_entry)
+				local newPose, newBodyType = require("lib.sex-machine.data").GetPoseFromGXT(gxt_entry)
 				if	newPose ~= sex.pose		or	highlightedPlace ~= sex.place	or	newBodyType ~= sex.bodytype		then
 					doFade(false, 750)
 					wait (750)
-					sex.pose = newPose
-					sex.place = highlightedPlace
-					sex.bodytype = newBodyType
+					sex.pose, sex.place, sex.bodytype = newPose, highlightedPlace, newBodyType
 					actors.RemovePosesAndActors(sex.female, sex.male)
 					speed.value = 0
 					sexfiles.generate(sex.pose, sex.place, sex.bodytype)
 					timer.set(0) -- give the sexfiles.generate() enough time
 					speed.value = 40
 					sex.female, sex.male = actors.ChangePoseAndPlace(female_gxt, male_gxt, sex.female, sex.male, sex.pose, sex.place, speed.stat, menu.slot, SEXFILES_MINIMUM_WAIT_TIME)
-					sex.menuState = 2
+					menu.stat = 2
 					wait (0)
 					doFade(true, 750)
 				elseif newPose == sex.pose and highlightedPlace == sex.place then
 					if sex.slot ~= 0 then
-						sex.menuState = 2
+						menu.stat = 2
 						--0AB1: @RetrieveInformationFromInternalStorage 6 slot Dummy3 PornActress PornActor SexPoseInt SexPlace SpeedState
 						cam.restoreCamera(true, pose, place)
 					end
@@ -174,30 +172,30 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 			end
 			if cursor.clickCheck(76.0, 436.0, 143.0, 13.0) then -- Cancel Button
 				cursor.waitUntilReleaseClickButton()
-				sex.menuState = 2
+				menu.stat = 2
 				cam.restoreCamera(false, 0, 0)
 			end
 			if pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
-				sex.menuState = 2
+				menu.stat = 2
 				pulsed.increaseStat()
 				cam.restoreCamera(false, 0, 0)
 			end
 		end
-		if sex.menuState == 2 then
+		if menu.stat == 2 then
 			if cursor.clickCheck(130.0, 398.0, 64.0, 12.0) then -- Poses button
 				cam.freezeCamera()
-				sex.menuState=5
+				menu.stat=5
 			end
 			if cursor.clickCheck(130.0, 411.0, 64.0, 12.0) then -- Offsets button
 				file.data.Load(sex.pose, sex.place)
 				menu.InitFrontLookAngle()
 				--actors.ChangeGenderSkin(female_gxt, male_gxt, genders.MALE)
 				menu.ActorsOffsetsMenu_OffsetToModify = 0 -- Edit Female
-				sex.menuState = 3
+				menu.stat = 3
 			end
 			if cursor.clickCheck(130.0, 424.0, 64.0, 12.0) then -- Save/Load button
 				file.data.Load(sex.pose, sex.place)
-				sex.menuState = 4
+				menu.stat = 4
 			end
 			if cursor.clickCheck(130.0, 437.0, 64.0, 12.0) -- Back button
 			or pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
@@ -205,14 +203,14 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 				actors.RemovePosesAndActors(sex.female, sex.male)
 				speed.value = 0
 				actors.ChangeGenderSkin(female_gxt, male_gxt, genders.MALE)
-				sex.menuState=0
+				menu.stat=0
 			end
 		end
-		if sex.menuState == 3 then
-			sex.menuState = menu.ActorsOffsetsMenu(sex.menuState, sex.female, sex.male, sex.pose, sex.place, speed.stat)
-			if sex.menuState == 0 -- Clicked on back button from @ActorsOffsetsMenu
+		if menu.stat == 3 then
+			menu.stat = menu.ActorsOffsetsMenu(menu.stat, sex.female, sex.male, sex.pose, sex.place, speed.stat)
+			if menu.stat == 0 -- Clicked on back button from @ActorsOffsetsMenu
 			or pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
-				sex.menuState = 2
+				menu.stat = 2
 				if pulsed.check(pulsed.states.PULSED_ENTER_VEH)
 				then pulsed.increaseStat()
 				end
@@ -226,25 +224,25 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 				cam.relocateFreeCamCenter()
 			end
 		end
-		if sex.menuState == 4 then
-			sex.menuState = menu.SaveLoadMenu(sex.menuState, sex.female, sex.male, sex.pose, sex.place, speed.stat)
-			if sex.menuState == 0 -- Clicked on back (from @SaveLoadMenu)
+		if menu.stat == 4 then
+			menu.stat = menu.SaveLoadMenu(menu.stat, sex.female, sex.male, sex.pose, sex.place, speed.stat)
+			if menu.stat == 0 -- Clicked on back (from @SaveLoadMenu)
 			or pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
 				if pulsed.check(pulsed.states.PULSED_ENTER_VEH)
 				then pulsed.increaseStat()
 				end
-				sex.menuState = 2
+				menu.stat = 2
 			end
 		end
 		if sex.showSexualStats then
 			menu.showSexualStats(climax.value, speed.value, pleasure.value)
-			menu.ShowSettingTexts(sex.menuState, speed.stat, sex.pose, sex.place, true)
+			menu.ShowSettingTexts(menu.stat, speed.stat, sex.pose, sex.place, true)
 		end
 		
 		-- Is current selector on left menu items ?
-		if sex.menuState >= SX_MENU_LEFT_FIRST_ELEM and sex.menuState <= SX_MENU_LEFT_LAST_ELEM then
+		if menu.stat >= SX_MENU_LEFT_FIRST_ELEM and menu.stat <= SX_MENU_LEFT_LAST_ELEM then
 			if pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
-				sex.menuState = 0 -- Close Sexual Menu
+				menu.stat = 0 -- Close Sexual Menu
 			end
 		end
 		
@@ -286,28 +284,28 @@ sex.machine = function()
 	local do_nothing = function() end
 	
 	if sex.stat == 0 then
-		if sex.menuState == 2 then
+		if menu.stat == 2 then
 			if cursor.clickCheck(203.0, 395.0, 72.0, 11.0) then -- Camera mode Button
 				cam.mode = Increase(cam.mode, 1, 1, 2)
 				cam.ToggleSexualCamera_Alt(sex.pose, sex.place)
 			end
 			if cursor.clickCheck(310.0, 395.0, 26.0, 11.0) then -- 'Free' Button
-				sex.menuState = 8
+				menu.stat = 8
 				cam.setFreeCamera(true, false, sex.pose, sex.place)
 			end
 			if cursor.clickCheck(340.0, 395.0, 26.0, 11.0) then -- 'Edit' Button
-				sex.menuState = 8
+				menu.stat = 8
 				cam.setFreeCamera(false, true, sex.pose, sex.place)
 			end
 		end
 		--	Regular sex mode		Offsets mode
-		if	sex.menuState == 2	or	sex.menuState == 3 then
+		if	menu.stat == 2	or	menu.stat == 3 then
 			menu.ManageAnimationsMenu(speed.stat, sex.pose, sex.place, sex.female, sex.male)
 		end
-		if sex.menuState == 8 then
+		if menu.stat == 8 then
 			if cursor.clickCheck(320.0, 224.0, 640.0, 448.0, true) -- Clicked on Full screen box
 			or pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
-				sex.menuState = 2
+				menu.stat = 2
 				cam.setFreeCamera(false, false, sex.pose, sex.place)
 				if pulsed.check(pulsed.states.PULSED_ENTER_VEH)
 				then pulsed.increaseStat()
@@ -315,7 +313,7 @@ sex.machine = function()
 			end
 			if cam.mode == cam.modes.FREE_CAM then
 				if isButtonPressed(playerchar, pad.ANSWERPHONE_FIREWEAPONALT) then
-					sex.menuState = 9
+					menu.stat = 9
 					cursor.show_cursor = true
 					cam.fpv.removeFirstPersonPoint()
 					cam.createFreeCamCenter()
@@ -323,10 +321,10 @@ sex.machine = function()
 				end
 			end
 		end
-		if sex.menuState == 9 then
+		if menu.stat == 9 then
 			if cam.freeCamEditMode() -- @FreeCamEditMode ended (clicked on back)
 			or pulsed.check(pulsed.states.PULSED_ENTER_VEH) then
-				sex.menuState = 8
+				menu.stat = 8
 				cam.removeFreeCamCenter()
 				cam.ToggleSexualCamera_Alt(sex.pose, sex.place)
 				cursor.show_cursor = false
@@ -334,7 +332,7 @@ sex.machine = function()
 			end
 		end
 
-		if sex.menuState == 2 then
+		if menu.stat == 2 then
 			if cam.mode == cam.modes.FIXED_CAM then
 				local moveAxisX, moveAxisY, specialAxisX, specialAxisY = getPositionOfAnalogueSticks(0)
 				if specialAxisX > 100 then -- RIGHT
@@ -376,7 +374,7 @@ sex.machine = function()
 	end
 	
 	-- Increase / Decrease Speed (Keypresses / Clickable bar)
-	speed.control(sex.menuState, cam.fpv.edit_mode, cam.fpv.moveable)
+	speed.control(menu.stat, cam.fpv.edit_mode, cam.fpv.moveable)
 
 	-- Increase Pleasure
 	local pleasure_machine = (speed.value > 13) and pleasure.machine or do_nothing
@@ -389,12 +387,12 @@ sex.machine = function()
 	speed.machine(sex.female, sex.male, sex.pose, sex.place)
 
 	-- First Person Camera control
-	if not(sex.menuState == 3) then
+	if not(menu.stat == 3) then
 		cam.fpv.control(cam.mode) -- FirstPersonCameraControl_Alt
 	end
 
 	-- Keys Control for Edit Mode
-	if not(sex.menuState == 3) then
+	if not(menu.stat == 3) then
 		cam.fpv.keyscontrol(cam.mode, cam.id) -- 0AB1: @FirstPersonCameraMoveable_KeysControl 2 camera Dummy2 cam_id Dummy3
 	end
 end

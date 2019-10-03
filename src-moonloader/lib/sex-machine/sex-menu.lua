@@ -2,118 +2,11 @@
 ===================================================================]]
 local module = {}
 
+module.stat = 0
+
 module.pose = 0
 module.place = 0
 module.slot = 0
-
-local GetContent = function()
-	local DrawText = require("lib.sex-machine.utils").DrawText
-
-	-- Places (Left Menu)
-	local x, y, at_least_one_data_found
-	for y=1,3 do
-		for x=1,3 do
-			local i = x + (y-1)*3
-			local posX, posY = 56.0 + (x-1)*64.0, 152.0 + (y-1)*38.0
-			DrawText.set(2, 260.0, posX, posY, 0.2, 1.2, string.format("S_PL_%d",i))
-		end
-	end
-	for y=1,5 do
-		for x=1,5 do
-			local i = x + (y-1)*5
-			local pose_gxt = require("lib.sex-machine.data").places[module.place][i]
-			if not(pose_gxt=="") then
-				local posX, posY = 276.0 + (x-1)*66.0, 152.0 + (y-1)*38.0
-				DrawText.set(2, 600.0, posX, posY, 0.2, 1.2, pose_gxt)
-			end
-		end
-	end
-	for y=1,3 do
-		for x=1,4 do
-			local i = x + (y-1)*4
-			local data = require("lib.sex-machine.save-load").data
-			if not(data[i].interior == "") then
-				at_least_one_data_found = true
-				local posX, posY = 460.0 + (x-1)*40.0, 33.0 + (y-1)*28.0
-				DrawText.set(2, 610.0, posX, posY, 0.2, 1.2, 'CFSV_4', {number=i}) -- Slot ~1~
-			end
-		end
-	end
-	if at_least_one_data_found then
-		DrawText.set(2, 610.0, 460.0, 114.0, 0.2, 1.2, 'CFSV_8') -- Current Position
-	end
-end
-
-local CheckBoxes = function(generate_sex_files)
-	local at_least_one_data_found = false
-	for y=1,3 do
-		for x=1,3 do
-			local i = x + (y-1)*3
-			local posX, posY, sizeX, sizeY = 85.0 + (x-1)*65.0, 159.0 + (y-1)*39.0, 62.0, 36.0
-			if i==module.place then
-				drawRect(posX, posY, sizeX, sizeY, 0, 0, 160, 120) -- highlight selected
-			end
-			if require("lib.sex-machine.cursor-control").clickCheck(posX, posY, sizeX, sizeY) then
-				module.pose, module.place, module.slot = 1, i, 0
-				local pose_gxt = require("lib.sex-machine.data").places[module.place][module.pose]
-				local pose, bodytype = module.GetPoseFromGXT(pose_gxt)
-				local place = module.place
-				if generate_sex_files then
-					require("lib.sex-machine.utils").sexfiles.generate(pose, place, bodytype)
-				end
-				require("lib.sex-machine.save-load").data.Load(pose, place)
-			end
-		end
-	end
-	for y=1,5 do
-		for x=1,5 do
-			local i = x + (y-1)*5
-			local posX, posY, sizeX, sizeY = 306.0 + (x-1)*66.0, 159.0 + (y-1)*39.0, 62.0, 36.0
-			if i==module.pose then
-				drawRect(posX, posY, sizeX, sizeY, 0, 0, 160, 120) -- highlight selected
-			end
-			local pose_gxt = require("lib.sex-machine.data").places[module.place][i]
-			if not(pose_gxt == "") then
-				if require("lib.sex-machine.cursor-control").clickCheck(posX, posY, sizeX, sizeY) then
-					module.pose, module.slot = i, 0
-					pose_gxt = require("lib.sex-machine.data").places[module.place][module.pose]
-					local pose, bodytype = module.GetPoseFromGXT(pose_gxt)
-					local place = module.place
-					if generate_sex_files then
-						require("lib.sex-machine.utils").sexfiles.generate(pose, place, bodytype)
-					end
-					require("lib.sex-machine.save-load").data.Load(pose, place)
-				end
-			end
-		end
-	end
-	for y=1,3 do
-		for x=1,4 do
-			local i = x + (y-1)*4
-			local data = require("lib.sex-machine.save-load").data
-			if not(data[i].interior == "") then
-				at_least_one_data_found = true
-				local posX, posY, sizeX, sizeY = 474.0 + (x-1)*40.0, 39.0 + (y-1)*28.0, 38.0, 26.0
-				if module.slot == i then
-					drawRect(posX, posY, sizeX, sizeY, 0, 0, 160, 120) -- highlight selected
-				end
-				if require("lib.sex-machine.cursor-control").clickCheck(posX, posY, sizeX, sizeY) then
-					module.slot = i
-				end
-			end
-		end
-	end
-	if at_least_one_data_found then -- At least one data found?
-		drawRect(518.0, 67.0, 243.0, 134.0, 0, 0, 0, 120) -- Decoration bar
-		if require("lib.sex-machine.cursor-control").clickCheck(500.0, 122.0, 90.0, 25.0) then
-			module.slot = 0
-		end
-		if module.slot == 0 then
-			drawRect(500.0, 122.0, 90.0, 25.0, 0, 0, 160, 120) -- highlight 'Current Position' button
-		end
-	end
-	return module.pose, module.place
-end
 
 --[[===============================================================
 ===================================================================]]
@@ -144,57 +37,105 @@ module.showSexualMenu = function(pose, place, generate_sex_files)
 	drawRect(542.0, 422.0, 161.0, 6.0, 255, 147, 251, 100)
 	DrawText.set(2, 640.0, 524.0, 409.0, 0.3, 1.5, 'S_OPT4') -- Change!
 	DrawText.set(2, 600.0, 10.0, 430.0, 0.2, 1.2, 'S_OPT5') -- Cancel
-
-	GetContent()
-	local highlightedPose, highlightedPlace = CheckBoxes(generate_sex_files)
-	return highlightedPose, highlightedPlace
-end
-
---[[===============================================================
-===================================================================]]
-module.GetPoseFromGXT = function(gxt_entry)
-	local i
-	local poses_gxt = require("lib.sex-machine.data").poses_gxt
-	local pattern = "gxt%s+([%w_]+)%s+pose%s+(%d+)%s+bodytype%s+(%d+)"
-	for i=1,#poses_gxt do
-		local gxt_read, pose, bodytype = string.match(poses_gxt[i], pattern)
-		if gxt_entry == gxt_read then
-			return tonumber(pose), tonumber(bodytype)
+	
+	-- Places Submenu
+	local place_gxt = function (id)
+		return string.format("S_PL_%d",id)
+	end
+	
+	local places_buttons = function(i)
+		module.pose, module.place, module.slot = 1, i, 0
+		local pose_gxt = require("lib.sex-machine.data").places[module.place][module.pose]
+		local pose, bodytype = require("lib.sex-machine.data").GetPoseFromGXT(pose_gxt)
+		local place = module.place
+		if generate_sex_files then
+			require("lib.sex-machine.utils").sexfiles.generate(pose, place, bodytype)
+		end
+		require("lib.sex-machine.save-load").data.Load(pose, place)
+	end
+	
+	module.showButtons({
+		{{  1, place_gxt( 1),  1, places_buttons, function() return  1 end },	{  2, place_gxt( 2),  2, places_buttons, function() return  2 end },		{  3, place_gxt( 3),  3, places_buttons, function() return  3 end }},
+		{{  4, place_gxt( 4),  4, places_buttons, function() return  4 end },	{  5, place_gxt( 5),  5, places_buttons, function() return  5 end },		{  6, place_gxt( 6),  6, places_buttons, function() return  6 end }},
+		{{  7, place_gxt( 7),  7, places_buttons, function() return  7 end },	{  8, place_gxt( 8),  8, places_buttons, function() return  8 end },		{  9, place_gxt( 9),  9, places_buttons, function() return  9 end }},
+	}, 56.0, 152.0, 0.2, 1.2, 64.0, 38.0, nil, nil, 85.0, 159.0, 62.0, 36.0, nil, {r=0,g=0,b=160,a=120}, module.place)
+	
+	-- Poses Submenu
+	local pose_gxt = function(i)
+		local pose_gxt = require("lib.sex-machine.data").places[module.place][i]
+		if not(pose_gxt=="") then	return pose_gxt
+		else						return nil			end
+	end
+	
+	local poses_buttons = function(i)
+		module.pose, module.slot = i, 0
+		pose_gxt = require("lib.sex-machine.data").places[module.place][module.pose]
+		local pose, bodytype = require("lib.sex-machine.data").GetPoseFromGXT(pose_gxt)
+		local place = module.place
+		if generate_sex_files then
+			require("lib.sex-machine.utils").sexfiles.generate(pose, place, bodytype)
+		end
+		require("lib.sex-machine.save-load").data.Load(pose, place)
+	end
+	local get_poses_buttons = function(i)
+		local pose_gxt = require("lib.sex-machine.data").places[module.place][i]
+		if not(pose_gxt == "") then		return poses_buttons
+		else							return nil				end
+	end
+	
+	module.showButtons({
+		{{  1, pose_gxt( 1),  1, get_poses_buttons( 1), function() return  1 end },	{  2, pose_gxt( 2),  2, get_poses_buttons( 2), function() return  2 end },	{  3, pose_gxt( 3),  3, get_poses_buttons( 3), function() return  3 end },	{  4, pose_gxt( 4),  4, get_poses_buttons( 4), function() return  4 end },	{  5, pose_gxt( 5),  5, get_poses_buttons( 5), function() return  5 end }},
+		{{  6, pose_gxt( 6),  6, get_poses_buttons( 6), function() return  6 end },	{  7, pose_gxt( 7),  7, get_poses_buttons( 7), function() return  7 end },	{  8, pose_gxt( 8),  8, get_poses_buttons( 8), function() return  8 end },	{  9, pose_gxt( 9),  9, get_poses_buttons( 9), function() return  9 end },	{ 10, pose_gxt(10), 10, get_poses_buttons(10), function() return 10 end }},
+		{{ 11, pose_gxt(11), 11, get_poses_buttons(11), function() return 11 end },	{ 12, pose_gxt(12), 12, get_poses_buttons(12), function() return 12 end },	{ 13, pose_gxt(13), 13, get_poses_buttons(13), function() return 13 end },	{ 14, pose_gxt(14), 14, get_poses_buttons(14), function() return 14 end },	{ 15, pose_gxt(15), 15, get_poses_buttons(15), function() return 15 end }},
+		{{ 16, pose_gxt(16), 16, get_poses_buttons(16), function() return 16 end },	{ 17, pose_gxt(17), 17, get_poses_buttons(17), function() return 17 end },	{ 18, pose_gxt(18), 18, get_poses_buttons(18), function() return 18 end },	{ 19, pose_gxt(19), 19, get_poses_buttons(19), function() return 19 end },	{ 20, pose_gxt(20), 20, get_poses_buttons(20), function() return 20 end }},
+		{{ 21, pose_gxt(21), 21, get_poses_buttons(21), function() return 21 end },	{ 22, pose_gxt(22), 22, get_poses_buttons(22), function() return 22 end },	{ 23, pose_gxt(23), 23, get_poses_buttons(23), function() return 23 end },	{ 24, pose_gxt(24), 24, get_poses_buttons(24), function() return 24 end },	{ 25, pose_gxt(25), 25, get_poses_buttons(25), function() return 25 end }},
+	}, 276.0, 152.0, 0.2, 1.2, 66.0, 38.0, nil, nil, 306.0, 159.0, 62.0, 36.0, nil, {r=0,g=0,b=160,a=120}, module.pose)
+	
+	-- Memory slots Submenu
+	local at_least_one_data_found = false
+	
+	local slot_gxt = function(i)
+		local data = require("lib.sex-machine.save-load").data
+		if not(data[i].interior == "") then
+			at_least_one_data_found = true
+			return 'CFSV_4'
+		else return nil
 		end
 	end
-	return nil, nil
-end
-
-
---[[===============================================================
-===================================================================]]
-module.GetPlaceFromGXT = function(gxt_entry)
-	local i
-	local places_gxt = require "lib.sex-machine.data".places_gxt
-	local pattern = "gxt%s+([%w_]+)%s+place%s+(%d+)%s+%a+"
-	for i=1,#places_gxt do
-		local gxt_read, place = string.match(places_gxt[i], pattern)
-		if gxt_entry == gxt_read then
-			return tonumber(place)
+	
+	local slot_buttons = function(i)
+		module.slot = i
+	end
+	
+	local get_slot_buttons = function(i)
+		local data = require("lib.sex-machine.save-load").data
+		if not(data[i].interior == "") then
+			at_least_one_data_found = true
+			return slot_buttons
+		else return nil
 		end
 	end
-	return nil
-end
-
---[[===============================================================
-===================================================================]]
-module.getMenuPose = function (pose, place)
-	local x,y=nil,nil
-	for y=1,5 do
-		for x=1,5 do
-			local i = x + (y-1)*5
-			local pose_gxt = require("lib.sex-machine.data").places[place][i]
-			local searching_pose, b = module.GetPoseFromGXT(pose_gxt)
-			if searching_pose==pose then
-				return i
-			end
+	
+	module.showButtons({
+		{{  1, slot_gxt( 1),  1, get_slot_buttons( 1), function() return  1 end },	{  2, slot_gxt( 2),  2, get_slot_buttons( 2), function() return  2 end },	{  3, slot_gxt( 3),  3, get_slot_buttons( 3), function() return  3 end }},
+		{{  4, slot_gxt( 4),  4, get_slot_buttons( 4), function() return  4 end },	{  5, slot_gxt( 5),  5, get_slot_buttons( 5), function() return  5 end },	{  6, slot_gxt( 6),  6, get_slot_buttons( 6), function() return  6 end }},
+		{{  7, slot_gxt( 7),  7, get_slot_buttons( 7), function() return  7 end },	{  8, slot_gxt( 8),  8, get_slot_buttons( 8), function() return  8 end },	{  9, slot_gxt( 9),  9, get_slot_buttons( 9), function() return  9 end }},
+		{{ 10, slot_gxt(10), 10, get_slot_buttons(10), function() return 10 end },	{ 11, slot_gxt(11), 11, get_slot_buttons(11), function() return 11 end },	{ 12, slot_gxt(12), 12, get_slot_buttons(12), function() return 12 end }},
+	}, 460.0, 33.0, 0.2, 1.2, 40.0, 28.0, nil, nil, 474.0, 39.0, 38.0, 26.0, nil, {r=0,g=0,b=160,a=120}, module.slot)
+	
+	if at_least_one_data_found then -- At least one data found?
+		local DrawText = require("lib.sex-machine.utils").DrawText
+		DrawText.set(2, 610.0, 460.0, 114.0, 0.2, 1.2, 'CFSV_8') -- Current Position
+		drawRect(518.0, 67.0, 243.0, 134.0, 0, 0, 0, 120) -- Decoration bar
+		if require("lib.sex-machine.cursor-control").clickCheck(500.0, 122.0, 90.0, 25.0) then
+			module.slot = 0
+		end
+		if module.slot == 0 then
+			drawRect(500.0, 122.0, 90.0, 25.0, 0, 0, 160, 120) -- highlight 'Current Position' button
 		end
 	end
+	
+	return module.pose, module.place
 end
 	
 --[[===============================================================
@@ -212,7 +153,9 @@ end
 --[[===============================================================
 void showSexualStats(float climax, int speed, int pleasure)
 ===================================================================]]
-module.showSexualStats = function(climax, speed, pleasure) -- ShowSexualStats
+module.showSexualStats = function(climax, speed, pleasure)
+	local DrawText = require("lib.sex-machine.utils").DrawText
+	
 	local climaxBar = {}
 	climaxBar.sizeX = 1.8 * climax
 	climaxBar.posX = climaxBar.sizeX/2.0 + 170.0
@@ -245,15 +188,8 @@ module.showSexualStats = function(climax, speed, pleasure) -- ShowSexualStats
 	-- Shadow on text "pleasure"
 	drawRect(203.0, 436.0, 72.0, 12.0, 0, 0, 0, 120)
 	
-	setTextFont(2)
-	setTextWrapx(600.0)
-	setTextScale(0.2, 1.0)
-	displayText(179.0, 409.0, 'S_HUD1') -- Climax
-
-	setTextFont(1)
-	setTextWrapx(600.0)
-	setTextScale(0.2, 1.0)
-	displayTextWithNumber(171.0, 430.0, 'S_HUD2', pleasure) -- Pleasure: ~1~%
+	DrawText.set(2, 600.0, 179.0, 409.0, 0.2, 1.0, 'S_HUD1') -- Climax
+	DrawText.set(1, 600.0, 171.0, 430.0, 0.2, 1.0, 'S_HUD2', {number=pleasure}) -- Pleasure: ~1~%
 end
 
 --[[===============================================================
@@ -561,7 +497,7 @@ end
 
 --[[===============================================================
 ===================================================================]]
-module.CamsOffsetsMenu_Action = 0
+--[[module.CamsOffsetsMenu_Action = 0
 module.CamsOffsetsMenu_OffsetToModify, module.CamsOffsetsMenu_OffsetToModify_prev = 0, 0
 module.CamsOffsetsMenu_FixedId = 0
 
@@ -777,7 +713,7 @@ module.CameraOffsetsMenu = function (stat, female, male, pose, place, speed)
 	end
 	
 	return stat
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
@@ -975,7 +911,12 @@ end
 --[[===============================================================
 ===================================================================]]
 module.showButtons = function (data, tposX, tposY, tsizeX, tsizeY, offsX, offsY, text_default_style, text_selected_style,
-	bposX, bposY, bsizeX, bsizeX, box_default_style, box_selected_style, selected_elem_id)
+	bposX, bposY, bsizeX, bsizeY, box_default_style, box_selected_style, selected_elem_id)
+	
+	text_default_style = text_default_style or {r=255,g=255,b=255,a=255}
+	text_selected_style = text_selected_style or {r=255,g=255,b=255,a=255}
+	box_default_style = box_default_style or {r=0,g=0,b=0,a=0}
+	box_selected_style = box_selected_style or {r=0,g=0,b=0,a=0}
 	
 	local cursor = require("lib.sex-machine.cursor-control")
 	local DrawText = require("lib.sex-machine.utils").DrawText
@@ -985,23 +926,29 @@ module.showButtons = function (data, tposX, tposY, tsizeX, tsizeY, offsX, offsY,
 		for x=1,#data[y] do
 			
 			local elem_id = data[y][x][1]
-			local sel = elem_id==selected_elem_id --cursor.positionCheck(bposX+offsX*(x-1), bposY+offsY*(y-1), bsizeX, bsizeX)
+			local sel = elem_id==selected_elem_id --cursor.positionCheck(bposX+offsX*(x-1), bposY+offsY*(y-1), bsizeX, bsizeY)
 			local r, g, b, a = sel and tsel_r or tr, sel and tsel_g or tg, sel and tsel_b or tb, sel and tsel_a or ta
 			local gxt_entry, gxt_num = data[y][x][2], data[y][x][3]
 			local style = sel and text_selected_style or text_default_style
 			style.number = gxt_num
 			
 			-- Texts
-			DrawText.set(2, 600.0, tposX+offsX*(x-1), tposY+offsY*(y-1), tsizeX, tsizeY, gxt_entry, style)
+			if not(gxt_entry==nil) then
+				DrawText.set(2, 600.0, tposX+offsX*(x-1), tposY+offsY*(y-1), tsizeX, tsizeY, gxt_entry, style)
+			end
 			
 			-- Boxes
-			style = sel and box_selected_style or box_default_style
-			drawRect(bposX+offsX*(x-1), bposY+offsY*(y-1), bsizeX, bsizeX, style.r, style.g, style.b, style.a)
+			if not(gxt_entry==nil) then
+				style = sel and box_selected_style or box_default_style
+				drawRect(bposX+offsX*(x-1), bposY+offsY*(y-1), bsizeX, bsizeY, style.r, style.g, style.b, style.a)
+			end
 			
 			-- Actions
 			local button_action, params = data[y][x][4], data[y][x][5] or void
-			local do_nothing, void = function() end, function() end
-			( cursor.clickCheck(bposX+offsX*(x-1), bposY+offsY*(y-1), bsizeX, bsizeX) and button_action or do_nothing)( params() )
+			if not(button_action==nil) then
+				local do_nothing, void = function() end, function() end
+				( cursor.clickCheck(bposX+offsX*(x-1), bposY+offsY*(y-1), bsizeX, bsizeY) and button_action or do_nothing)( params() )
+			end
 			
 		end
 	end

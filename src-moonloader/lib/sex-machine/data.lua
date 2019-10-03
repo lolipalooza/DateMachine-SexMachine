@@ -225,4 +225,51 @@ module.places_gxt = {
 	"gxt S_PL_9 place 9 onfoot",
 }
 
+--[[===============================================================
+===================================================================]]
+module.GetPoseFromGXT = function(gxt_entry)
+	local i
+	local poses_gxt = module.poses_gxt
+	local pattern = "gxt%s+([%w_]+)%s+pose%s+(%d+)%s+bodytype%s+(%d+)"
+	for i=1,#poses_gxt do
+		local gxt_read, pose, bodytype = string.match(poses_gxt[i], pattern)
+		if gxt_entry == gxt_read then
+			return tonumber(pose), tonumber(bodytype)
+		end
+	end
+	return nil, nil
+end
+
+
+--[[===============================================================
+===================================================================]]
+module.GetPlaceFromGXT = function(gxt_entry)
+	local i
+	local places_gxt = module.places_gxt
+	local pattern = "gxt%s+([%w_]+)%s+place%s+(%d+)%s+%a+"
+	for i=1,#places_gxt do
+		local gxt_read, place = string.match(places_gxt[i], pattern)
+		if gxt_entry == gxt_read then
+			return tonumber(place)
+		end
+	end
+	return nil
+end
+
+--[[===============================================================
+===================================================================]]
+module.getMenuPose = function (pose, place)
+	local x,y=nil,nil
+	for y=1,5 do
+		for x=1,5 do
+			local i = x + (y-1)*5
+			local pose_gxt = module.places[place][i]
+			local searching_pose, b = module.GetPoseFromGXT(pose_gxt)
+			if searching_pose==pose then
+				return i
+			end
+		end
+	end
+end
+
 return module

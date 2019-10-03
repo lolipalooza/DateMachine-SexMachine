@@ -52,6 +52,9 @@ end
 ===================================================================]]
 module.camera = {}
 
+module.camera.mode = 0
+module.camera.id = 0
+
 module.camera.modes = {
 	FREE_CAM = 0,
 	FIXED_CAM = 1,
@@ -60,34 +63,6 @@ module.camera.modes = {
 
 module.camera.fpv = {}
 module.camera.fixed = {}
-
-function module.camera.init(mode)
-	module.camera.mode = mode
-	module.camera.id = 1
-end
-
---[[===============================================================
-===================================================================]]
-function module.camera.ToggleSexualCamera(pose, place)
-	local FREE_CAM, FIXED_CAM, FPV_CAM = module.camera.modes.FREE_CAM, module.camera.modes.FIXED_CAM, module.camera.modes.FPV_CAM
-	local cam = module.camera.mode
-	if cam == FREE_CAM then
-		restoreCameraJumpcut()
-	elseif cam == FIXED_CAM then
-		local x, y, z, tx, ty, tz = module.camera.getFixedCoordinates(pose, place)
-		setFixedCameraPosition(x, y, z, 0.0, 0.0, 0.0)
-		pointCameraAtPoint(tx, ty, tz, 2)
-	elseif cam == FPV_CAM then
-		local x, y, z, tx, ty, tz, rot, a, min_rot, max_rot, min_a, max_a = module.camera.getFPVCamCoordinates(pose, place)
-		module.camera.fpv.rotation = rot
-		module.camera.fpv.min_rotation = min_rot
-		module.camera.fpv.max_rotation = max_rot
-		module.camera.fpv.min_angle = min_a
-		module.camera.fpv.max_angle = max_a
-		module.camera.fpv.createFirstPersonPoint(x, y, z, a, tx)
-	end
-	if not(cam == m.FPV_CAM) then module.camera.fpv.removeFirstPersonPoint() end
-end
 
 --[[===============================================================
 ===================================================================]]
@@ -118,7 +93,7 @@ function module.camera.freezeCamera()
 	local cam = module.camera.mode
 	if cam == FREE_CAM then
 		local x,y,z = getActiveCameraCoordinates()
-		setFixedCameraPosition(x,y,z,0.0,0.0,0.0)
+		setFixedCameraPosition(x,y,z,0,0,0)
 		x,y,z = getActiveCameraPointAt()
 		pointCameraAtPoint(x,y,z,2)
 	elseif cam == FPV_CAM then
