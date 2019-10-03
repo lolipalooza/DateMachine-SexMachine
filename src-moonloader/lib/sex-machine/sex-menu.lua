@@ -117,10 +117,9 @@ module.showSexualMenu = function(pose, place, generate_sex_files)
 	end
 	
 	module.showButtons({
-		{{  1, slot_gxt( 1),  1, get_slot_buttons( 1), function() return  1 end },	{  2, slot_gxt( 2),  2, get_slot_buttons( 2), function() return  2 end },	{  3, slot_gxt( 3),  3, get_slot_buttons( 3), function() return  3 end }},
-		{{  4, slot_gxt( 4),  4, get_slot_buttons( 4), function() return  4 end },	{  5, slot_gxt( 5),  5, get_slot_buttons( 5), function() return  5 end },	{  6, slot_gxt( 6),  6, get_slot_buttons( 6), function() return  6 end }},
-		{{  7, slot_gxt( 7),  7, get_slot_buttons( 7), function() return  7 end },	{  8, slot_gxt( 8),  8, get_slot_buttons( 8), function() return  8 end },	{  9, slot_gxt( 9),  9, get_slot_buttons( 9), function() return  9 end }},
-		{{ 10, slot_gxt(10), 10, get_slot_buttons(10), function() return 10 end },	{ 11, slot_gxt(11), 11, get_slot_buttons(11), function() return 11 end },	{ 12, slot_gxt(12), 12, get_slot_buttons(12), function() return 12 end }},
+		{{  1, slot_gxt( 1),  1, get_slot_buttons( 1), function() return  1 end },	{  2, slot_gxt( 2),  2, get_slot_buttons( 2), function() return  2 end },	{  3, slot_gxt( 3),  3, get_slot_buttons( 3), function() return  3 end },	{  4, slot_gxt( 4),  4, get_slot_buttons( 4), function() return  4 end }},
+		{{  5, slot_gxt( 5),  5, get_slot_buttons( 5), function() return  5 end },	{  6, slot_gxt( 6),  6, get_slot_buttons( 6), function() return  6 end },	{  7, slot_gxt( 7),  7, get_slot_buttons( 7), function() return  7 end },	{  8, slot_gxt( 8),  8, get_slot_buttons( 8), function() return  8 end }},
+		{{  9, slot_gxt( 9),  9, get_slot_buttons( 9), function() return  9 end },	{ 10, slot_gxt(10), 10, get_slot_buttons(10), function() return 10 end },	{ 11, slot_gxt(11), 11, get_slot_buttons(11), function() return 11 end },	{ 12, slot_gxt(12), 12, get_slot_buttons(12), function() return 12 end }},
 	}, 460.0, 33.0, 0.2, 1.2, 40.0, 28.0, nil, nil, 474.0, 39.0, 38.0, 26.0, nil, {r=0,g=0,b=160,a=120}, module.slot)
 	
 	if at_least_one_data_found then -- At least one data found?
@@ -717,36 +716,25 @@ end]]
 
 --[[===============================================================
 ===================================================================]]
-module.CamsOffsets_SetFixedCamera = function ()
+--[[module.CamsOffsets_SetFixedCamera = function ()
 	local object = require("lib.sex-machine.cameras-coordinates").camera.free.center
 	module.ActorsOffsets_SetFixedCamera(object)
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
-module.ShowSettingTexts = function (stat, speed, pose, place, info_text_flag)
+module.ShowSettingTexts = function (stat, speed, pose, place)
 	local cam = require("lib.sex-machine.cameras-coordinates").camera
 	local FREE_CAM, FIXED_CAM, FPV_CAM = cam.modes.FREE_CAM, cam.modes.FIXED_CAM, cam.modes.FPV_CAM
 	local DrawText = require("lib.sex-machine.utils").DrawText
 	
 	DrawText.set(2, 600.0, 24.0, 12.0, 0.2, 1.2, 'CFG_T3') -- ~b~~k~~VEHICLE_ENTER_EXIT~: ~s~Go back.
 	
-	if not info_text_flag then	-- Classic Mode For SexMachine
-		DrawText.set(2, 600.0, 24.0, 26.0, 0.2, 1.2, 'CFG_T1') -- ~b~Mouse wheel~w~: Increase/decrease speed.
-		DrawText.set(2, 600.0, 24.0, 40.0, 0.2, 1.2, 'CFG_T4') -- ~b~~k~~CAMERA_CHANGE_VIEW_ALL_SITUATIONS~~s~: Change Camera mode. ~b~~k~~GO_LEFT~~s~/~b~~k~~GO_RIGHT~~s~: Change cam view (only in fixed mode).
-	else						-- Custom mode for SexMachine
-		if		stat == 0	then	DrawText.set(2, 600.0, 24.0, 26.0, 0.2, 1.2, 'CFG_T9') -- ~b~~k~~PED_ANSWER_PHONE~~w~: Go to the desired place and press ~k~~PED_ANSWER_PHONE~ to select pose.
-		elseif	stat == 8	then	DrawText.set(2, 600.0, 24.0, 26.0, 0.2, 1.2, 'CFG_I1') -- ~b~~k~~PED_ANSWER_PHONE~~w~: Edit the free camera rotation point.
-		end
+	if		stat == 0	then	DrawText.set(2, 600.0, 24.0, 26.0, 0.2, 1.2, 'CFG_T9') -- ~b~~k~~PED_ANSWER_PHONE~~w~: Go to the desired place and press ~k~~PED_ANSWER_PHONE~ to select pose.
+	elseif	stat == 8	then	DrawText.set(2, 600.0, 24.0, 26.0, 0.2, 1.2, 'CFG_I1') -- ~b~~k~~PED_ANSWER_PHONE~~w~: Edit the free camera rotation point.
 	end
 	
-	--[[ -- Debug
-	if doesCharExist(cam.fpv.actor) then
-		printStringNow( string.format("rotation: %f, angle: %f", cam.fpv.rotation, getCharHeading(cam.fpv.actor)), 0 )
-	end]]
-	
-	--	Classic Mode For SexMachine			Custom mode for SexMachine
-	if	not info_text_flag			or		info_text_flag and stat == 2 then
+	if stat == 2 then
 		if not(cam.mode == FREE_CAM) then
 			if cam.mode == FIXED_CAM then
 				DrawText.set(2, 600.0, 169.0, 390.0, 0.2, 1.0, 'CFG_C5', {number=cam.id+1}) -- Fixed Camera ~y~~1~
@@ -757,10 +745,7 @@ module.ShowSettingTexts = function (stat, speed, pose, place, info_text_flag)
 			DrawText.set(2, 600.0, 300.0, 390.0, 0.2, 1.0, 'CFG_C7') -- Free
 			DrawText.set(2, 600.0, 330.0, 390.0, 0.2, 1.0, 'CFG_C8') -- Edit
 		end
-	end
-	
-	--	Classic Mode For SexMachine				Custom mode for SexMachine
-	if	not info_text_flag and stat == 0	or	info_text_flag and stat == 2	then
+		
 		DrawText.set(2, 600.0, 129.0, 391.0, 0.2, 1.2, 'CFG_M1') -- Poses
 		DrawText.set(2, 600.0, 119.0, 404.0, 0.2, 1.2, 'CFG_M2') -- Offsets
 		DrawText.set(2, 600.0, 108.0, 417.0, 0.2, 1.2, 'CFG_M4') -- Save/Load
@@ -934,7 +919,7 @@ module.showButtons = function (data, tposX, tposY, tsizeX, tsizeY, offsX, offsY,
 			
 			-- Texts
 			if not(gxt_entry==nil) then
-				DrawText.set(2, 600.0, tposX+offsX*(x-1), tposY+offsY*(y-1), tsizeX, tsizeY, gxt_entry, style)
+				DrawText.set(2, 620.0, tposX+offsX*(x-1), tposY+offsY*(y-1), tsizeX, tsizeY, gxt_entry, style)
 			end
 			
 			-- Boxes
@@ -953,6 +938,5 @@ module.showButtons = function (data, tposX, tposY, tsizeX, tsizeY, offsX, offsY,
 		end
 	end
 end
-
 
 return module

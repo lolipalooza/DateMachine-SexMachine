@@ -73,16 +73,18 @@ local writeDataTableLineToFile = function ()
 	for slot=1,#data do
 		if not(data[slot].interior == "") then
 			local d = data[slot]
-			io.write( string.format("interior %s pose %d place %d center_xyz %.6f %.6f %.6f fem_xyza %.6f %.6f %.6f %.6f male_xyza %.6f %.6f %.6f %.6f slot %d in_use %d free_cam %.6f %.6f %.6f fpv_pos %.6f %.6f %.6f fpv_angle %.6f fpv_rotation %.6f ",
+			local write_to_file = string.format("interior %s pose %d place %d center_xyz %.6f %.6f %.6f fem_xyza %.6f %.6f %.6f %.6f male_xyza %.6f %.6f %.6f %.6f slot %d in_use %d free_cam %.6f %.6f %.6f fpv_pos %.6f %.6f %.6f fpv_angle %.6f fpv_rotation %.6f ",
 				d.interior, d.pose - 1, d.place - 1, d.center[1], d.center[2], d.center[3],
 				d.fem[1], d.fem[2], d.fem[3], d.fem[4], d.male[1], d.male[2], d.male[3], d.male[4],
 				slot, d.in_use and "1" or "0", d.cam.free[1], d.cam.free[2], d.cam.free[3],
-				d.cam.fpv[1], d.cam.fpv[2], d.cam.fpv[3], d.cam.fpv[4], d.cam.fpv[5]) )
+				d.cam.fpv[1], d.cam.fpv[2], d.cam.fpv[3], d.cam.fpv[4], d.cam.fpv[5])
+			io.write( write_to_file )
 			
 			local i = nil
 			for i=1,12 do
-				io.write( string.format("fixed_pos %.6f %.6f %.6f angle %.6f rot %.6f ",
-					d.cam.fixed[i][1], d.cam.fixed[i][2], d.cam.fixed[i][3], d.cam.fixed[i][4], d.cam.fixed[i][5]) )
+				write_to_file = string.format("fixed_pos %.6f %.6f %.6f angle %.6f rot %.6f ",
+					d.cam.fixed[i][1], d.cam.fixed[i][2], d.cam.fixed[i][3], d.cam.fixed[i][4], d.cam.fixed[i][5])
+				io.write( write_to_file )
 			end
 			io.write("\n")
 		end
@@ -114,6 +116,7 @@ module.data.Save = function (_pose, _place) -- SaveData
 	for i=1,#temp do
 		line = temp[i]
 		local check_interior, check_pose, check_place = string.match(line, "interior%s+([%w_]+)%s+pose%s+(%d+)%s+place%s+(%d+)")
+		check_pose, check_place = check_pose+1, check_place+1
 		if check_interior == interiorName and tonumber(check_pose) == _pose and tonumber(check_place) == _place then
 			if not already_saved_data_in_use then
 				already_saved_data_in_use = true
