@@ -386,7 +386,7 @@ end
 
 --[[===============================================================
 ===================================================================]]
-function module.camera.fpv.control1() -- FirstPersonCameraControl
+--[[function module.camera.fpv.control1() -- FirstPersonCameraControl
 	if doesCharExist(module.camera.fpv.actor) then
 		if module.camera.mode == module.camera.modes.FPV_CAM then
 			local x, y = getPcMouseMovement()
@@ -404,7 +404,7 @@ function module.camera.fpv.control1() -- FirstPersonCameraControl
 			module.camera.fpv.rotation = rot
 		end
 	end
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
@@ -581,7 +581,7 @@ end
 
 --[[===============================================================
 ===================================================================]]
-function module.camera.fixed.move(cam_id, sides, front, height, speed) -- MoveFixedCamPoint
+--[[function module.camera.fixed.move(cam_id, sides, front, height, speed) -- MoveFixedCamPoint
 	if doesCharExist(module.camera.fpv.actor) then
 		sides, front, height = sides*speed, front*speed, height*speed - 1.0
 		local x, y, z = getOffsetFromCharInWorldCoords(module.camera.fpv.actor, sides, front, height)
@@ -598,7 +598,7 @@ function module.camera.fixed.move(cam_id, sides, front, height, speed) -- MoveFi
 		x, y, z = x-plyX-femX, y-plyY-femY, z-plyZ-femZ
 		module.camera.fixed.store(cam_id, x, y, z, a, rot, tx)
 	end
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
@@ -750,17 +750,7 @@ return module
 
 --[[===============================================================
 ===================================================================]]
---[[:DEBUG_ShowFixedCamStorage
-0A9A: 30@ = openfile LOG_FILE mode "wb+"  // IF and SET
-for 10@ = 0 to 11
-    0AB1: @GetFixedCam 1 cam_id 10@ ret 20@ 21@ 22@ 23@ 24@ 25@
-    0AD9: write_formatted_text "pos %f %f %f angle %f rot %f x_trgt %f%c%c" in_file 30@ vars 20@ 21@ 22@ 23@ 24@ 25@ 0xd 0xa
-end
-0A9B: closefile 30@
-0AB2: ret 0
-
-
-
+--[[
 :ARC_SIN // 0@
 if 0@ == 1.0
 then 31@ = 90.0
