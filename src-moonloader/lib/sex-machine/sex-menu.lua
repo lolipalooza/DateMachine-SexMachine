@@ -244,9 +244,9 @@ end
 --[[===============================================================
 ===================================================================]]
 module.ActorsOffsetsMenu_Action = 0
-module.ActorsOffsetsMenu_AngleOfView = 0.0
+--module.ActorsOffsetsMenu_AngleOfView = 0.0
 
-module.ActorsOffsets_SetFixedCamera = function(input) -- input can be actor or object
+--[[module.ActorsOffsets_SetFixedCamera = function(input) -- input can be actor or object
 	local x, y, z, dummy
 	if doesCharExist(input) then
 		x, y, z = getCharCoordinates(input)
@@ -257,7 +257,7 @@ module.ActorsOffsets_SetFixedCamera = function(input) -- input can be actor or o
 	local camPosX, camPosY, camPosZ = x - 2.0*sin(angle), y + 2.0*cos(angle), z + 1.0
 	setFixedCameraPosition(camPosX, camPosY, camPosZ, 0.0, 0.0, 0.0)
 	pointCameraAtPoint(x, y, z, 2)
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
@@ -388,7 +388,7 @@ end
 
 --[[===============================================================
 ===================================================================]]
-module.GetIncreaseSteps_Cam = function (step)
+--[[module.GetIncreaseSteps_Cam = function (step)
 	cx, cy, cz = getActiveCameraCoordinates()
 	tx, ty, tz = getActiveCameraPointAt()
 	
@@ -397,7 +397,7 @@ module.GetIncreaseSteps_Cam = function (step)
 	local step_x, step_y = (tx - cx)*step, (ty - cy)*step
 	
 	return step_x, step_y
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
@@ -443,8 +443,8 @@ module.ActorsOffsetsMenu = function (stat, female, male, pose, place, speed)
 	DrawText.set(2, 600.0, 10.0, 415.0, 0.2, 1.0, 'CFG_O6') -- Reset
 	if cursor.clickCheck(52.0, 421.0, 93.0, 12.0) then -- Reset
 		if offset <= 2 then -- Actors offset
-			coords.setFemOffsets(0.0, 0.0, 0.0, 0.0)
-			coords.setMaleOffsets(0.0, 0.0, 0.0, 0.0)
+			coords.setFemOffsets(0, 0, 0, 0)
+			coords.setMaleOffsets(0, 0, 0, 0)
 			move_actors_flag=true
 		elseif offset == 3 then -- Free cam center offset
 			local x,y,z = coords.getFemOffsets()

@@ -708,7 +708,7 @@ end
 
 --[[===============================================================
 ===================================================================]]
-function module.camera.moveFreeCamCenter(step_x, step_y, step_z)
+--[[function module.camera.moveFreeCamCenter(step_x, step_y, step_z)
 	local menu = require("lib.sex-machine.sex-menu")
 
 	local coords = module.coordinates
@@ -722,7 +722,7 @@ function module.camera.moveFreeCamCenter(step_x, step_y, step_z)
 	menu.ActorsOffsets_SetFixedCamera(object)
 	
 	coords.setPlayerOffsets(offsX, offsY, offsZ)
-end
+end]]
 
 --[[===============================================================
 ===================================================================]]
