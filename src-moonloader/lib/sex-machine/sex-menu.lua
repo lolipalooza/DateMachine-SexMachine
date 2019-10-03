@@ -448,7 +448,7 @@ module.ActorsOffsetsMenu = function (stat, female, male, pose, place, speed)
 			move_actors_flag=true
 		elseif offset == 3 then -- Free cam center offset
 			local x,y,z = coords.getFemOffsets()
-			coords.setPlayerPos(x,y,z)
+			coords.setPlayerOffsets(x,y,z)
 			cam.setFreeCamCenter(x,y,z)
 		end
 	end
@@ -482,7 +482,7 @@ module.ActorsOffsets_KeysControl = function (gender_flag, female, male, pose, pl
 	f7 = ( isKeyDown(37)	and incDecActorOffset	or do_nothing )( gender_flag, -10.0, false )					-- left: angle
 	f8 = ( isKeyDown(39)	and incDecActorOffset	or do_nothing )( gender_flag,  10.0, false )					-- right: angle
 	
-	if	move_actors_flag	or	f1	or	f2	or	f3	or	f4	or	f5	or	f6	or	f7	or	f8 then -- Should actors be move?
+	if	move_actors_flag	or	f1	or	f2	or	f3	or	f4	or	f5	or	f6	or	f7	or	f8 then -- Should actors be moved?
 		local coords = require("lib.sex-machine.cameras-coordinates").coordinates
 		local actors = require("lib.sex-machine.actors-poses")
 		local plyX, plyY, plyZ = coords.getPlayerPos()
