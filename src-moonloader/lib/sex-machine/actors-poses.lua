@@ -24,6 +24,7 @@ end
 --[[===============================================================
 ===================================================================]]
 module.PlayerDissapear = function()
+	-- https://gtaforums.com/topic/498138-how-to-make-cjs-head-invisible/
 	module.ChangeSkin('VOID', 10)
 end
 

@@ -83,6 +83,7 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 	
 	cam.mode = cam.modes.FREE_CAM
 	sex.showSexualStats = true
+	sex.hideStats = false
 	sex.stat = 0
 	menu.stat = 0
 	
@@ -104,10 +105,15 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 	
 	while true do
 	wait (0)
+		-- Hide sex menu and stats
+		if testCheat("stats") then
+			sex.hideStats = not sex.hideStats
+		end
+		
 		-- Buttons UP - DOWN - ACCEPT - CANCEL acknowledge
 		pulsed.run()
 		
-		if menu.stat > 0 then	-- 0 is the only state when player can move
+		if menu.stat > 0 and not sex.hideStats then	-- 0 is the only state when player can move
 			cursor.control()		-- so is best to activate cursor when player can't!
 		end
 		
@@ -234,7 +240,7 @@ sex.run = function(pose, place, speed, female_gxt, male_gxt)
 				menu.stat = 2
 			end
 		end
-		if sex.showSexualStats then
+		if sex.showSexualStats and not sex.hideStats then
 			menu.showSexualStats(climax.value, speed.value, pleasure.value)
 			menu.ShowSettingTexts(menu.stat, speed.stat, sex.pose, sex.place, true)
 		end
@@ -300,7 +306,9 @@ sex.machine = function()
 		end
 		--	Regular sex mode		Offsets mode
 		if	menu.stat == 2	or	menu.stat == 3 then
-			menu.ManageAnimationsMenu(speed.stat, sex.pose, sex.place, sex.female, sex.male)
+			if not sex.hideStats then
+				menu.ManageAnimationsMenu(speed.stat, sex.pose, sex.place, sex.female, sex.male)
+			end
 		end
 		if menu.stat == 8 then
 			if cursor.clickCheck(320.0, 224.0, 640.0, 448.0, true) -- Clicked on Full screen box
