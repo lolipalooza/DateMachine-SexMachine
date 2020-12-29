@@ -8,7 +8,7 @@ local sex = require "lib.sex-machine.sex"
 local mission = require "lib.sex-machine.mission"
 
 function main()
-	printHelpString(string.format("Running %s~s~.", "~r~Sex~y~Machine~s~.~b~lua" ))
+	--printHelpString(string.format("Running %s~s~.", "~r~Sex~y~Machine~s~.~b~lua" ))
 	
 	while true do
 	wait (0)
@@ -23,5 +23,7 @@ function main()
 			mission.setOnMission( mission.onMission() and 0 or 1 )
 			printHelpString(string.format("$~y~ONMISSION~s~: %s", mission.onMission() and "~b~on" or "~r~off" ))
 		end
+		
+		-- write "stats" to toggle the sex hud view
 	end
 end
